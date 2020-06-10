@@ -6,15 +6,17 @@ import styles from './styles';
 
 export default function Header({...props}) {
     return (
-        <TouchableOpacity 
-            style={styles.btMenu}
-            onPress={props.navigation.openDrawer}
-        >
-            <AntDesign 
-                name="menu-fold"
-                size={50}
-                color="black"
-            />
-        </TouchableOpacity> 
+        <View style={styles.container}>
+            <TouchableOpacity 
+                style={styles.btMenu}
+                onPress={props.navigation.openDrawer}
+            >
+                <AntDesign 
+                    name="menu-fold"
+                    size={50}
+                    color="black"
+                />
+            </TouchableOpacity> 
+        </View>
     )
 }

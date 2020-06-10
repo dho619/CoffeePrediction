@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 
@@ -10,6 +9,7 @@ import CustomDrawer from './components/CustomDrawer';
 import Home from './pages/Home';
 import Incidents from './pages/Incidents';
 import LatestReviews from './pages/LatestReviews';
+import NewPhotos from './pages/NewPhotos';
 
 export default function Routes() {
     return (
@@ -26,7 +26,8 @@ export default function Routes() {
             >
                 { true ? (
                     <>
-                        <AppDrawer.Screen name = "Inicio" component={Home} />
+                        <AppDrawer.Screen dr name = "Inicio" component={Home} />
+                        <AppDrawer.Screen name = "Nova Análise" component={NewPhotos}/>
                         <AppDrawer.Screen name = "Últimas Análises" component={LatestReviews}/>
                         <AppDrawer.Screen name = "Ocorrências" component={Incidents}/>
                     </>

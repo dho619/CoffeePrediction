@@ -16,7 +16,10 @@ export default function Home({...props}) {
                     <Text style={styles.text2}>of Coffee</Text>
                     <Text style={styles.text3}>Grower</Text>
                 </View>
-                <TouchableOpacity style={styles.btNewPhoto}>
+                <TouchableOpacity 
+                    style={styles.btNewPhoto}
+                    onPress={() => props.navigation.navigate('Nova Análise')}
+                >
                     <AntDesign 
                         name="pluscircle" 
                         size={70} 
