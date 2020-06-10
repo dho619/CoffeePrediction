@@ -1,12 +1,12 @@
 import React from 'react';
-import { TouchableOpacity, View, Text } from 'react-native'
+import { TouchableOpacity, View, SafeAreaView } from 'react-native'
 import { AntDesign } from '@expo/vector-icons'; 
 
 import styles from './styles';
 
 export default function Header({...props}) {
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <TouchableOpacity 
                 style={styles.btMenu}
                 onPress={props.navigation.openDrawer}
@@ -17,6 +17,6 @@ export default function Header({...props}) {
                     color="black"
                 />
             </TouchableOpacity> 
-        </View>
+        </SafeAreaView>
     )
 }
