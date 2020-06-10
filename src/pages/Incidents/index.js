@@ -1,8 +1,13 @@
 import React from 'react';
-import { View } from 'react-native'
+import { View, Text } from 'react-native'
 
-export default function Incidents() {
+import Header from '../../components/Header';
+
+export default function Incidents({...props}) {
     return (
-        <View />
+        <View style={{ flex: 1}}>
+            <Header {...props}/>
+            <Text>Incidents</Text>
+        </View>
     )
 }

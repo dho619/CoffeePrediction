@@ -1,8 +1,29 @@
 import React from 'react';
-import { View } from 'react-native'
+import { StyleSheet, View, Text, TouchableOpacity, ImageBackground } from 'react-native'
+import { AntDesign } from '@expo/vector-icons';
 
-export default function Home() {
+import Header from '../../components/Header';
+import wallpapper from '../../assets/wallpapper.jpg';
+import styles from './styles';
+
+export default function Home({...props}) {
     return (
-        <View />
+        <View style={styles.container}>
+            <ImageBackground source={wallpapper} style={styles.image}>
+                <Header {...props}/>
+                <View style={styles.areaText}>
+                    <Text style={styles.text1}>Assistant</Text>
+                    <Text style={styles.text2}>of Coffee</Text>
+                    <Text style={styles.text3}>Grower</Text>
+                </View>
+                <TouchableOpacity style={styles.btNewPhoto}>
+                    <AntDesign 
+                        name="pluscircle" 
+                        size={70} 
+                        color="black"                         
+                    />
+                </TouchableOpacity>
+            </ImageBackground>
+        </View>
     )
 }
