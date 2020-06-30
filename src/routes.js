@@ -8,7 +8,7 @@ const AppDrawer = createDrawerNavigator();
 import CustomDrawer from './components/CustomDrawer';
 import Home from './pages/Home';
 import Incidents from './pages/Incidents';
-import LatestReviews from './pages/LatestReviews';
+import LatestAnalysis from './pages/LatestAnalysis';
 import NewPhotos from './pages/NewPhotos';
 
 export default function Routes() {
@@ -28,7 +28,7 @@ export default function Routes() {
                     <>
                         <AppDrawer.Screen dr name = "Inicio" component={Home} />
                         <AppDrawer.Screen name = "Nova Análise" component={NewPhotos}/>
-                        <AppDrawer.Screen name = "Últimas Análises" component={LatestReviews}/>
+                        <AppDrawer.Screen name = "Últimas Análises" component={LatestAnalysis}/>
                         <AppDrawer.Screen name = "Ocorrências" component={Incidents}/>
                     </>
                 ): (

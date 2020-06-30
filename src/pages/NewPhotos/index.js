@@ -83,6 +83,7 @@ export default function NewPhotos({...props}) {
                 <MaterialIcons name="insert-photo" size={80} color="black"/>
             </TouchableOpacity>
         </View>
+        {/* Tela da Foto a abaixo*/}
         <Modal 
             animationType='slide'
             transparent={false}

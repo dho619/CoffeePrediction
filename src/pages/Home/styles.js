@@ -45,7 +45,8 @@ export default StyleSheet.create({
         marginTop: 'auto',
         bottom: 50,
         right: 40,
-        alignSelf: "flex-end"
+        alignSelf: "flex-end",
+
     },
     btMenu: {
         marginTop: 20,
