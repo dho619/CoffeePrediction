@@ -14,7 +14,7 @@ import NewPhotos from './pages/NewPhotos';
 export default function Routes() {
     return (
         <NavigationContainer>
-            <AppDrawer.Navigator 
+            <AppDrawer.Navigator
                 initialRouteName="Inicio" 
                 drawerContent= {CustomDrawer}
                 drawerContentOptions={{
@@ -27,7 +27,7 @@ export default function Routes() {
                 { true ? (
                     <>
                         <AppDrawer.Screen dr name = "Inicio" component={Home} />
-                        <AppDrawer.Screen name = "Nova Análise" component={NewPhotos}/>
+                        <AppDrawer.Screen name = "Nova Análise" options={{unmountOnBlur: true}} component={NewPhotos}/>
                         <AppDrawer.Screen name = "Últimas Análises" component={LatestAnalysis}/>
                         <AppDrawer.Screen name = "Ocorrências" component={Incidents}/>
                     </>
@@ -39,4 +39,3 @@ export default function Routes() {
     )
 
 }
-//screenOptions={{headerShown: false}

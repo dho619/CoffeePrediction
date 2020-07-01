@@ -12,8 +12,9 @@ export default function NewPhotos({...props}) {
     const [type, setType] = useState(Camera.Constants.Type.back); //camera traseira ou front
     const [flash, setFlash] = useState(Camera.Constants.FlashMode.off); //camera traseira ou front
     const [flashIcon, setFlashIcon] = useState('ios-flash-off'); //camera traseira ou front
-    const [capturedPhoto, setCapturePhoto] = useState(null)
-    const [open, setOpen] = useState(false)
+    const [capturedPhoto, setCapturePhoto] = useState(null);
+    const [open, setOpen] = useState(false);
+    
 
     useEffect(() => {
     (async () => {
@@ -64,6 +65,7 @@ export default function NewPhotos({...props}) {
             type={type}
             flashMode={flash}
             ref={camRef}
+            
         >
             <TouchableOpacity  style={styles.btFlash} onPress={turnFlash}>
                 <Ionicons name={flashIcon} size={50} color="white" />
