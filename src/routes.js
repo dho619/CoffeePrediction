@@ -6,16 +6,19 @@ import { NavigationContainer } from '@react-navigation/native';
 const AppDrawer = createDrawerNavigator();
 
 import CustomDrawer from './components/CustomDrawer';
+import Login from './pages/Login';
 import Home from './pages/Home';
 import Incidents from './pages/Incidents';
 import LatestAnalysis from './pages/LatestAnalysis';
 import NewPhotos from './pages/NewPhotos';
 
+var logado = false;
+
 export default function Routes() {
     return (
         <NavigationContainer>
             <AppDrawer.Navigator
-                initialRouteName="Inicio" 
+                initialRouteName= {logado? "Inicio": "Login"}
                 drawerContent= {CustomDrawer}
                 drawerContentOptions={{
                     activeTintColor: '#A0522D',
@@ -24,7 +27,7 @@ export default function Routes() {
                     labelStyle: { color: '#FFF', fontSize: 15},
                 }}
             >
-                { true ? (
+                { logado ? (
                     <>
                         <AppDrawer.Screen dr name = "Inicio" component={Home} />
                         <AppDrawer.Screen name = "Nova Análise" options={{unmountOnBlur: true}} component={NewPhotos}/>
@@ -32,7 +35,7 @@ export default function Routes() {
                         <AppDrawer.Screen name = "Ocorrências" component={Incidents}/>
                     </>
                 ): (
-                    <AppDrawer.Screen name = "Inicio" component={Home}/>
+                    <AppDrawer.Screen name = "Login" component={Login}/>
                 )}
             </AppDrawer.Navigator>
         </NavigationContainer>

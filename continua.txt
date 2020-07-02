@@ -1,6 +1,4 @@
 Tentar achar flash ligado o tempo td
 Pegar localização quando tirar foto
-mostrar mapa
-criar form exibição de ocorrências
-fazer conexão com o google
 conectar o backend
+fazer conexão com o google
