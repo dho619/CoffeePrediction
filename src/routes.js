@@ -7,6 +7,7 @@ const AppDrawer = createDrawerNavigator();
 
 import CustomDrawer from './components/CustomDrawer';
 import Login from './pages/Login';
+import Register from './pages/Register';
 import Home from './pages/Home';
 import Incidents from './pages/Incidents';
 import LatestAnalysis from './pages/LatestAnalysis';
@@ -35,7 +36,10 @@ export default function Routes() {
                         <AppDrawer.Screen name = "Ocorrências" component={Incidents}/>
                     </>
                 ): (
-                    <AppDrawer.Screen name = "Login" component={Login}/>
+                    <>
+                        <AppDrawer.Screen name = "Login" component={Login}/>
+                        <AppDrawer.Screen name = "Register" component={Register}/>
+                    </>
                 )}
             </AppDrawer.Navigator>
         </NavigationContainer>

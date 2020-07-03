@@ -1,24 +1,26 @@
 import React, {useState, useEffect} from 'react';
 import { View, KeyboardAvoidingView, Image, 
          Text, TouchableOpacity, TextInput,
-         Animated, StyleSheet, Keyboard, Alert
+         Animated, StyleSheet, Keyboard
 } from 'react-native';
 import { validate } from 'validate.js';
 import constraintsEmail from '../../utils/constraints';
-
-const logo = require('../../assets/logo.png');
+const logo = require('../../assets/logo.png')
 
 export default function Login({...props}) {
 
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [offset] = useState(new Animated.ValueXY({x:0, y:95}));
-    const [opacity] = useState(new Animated.Value(0));
-    const [dimensao] = useState(new Animated.ValueXY({x: 330, y: 345}));
+    const [password2, setPassword2] = useState('');
+    const [offset] = useState(new Animated.ValueXY({x:0, y:95}))
+    const [opacity] = useState(new Animated.Value(0))
+    const [marginTop] = useState(new Animated.Value(40))
+    const [dimensao] = useState(new Animated.ValueXY({x: 250, y: 255}))
 
     useEffect(() => {
-        keboardDidShowListener = Keyboard.addListener('keyboardDidShow', keyboardDidShow);
-        keboardDidHideListener = Keyboard.addListener('keyboardDidHide', keyboardDidHide);
+        keboardDidShowListener = Keyboard.addListener('keyboardDidShow', keyboardDidShow)
+        keboardDidHideListener = Keyboard.addListener('keyboardDidHide', keyboardDidHide)
 
         Animated.parallel([
             Animated.spring(offset.y, {
@@ -36,11 +38,15 @@ export default function Login({...props}) {
     function keyboardDidShow(){
         Animated.parallel([
             Animated.timing(dimensao.x, {
-                toValue: 200,
+                toValue: 130,
                 duration: 300,
             }),
             Animated.timing(dimensao.y, {
-                toValue: 205,
+                toValue: 140,
+                duration: 300,
+            }),
+            Animated.timing(marginTop, {
+                toValue: 20,
                 duration: 300,
             }),
         ]).start();
@@ -49,17 +55,21 @@ export default function Login({...props}) {
     function keyboardDidHide(){
         Animated.parallel([
             Animated.timing(dimensao.x, {
-                toValue: 330,
+                toValue: 250,
                 duration: 300,
             }),
             Animated.timing(dimensao.y, {
-                toValue: 345,
+                toValue: 255,
+                duration: 300,
+            }),
+            Animated.timing(marginTop, {
+                toValue: 40,
                 duration: 300,
             }),
         ]).start();
     }
 
-    const signIn = async () => {
+    const register = async () => {
         const validationResult = await validate({email}, constraintsEmail);
         if (validationResult){
             Alert.alert(
@@ -69,13 +79,13 @@ export default function Login({...props}) {
                   { text: "OK"}
                 ],
                 { cancelable: false }
-              );
+            );
         }
     }
- 
+
     return (
         <KeyboardAvoidingView style={styles.container}>
-            <View style={styles.containerLogo}>
+            <Animated.View style={[styles.containerLogo], {marginTop: marginTop,}}>
                 <Animated.Image 
                     style={{
                         width: dimensao.x,
@@ -84,7 +94,7 @@ export default function Login({...props}) {
                     }} 
                     source={logo} 
                 />
-            </View>
+            </Animated.View>
             <Animated.View 
                 style={[styles.containerForm,
                     {
@@ -97,27 +107,44 @@ export default function Login({...props}) {
             >
                 <TextInput
                     style={styles.input}
+                    placeholder="Nome"
+                    value={name}
+                    autoCorrect={false}
+                    onChangeText={name => setName(name)}
+                />
+
+                <TextInput
+                    style={styles.input}
                     placeholder="Email"
                     value={email}
                     autoCorrect={false}
-                    onChangeText={email => setEmail(email)} 
+                    onChangeText={email => setEmail(email)}
                 />
 
                 <TextInput
                     style={styles.input}
                     placeholder="Senha"
-                    autoCorrect={false}
                     value={password}
-                    onChangeText={password => setPassword(password)} 
+                    autoCorrect={false}
+                    onChangeText={password => setPassword(password)}
                     secureTextEntry={true}
                 />
 
-                <TouchableOpacity style={styles.btnSubmit} onPress={signIn}>
-                    <Text style={styles.submitText}>Logar</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Confirmar senha"
+                    value={password2}
+                    autoCorrect={false}
+                    onChangeText={password2 => setPassword2(password2)}
+                    secureTextEntry={true}
+                />
+
+                <TouchableOpacity style={styles.btnRegister} onPress={register}>
+                    <Text style={styles.submitText}>Registrar</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.btnRegister} onPress={() => props.navigation.navigate('Register')}>
-                    <Text style={styles.registerText}>Criar conta gratuita</Text>
+                <TouchableOpacity style={styles.btnLogin} onPress={() => props.navigation.navigate('Login')}>
+                    <Text style={styles.registerText}>Fazer login</Text>
                 </TouchableOpacity>
             </Animated.View>
         </KeyboardAvoidingView>
@@ -135,7 +162,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 40,
     },
     containerForm: {
         flex: 1,
@@ -153,7 +179,7 @@ const styles = StyleSheet.create({
         borderRadius: 7,
         padding: 10,
     },
-    btnSubmit: {
+    btnRegister: {
         backgroundColor: '#00622D',
         width: '90%',
         height: 45,
@@ -165,7 +191,7 @@ const styles = StyleSheet.create({
         color: '#FFF',
         fontSize: 18,
     },
-    btnRegister: {
+    btnLogin: {
         marginTop: 20,
     },
     registerText: {
