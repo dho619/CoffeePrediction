@@ -8,7 +8,7 @@ import constraintsEmail from '../../utils/constraints';
 
 const logo = require('../../assets/logo.png');
 
-export default function Login({...props}) {
+export default function Login({ navigation }) {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -28,7 +28,7 @@ export default function Login({...props}) {
             }),
             Animated.timing(opacity, {
                 toValue: 1,
-                duration: 1000,
+                duration: 200,
             })
         ]).start();
     }, []);
@@ -37,11 +37,11 @@ export default function Login({...props}) {
         Animated.parallel([
             Animated.timing(dimensao.x, {
                 toValue: 200,
-                duration: 300,
+                duration: 100,
             }),
             Animated.timing(dimensao.y, {
                 toValue: 205,
-                duration: 300,
+                duration: 100,
             }),
         ]).start();
     }
@@ -50,18 +50,18 @@ export default function Login({...props}) {
         Animated.parallel([
             Animated.timing(dimensao.x, {
                 toValue: 330,
-                duration: 300,
+                duration: 100,
             }),
             Animated.timing(dimensao.y, {
                 toValue: 345,
-                duration: 300,
+                duration: 100,
             }),
         ]).start();
     }
 
     const signIn = async () => {
         const validationResult = await validate({email}, constraintsEmail);
-        if (validationResult){
+        if (false && validationResult){
             Alert.alert(
                 "Aviso",
                 validationResult.email[0],
@@ -71,7 +71,7 @@ export default function Login({...props}) {
                 { cancelable: false }
               );
         } else {
-            props.navigation.navigate('Drawer');
+            navigation.navigate('Drawer');
         }
     }
  
@@ -118,7 +118,7 @@ export default function Login({...props}) {
                     <Text style={styles.submitText}>Logar</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.btnRegister} onPress={() => props.navigation.navigate('Register')}>
+                <TouchableOpacity style={styles.btnRegister} onPress={() => navigation.navigate('Register')}>
                     <Text style={styles.registerText}>Criar conta gratuita</Text>
                 </TouchableOpacity>
             </Animated.View>

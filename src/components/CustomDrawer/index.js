@@ -1,13 +1,18 @@
 import React from 'react';
 import {View, Text, Image, TouchableOpacity} from 'react-native';
-import { DrawerItemList } from '@react-navigation/drawer'
-import { AntDesign, } from '@expo/vector-icons'; {/*name=login or logout*/}
+import { DrawerItemList } from '@react-navigation/drawer';
+import { AntDesign, } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 
 var avatar = require('../../assets/perfil.jpeg');
 import styles from './styles';
 
 export default function CustomDrawer({...props}){
+
+    const signOut = () => {
+        props.navigation.navigate('Login')
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -27,12 +32,12 @@ export default function CustomDrawer({...props}){
                         style={styles.avatar}
                     />
                     <View style={styles.userText}>
-                        <Text style={styles.name}>Korapayka</Text>
+                        <Text numberOfLines={1} style={styles.name}>Korapayka Winchester da Silva</Text>
                         <Text numberOfLines={1} style={styles.email}>KorapaykaWinchester@email.com</Text>
                     </View>
                     <TouchableOpacity 
-                        style={styles.btLogin}
-                          
+                        style={styles.btLogout}
+                        onPress={() => signOut}   
                     >
                         <AntDesign 
                             name="logout" 

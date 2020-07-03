@@ -4,10 +4,10 @@ import { View, Text, TouchableOpacity, ScrollView } from 'react-native'
 import Header from '../../components/Header';
 import styles from './styles';
 
-export default function LatestAnalysis({...props}) {
+export default function LatestAnalysis({navigation}) {
     return (
         <View style={styles.container}>
-            <Header {...props}/>
+            <Header navigation={navigation} />
             <View style={styles.title}>
                 <Text style={styles.titleText}>Suas Últimas Análises:</Text>
             </View>

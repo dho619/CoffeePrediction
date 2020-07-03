@@ -6,7 +6,7 @@ import { AntDesign, Fontisto, Ionicons, MaterialIcons } from '@expo/vector-icons
 import Header from '../../components/Header';
 import styles from './styles';
 
-export default function NewPhotos({...props}) {
+export default function NewPhotos({navigation}) {
     const camRef = useRef(null) //criando uma referencia
     const [hasPermission, setHasPermission] = useState(null); //para guardar se ja teve permissao
     const [type, setType] = useState(Camera.Constants.Type.back); //camera traseira ou front
@@ -59,7 +59,7 @@ export default function NewPhotos({...props}) {
 
     return (
     <View style={styles.container}>
-        <Header {...props} />
+        <Header navigation={navigation} />
         <Camera 
             style={styles.camera} 
             type={type}

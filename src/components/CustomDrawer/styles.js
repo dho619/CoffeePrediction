@@ -23,9 +23,10 @@ export default StyleSheet.create({
         alignItems: 'center',
         marginBottom: 20,
     },
-    btLogin: {
+    btLogout: {
         marginTop: 5,
         marginRight: 15,
+        marginLeft: 30,
         right: 15,
     },
     avatar: {
@@ -39,12 +40,13 @@ export default StyleSheet.create({
 
     },
     name: {
+        width: 135,
         fontSize: 18,
         fontWeight: 'bold'
     },
     email: {
         fontSize: 13,
-        width: 150,
+        width: 135,
     },
     props: {
         flex: 1,

@@ -4,7 +4,7 @@ import { Text, View } from 'react-native';
 import Header from '../../components/Header';
 import styles from './styles';
 
-export default function Incidents({...props}) {
+export default function Incidents({navigation}) {
     -20.9146743 -46.9920948
     -20.9185789 -46.9778171
     20.9198338, -46.9834752
@@ -34,7 +34,7 @@ export default function Incidents({...props}) {
 
     return (
         <View style={styles.container}>
-            <Header {...props}/>
+            <Header navigation={navigation} />
             <View style={styles.mapArea}>
                 <MapView
                     style={styles.mapStyle}

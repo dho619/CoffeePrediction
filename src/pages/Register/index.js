@@ -7,7 +7,7 @@ import { validate } from 'validate.js';
 import constraintsEmail from '../../utils/constraints';
 const logo = require('../../assets/logo.png')
 
-export default function Login({...props}) {
+export default function Login({navigation}) {
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -30,7 +30,7 @@ export default function Login({...props}) {
             }),
             Animated.timing(opacity, {
                 toValue: 1,
-                duration: 1000,
+                duration: 200,
             })
         ]).start();
     }, []);
@@ -39,15 +39,15 @@ export default function Login({...props}) {
         Animated.parallel([
             Animated.timing(dimensao.x, {
                 toValue: 130,
-                duration: 300,
+                duration: 100,
             }),
             Animated.timing(dimensao.y, {
                 toValue: 140,
-                duration: 300,
+                duration: 100,
             }),
             Animated.timing(marginTop, {
                 toValue: 20,
-                duration: 300,
+                duration: 100,
             }),
         ]).start();
     }
@@ -143,7 +143,7 @@ export default function Login({...props}) {
                     <Text style={styles.submitText}>Registrar</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.btnLogin} onPress={() => props.navigation.navigate('Login')}>
+                <TouchableOpacity style={styles.btnLogin} onPress={() => navigation.navigate('Login')}>
                     <Text style={styles.registerText}>Fazer login</Text>
                 </TouchableOpacity>
             </Animated.View>

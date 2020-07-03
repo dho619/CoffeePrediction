@@ -6,11 +6,11 @@ import Header from '../../components/Header';
 import wallpapper from '../../assets/wallpapper.jpg';
 import styles from './styles';
 
-export default function Home({...props}) {
+export default function Home({navigation}) {
     return (
         <View style={styles.container}>
             <ImageBackground source={wallpapper} style={styles.image}>
-                <Header {...props}/>
+                <Header navigation={navigation} />
                 <View style={styles.areaText}>
                     <Text style={styles.text1}>Assistant</Text>
                     <Text style={styles.text2}>of Coffee</Text>
@@ -18,7 +18,7 @@ export default function Home({...props}) {
                 </View>
                 <TouchableOpacity 
                     style={styles.btNewPhoto}
-                    onPress={() => props.navigation.navigate('Nova Análise')}
+                    onPress={() => navigation.navigate('Nova Análise')}
                 >
                     <AntDesign 
                         name="pluscircle" 
