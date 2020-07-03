@@ -1,7 +1,7 @@
 import React from 'react';
-import {StyleSheet, View, Text, Image, TouchableOpacity} from 'react-native';
+import {View, Text, Image, TouchableOpacity} from 'react-native';
 import { DrawerItemList } from '@react-navigation/drawer'
-import { AntDesign,  } from '@expo/vector-icons'; {/*name=login or logout*/}
+import { AntDesign, } from '@expo/vector-icons'; {/*name=login or logout*/}
 import { Ionicons } from '@expo/vector-icons';
 
 var avatar = require('../../assets/perfil.jpeg');
@@ -28,9 +28,12 @@ export default function CustomDrawer({...props}){
                     />
                     <View style={styles.userText}>
                         <Text style={styles.name}>Korapayka</Text>
-                        <Text numberOfLines={1} style={styles.email}>Kora@email.com</Text>
+                        <Text numberOfLines={1} style={styles.email}>KorapaykaWinchester@email.com</Text>
                     </View>
-                    <TouchableOpacity style={styles.btLogin}>
+                    <TouchableOpacity 
+                        style={styles.btLogin}
+                          
+                    >
                         <AntDesign 
                             name="logout" 
                             size={28} 

@@ -44,7 +44,7 @@ export default StyleSheet.create({
     },
     email: {
         fontSize: 13,
-        width: 170,
+        width: 150,
     },
     props: {
         flex: 1,

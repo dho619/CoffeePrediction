@@ -70,6 +70,8 @@ export default function Login({...props}) {
                 ],
                 { cancelable: false }
               );
+        } else {
+            props.navigation.navigate('Drawer');
         }
     }
  
