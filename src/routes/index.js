@@ -23,6 +23,3 @@ export default function Routes() {
         </NavigationContainer>
     )
 }
-
-//<AppDrawer.Screen name = "Login" component={Login}/>
-//<AppDrawer.Screen name = "Register" component={Register}/>

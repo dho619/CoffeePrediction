@@ -100,6 +100,7 @@ export default function Login({ navigation }) {
                 <TextInput
                     style={styles.input}
                     placeholder="Email"
+                    autoCompleteType='email'
                     value={email}
                     autoCorrect={false}
                     onChangeText={email => setEmail(email)} 

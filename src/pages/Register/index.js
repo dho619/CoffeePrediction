@@ -25,7 +25,7 @@ export default function Login({navigation}) {
         Animated.parallel([
             Animated.spring(offset.y, {
                 toValue: 0,
-                speed: 3,
+                speed: 4,
                 bounciness: 20
             }),
             Animated.timing(opacity, {
@@ -56,15 +56,15 @@ export default function Login({navigation}) {
         Animated.parallel([
             Animated.timing(dimensao.x, {
                 toValue: 250,
-                duration: 300,
+                duration: 100,
             }),
             Animated.timing(dimensao.y, {
                 toValue: 255,
-                duration: 300,
+                duration: 100,
             }),
             Animated.timing(marginTop, {
                 toValue: 40,
-                duration: 300,
+                duration: 100,
             }),
         ]).start();
     }
@@ -116,6 +116,7 @@ export default function Login({navigation}) {
                 <TextInput
                     style={styles.input}
                     placeholder="Email"
+                    autoCompleteType='email'
                     value={email}
                     autoCorrect={false}
                     onChangeText={email => setEmail(email)}

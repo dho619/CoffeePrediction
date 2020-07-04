@@ -1,4 +1,4 @@
 Tentar achar flash ligado o tempo td
-Pegar localização quando tirar foto
+Pegar localização quando cadastra usario e criar uma area, sera a padrao em de nvoas analises
 conectar o backend
 fazer conexão com o google
