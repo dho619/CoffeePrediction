@@ -9,7 +9,6 @@ import constraintsEmail from '../../utils/constraints';
 const logo = require('../../assets/logo.png');
 
 export default function Login({ navigation }) {
-
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [offset] = useState(new Animated.ValueXY({x:0, y:95}));
@@ -23,8 +22,8 @@ export default function Login({ navigation }) {
         Animated.parallel([
             Animated.spring(offset.y, {
                 toValue: 0,
-                speed: 3,
-                bounciness: 20
+                speed: 4,
+                bounciness: 20,
             }),
             Animated.timing(opacity, {
                 toValue: 1,
@@ -74,9 +73,10 @@ export default function Login({ navigation }) {
             navigation.navigate('Drawer');
         }
     }
- 
-    return (
-        <KeyboardAvoidingView style={styles.container}>
+
+
+  return (
+    <KeyboardAvoidingView style={styles.container}>
             <View style={styles.containerLogo}>
                 <Animated.Image 
                     style={{
@@ -123,55 +123,55 @@ export default function Login({ navigation }) {
                 </TouchableOpacity>
             </Animated.View>
         </KeyboardAvoidingView>
-    );
+  );
 }
 
 const styles = StyleSheet.create({
-    container: {
+  container: {
+    flex: 1,
+    backgroundColor: '#cf965e',
+    alignItems: 'center',
+    justifyContent:'center',
+  },
+  containerLogo:{
       flex: 1,
-      backgroundColor: '#cf965e',
+      justifyContent: 'center',
       alignItems: 'center',
-      justifyContent:'center',
-    },
-    containerLogo:{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 40,
-    },
-    containerForm: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '90%',
-        paddingBottom: 50,
-    },
-    input: {
-        backgroundColor: '#FFF',
-        width: '90%',
-        marginBottom: 15,
-        color: '#222',
-        fontSize: 17,
-        borderRadius: 7,
-        padding: 10,
-    },
-    btnSubmit: {
-        backgroundColor: '#00622D',
-        width: '90%',
-        height: 45,
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 7
-    },
-    submitText: {
-        color: '#FFF',
-        fontSize: 18,
-    },
-    btnRegister: {
-        marginTop: 20,
-    },
-    registerText: {
-        color: '#FFF',
-        fontSize: 18,
-    }
+      marginTop: 40,
+  },
+  containerForm: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: '90%',
+      paddingBottom: 50,
+  },
+  input: {
+      backgroundColor: '#FFF',
+      width: '90%',
+      marginBottom: 15,
+      color: '#222',
+      fontSize: 17,
+      borderRadius: 7,
+      padding: 10,
+  },
+  btnSubmit: {
+      backgroundColor: '#00622D',
+      width: '90%',
+      height: 45,
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: 7
+  },
+  submitText: {
+      color: '#FFF',
+      fontSize: 18,
+  },
+  btnRegister: {
+      marginTop: 20,
+  },
+  registerText: {
+      color: '#FFF',
+      fontSize: 18,
+  }
 });

@@ -37,7 +37,7 @@ export default function CustomDrawer({...props}){
                     </View>
                     <TouchableOpacity 
                         style={styles.btLogout}
-                        onPress={() => signOut}   
+                        onPress={signOut}   
                     >
                         <AntDesign 
                             name="logout" 

@@ -90,7 +90,7 @@ export default function Login({navigation}) {
                     style={{
                         width: dimensao.x,
                         height: dimensao.y,
-                        marginLeft: 40, 
+                        marginLeft: 20, 
                     }} 
                     source={logo} 
                 />
