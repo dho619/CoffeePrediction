@@ -5,9 +5,7 @@ import Header from '../../components/Header';
 import styles from './styles';
 
 export default function Incidents({navigation}) {
-    -20.9146743 -46.9920948
-    -20.9185789 -46.9778171
-    20.9198338, -46.9834752
+
     const [places, setPlaces] = useState([
           {
             id: 1,

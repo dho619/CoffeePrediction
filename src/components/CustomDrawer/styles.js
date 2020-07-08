@@ -33,7 +33,7 @@ export default StyleSheet.create({
         width: 55,
         height: 55,
         borderRadius: 50,
-        marginRight: 20,
+        marginRight: 10,
         marginLeft: 10,
     },
     userText: {

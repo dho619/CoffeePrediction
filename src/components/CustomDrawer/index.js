@@ -9,8 +9,16 @@ import styles from './styles';
 
 export default function CustomDrawer({...props}){
 
+    const { state, ...rest } = props; // pegar os state (os itens que aparecerao na gaveta)
+    const newState = { ...state}  //copia o state para não altera o original 
+    newState.routes = newState.routes.filter(item => item.name !== 'Profile') //pega todos menos o Profile
+
     const signOut = () => {
         props.navigation.navigate('Login')
+    }
+
+    const accessProfile = () => {
+        props.navigation.navigate('Profile')
     }
 
     return (
@@ -27,12 +35,16 @@ export default function CustomDrawer({...props}){
                     />
                 </TouchableOpacity>
                 <View style={styles.userArea}>
-                    <Image 
-                        source={avatar}
-                        style={styles.avatar}
-                    />
+                    <TouchableOpacity onPress={accessProfile} >
+                        <Image 
+                            source={avatar}
+                            style={styles.avatar}
+                        />
+                    </TouchableOpacity>
                     <View style={styles.userText}>
-                        <Text numberOfLines={1} style={styles.name}>Korapayka Winchester da Silva</Text>
+                        <TouchableOpacity onPress={accessProfile} >
+                            <Text numberOfLines={1} style={styles.name}>Korapayka Winchester da Silva</Text>
+                        </TouchableOpacity>
                         <Text numberOfLines={1} style={styles.email}>KorapaykaWinchester@email.com</Text>
                     </View>
                     <TouchableOpacity 
@@ -55,7 +67,7 @@ export default function CustomDrawer({...props}){
                 </TouchableOpacity>
             </View>
             <View style={styles.props}>
-                <DrawerItemList {...props} />
+                <DrawerItemList state={newState} {...rest} />
             </View>
         </View>
     );

@@ -1,19 +1,22 @@
 import React, { useState } from 'react';
-import {View, Text, TextInput, KeyboardAvoidingView, ImageBackground} from 'react-native';
+import {View, Text, TextInput, KeyboardAvoidingView, ImageBackground, StyleSheet} from 'react-native';
+import RNPickerSelect from 'react-native-picker-select';
+import { AntDesign } from '@expo/vector-icons';
 
 import Header from '../../components/Header';
 import area from '../../assets/area.png';
-import styles from './styles';
+import folhas from '../../assets/folhas.png';
+import {styles, pickerStyle} from './styles';
 
 export default function AreaRegister({navigation}){
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [location, setLocation] = useState('');
-    const [type, setType] = useState(1);
+    const [type, setType] = useState(0);
     const [types, setTypes] = useState([
-        {label: 'Item 1', value: 'item1'},
-        {label: 'Item 2', value: 'item2'},
-    ])
+        {label: 'Fazenda', value: 0},
+        {label: 'Chácara', value: 1},
+    ]);
 
     return (
         <View style={styles.container} >
@@ -45,6 +48,20 @@ export default function AreaRegister({navigation}){
                         keyboardType = 'numeric'
                         onChangeText={location => setLocation(location)} 
                     />
+                    <RNPickerSelect
+                        placeholder={{
+                            label: 'Selecione um tipo de área',
+                            value: -1,
+                        }}
+                        items={types}
+                        onValueChange={value => setType(value)}
+                        value={type}
+                        style={pickerStyle}
+                        useNativeAndroidPickerStyle={false} //android only
+                        Icon={() => {
+                            return <AntDesign name="downcircleo" size={24} color="black" />;
+                        }}
+                    />
                     
                 </View>
 
@@ -53,3 +70,4 @@ export default function AreaRegister({navigation}){
         </View>
     );
 };
+

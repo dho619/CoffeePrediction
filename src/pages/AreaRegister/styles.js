@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 
-export default StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: '#cf965e',
@@ -11,7 +11,7 @@ export default StyleSheet.create({
         flex: 1,
     },
     containerHeader:{
-        height: '30%',
+        height: '20%',
         textAlign: 'center',
         justifyContent: 'center',
         alignItems: 'center',
@@ -26,6 +26,7 @@ export default StyleSheet.create({
         alignItems: 'center',
         width: '90%',
         paddingBottom: 50,
+        zIndex: 2,
     },
     input: {
         backgroundColor: '#FFF',
@@ -35,12 +36,6 @@ export default StyleSheet.create({
         fontSize: 17,
         borderRadius: 7,
         padding: 10,
-    },
-    inputDropBox: {
-        backgroundColor: '#FFF',
-        width: '90%',
-        color: '#222',
-        fontSize: 17,
     },
     inputMultiline: {
         backgroundColor: '#FFF',
@@ -67,8 +62,36 @@ export default StyleSheet.create({
     imageBackground:{
         flex: 1,
         width: 540,
+        height: 200,
         position: 'absolute',
         bottom: 0,
-        top: '75%',
+        zIndex: -1
     },
-  });
+});
+
+const pickerStyle = StyleSheet.create({
+    inputIOS: {
+        fontSize: 17,
+        padding: 10,
+        backgroundColor: '#FFF',
+        marginBottom: 15,
+        color: '#222',
+        borderRadius: 7,
+    },
+    inputAndroid: {
+        fontSize: 17,
+        padding: 10,
+        paddingRight: 40,
+        width: 317,
+        backgroundColor: '#FFF',
+        marginBottom: 15,
+        color: '#222',
+        borderRadius: 7,
+    },
+    iconContainer: {
+        top: 15,
+        right: 7,
+    },
+});
+
+export { styles, pickerStyle };

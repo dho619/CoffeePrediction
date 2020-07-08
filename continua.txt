@@ -1,4 +1,11 @@
-Tentar achar flash ligado o tempo td
-Pegar localização quando cadastra usario e criar uma area, sera a padrao em de nvoas analises
+criar tela de perfil e editar perfil
+adicionar opçao de contatos para adicionar quando cadastrar conta
+tela para exibir, editar e apagar áreas
 conectar o backend
-fazer conexão com o google
+
+
+Coisa para se ver se vai fazer e se for como fazer:
+
+- fazer conexão com o google
+- Localização como vai ser e como pegar (uma opção: Pegar localização quando cadastra usario e criar uma area, sera a padrao em de novas analises)
+- Tipos, deixa usuario cadastrar? Provavelmente melhor listar tds tipos
