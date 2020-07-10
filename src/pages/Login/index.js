@@ -4,7 +4,9 @@ import { View, KeyboardAvoidingView, Image,
          Animated, StyleSheet, Keyboard, Alert
 } from 'react-native';
 import { validate } from 'validate.js';
+
 import constraintsEmail from '../../utils/constraints';
+import api from '../../services/api';
 
 const logo = require('../../assets/logo.png');
 
@@ -59,8 +61,9 @@ export default function Login({ navigation }) {
     }
 
     const signIn = async () => {
+
         const validationResult = await validate({email}, constraintsEmail);
-        if (false && validationResult){
+        if (validationResult){
             Alert.alert(
                 "Aviso",
                 validationResult.email[0],
@@ -70,7 +73,21 @@ export default function Login({ navigation }) {
                 { cancelable: false }
               );
         } else {
-            navigation.navigate('Drawer');
+
+            try{
+                const response = await api.post('login', {email, password});
+                alert(response.data.token);
+                navigation.navigate('Drawer');
+            }catch{
+                Alert.alert(
+                    "Aviso",
+                    'Usuário ou senha incorretos',
+                    [
+                      { text: "OK"}
+                    ],
+                    { cancelable: false }
+                  );
+            }
         }
     }
 
