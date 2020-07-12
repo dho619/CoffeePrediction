@@ -7,6 +7,7 @@ import { validate } from 'validate.js';
 
 import constraintsEmail from '../../utils/constraints';
 import api from '../../services/api';
+import {onSignIn, loggedUser} from '../../services/auth';
 
 const logo = require('../../assets/logo.png');
 
@@ -76,7 +77,8 @@ export default function Login({ navigation }) {
 
             try{
                 const response = await api.post('login', {email, password});
-                alert(response.data.token);
+                onSignIn(response.data.token);
+                loggedUser;
                 navigation.navigate('Drawer');
             }catch{
                 Alert.alert(
