@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+
+import {Context} from '../context/contextAuth';
+import {isSignedIn} from '../services/auth'
 
 import CustomDrawer from '../components/CustomDrawer';
 import Home from '../pages/Home';
@@ -8,18 +11,23 @@ import Incidents from '../pages/Incidents';
 import LatestAnalysis from '../pages/LatestAnalysis';
 import NewPhotos from '../pages/NewPhotos';
 import AreaRegister from '../pages/AreaRegister';
-import Swipeable from 'react-native-gesture-handler/Swipeable';
 
 const AppDrawer = createDrawerNavigator();
 
-export default function Drawer() {
+function Drawer({navigation}) {
+    const [user, setUser] = useState({});
+    const { user: loggedUser} = useContext(Context);
+
+    useEffect(() => {
+        setUser(loggedUser);
+        console.log(loggedUser.name)
+    }, [isSignedIn()]);
+
     return (
         <AppDrawer.Navigator
             initialRouteName= {"Inicio"}
             drawerContent= {CustomDrawer}
-            screenOptions= {
-                {swipeEnabled: false}
-            }
+            screenOptions= {{swipeEnabled: false, user}}
             drawerContentOptions={{
                 activeTintColor: '#A0522D',
                 activeBackgroundColor: '#00622D',
@@ -36,3 +44,5 @@ export default function Drawer() {
         </AppDrawer.Navigator>
     )
 }
+
+export default Drawer;

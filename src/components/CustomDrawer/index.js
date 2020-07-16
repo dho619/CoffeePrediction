@@ -4,22 +4,26 @@ import { DrawerItemList } from '@react-navigation/drawer';
 import { AntDesign, } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 
+import {onSignOut} from '../../services/auth';
+
 var avatar = require('../../assets/perfil.jpeg');
 import styles from './styles';
 
 export default function CustomDrawer({...props}){
-
     const { state, ...rest } = props; // pegar os state (os itens que aparecerao na gaveta)
     const newState = { ...state}  //copia o state para não altera o original 
     newState.routes = newState.routes.filter(item => item.name !== 'Profile') //pega todos menos o Profile
 
     const signOut = () => {
+        onSignOut()
         props.navigation.navigate('Login')
     }
 
     const accessProfile = () => {
         props.navigation.navigate('Profile')
     }
+
+    const user = props.descriptors[props.state.routes[0].key].options.user;
 
     return (
         <View style={styles.container}>
@@ -43,7 +47,7 @@ export default function CustomDrawer({...props}){
                     </TouchableOpacity>
                     <View style={styles.userText}>
                         <TouchableOpacity onPress={accessProfile} >
-                            <Text numberOfLines={1} style={styles.name}>Korapayka Winchester da Silva</Text>
+                            <Text numberOfLines={1} style={styles.name}>{user.name}</Text>
                         </TouchableOpacity>
                         <Text numberOfLines={1} style={styles.email}>KorapaykaWinchester@email.com</Text>
                     </View>
@@ -72,4 +76,3 @@ export default function CustomDrawer({...props}){
         </View>
     );
 }
-

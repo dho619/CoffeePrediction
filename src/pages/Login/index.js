@@ -7,7 +7,7 @@ import { validate } from 'validate.js';
 
 import constraintsEmail from '../../utils/constraints';
 import api from '../../services/api';
-import {onSignIn, loggedUser} from '../../services/auth';
+import {onSignIn} from '../../services/auth';
 
 const logo = require('../../assets/logo.png');
 
@@ -62,7 +62,6 @@ export default function Login({ navigation }) {
     }
 
     const signIn = async () => {
-
         const validationResult = await validate({email}, constraintsEmail);
         if (validationResult){
             Alert.alert(
@@ -77,10 +76,10 @@ export default function Login({ navigation }) {
 
             try{
                 const response = await api.post('login', {email, password});
-                onSignIn(response.data.token);
-                loggedUser;
+                await onSignIn(response.data.token);
                 navigation.navigate('Drawer');
-            }catch{
+            }catch(err){
+                console.log(err)
                 Alert.alert(
                     "Aviso",
                     'Usuário ou senha incorretos',

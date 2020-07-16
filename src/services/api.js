@@ -1,11 +1,10 @@
 import axios from 'axios';
-import { isSignedIn } from './auth';
+import { AsyncStorage } from 'react-native';
+
+const token = AsyncStorage.getItem('@CoffeePrediction:token');
 
 const api = axios.create({
-    baseURL: 'http://192.168.0.115:5000',
-    headers: { 
-        Authorization : `Bearer ${isSignedIn}`
-    }
-});
+    baseURL: 'http://192.168.0.115:5000'
+});    
 
 export default api;
