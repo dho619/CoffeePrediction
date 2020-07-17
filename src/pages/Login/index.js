@@ -5,9 +5,9 @@ import { View, KeyboardAvoidingView, Image,
 } from 'react-native';
 import { validate } from 'validate.js';
 
-import constraintsEmail from '../../utils/constraints';
+import {constraintsEmail} from '../../utils/constraints';
 import api from '../../services/api';
-// import {onSignIn} from '../../services/auth';
+
 import { Context } from '../../context/contextAuth';
 
 const logo = require('../../assets/logo.png');
@@ -22,15 +22,20 @@ export default function Login({ navigation }) {
     const { onSignIn } = useContext(Context);
 
     useEffect(() => {
+        //quando abre o teclado chama a funcao passada
         keboardDidShowListener = Keyboard.addListener('keyboardDidShow', keyboardDidShow);
+        //quando fecha o teclado chama a funcao passada
         keboardDidHideListener = Keyboard.addListener('keyboardDidHide', keyboardDidHide);
 
+        //executar mais de uma animacao em paralelo
         Animated.parallel([
+            //controla os "pulos" do form de login
             Animated.spring(offset.y, {
                 toValue: 0,
                 speed: 4,
                 bounciness: 20,
             }),
+            //controla opacidade
             Animated.timing(opacity, {
                 toValue: 1,
                 duration: 200,
@@ -39,11 +44,14 @@ export default function Login({ navigation }) {
     }, []);
 
     function keyboardDidShow(){
+        //executar mais de uma animacao em paralelo
         Animated.parallel([
+            //controla o tamanho no eixo x
             Animated.timing(dimensao.x, {
                 toValue: 200,
                 duration: 100,
             }),
+            //controla o tamanho no eixo y
             Animated.timing(dimensao.y, {
                 toValue: 205,
                 duration: 100,
@@ -52,11 +60,14 @@ export default function Login({ navigation }) {
     }
 
     function keyboardDidHide(){
+        //executar mais de uma animacao em paralelo
         Animated.parallel([
+            //controla o tamanho no eixo x
             Animated.timing(dimensao.x, {
                 toValue: 330,
                 duration: 100,
             }),
+            //controla o tamanho no eixo y
             Animated.timing(dimensao.y, {
                 toValue: 345,
                 duration: 100,
@@ -65,6 +76,8 @@ export default function Login({ navigation }) {
     }
 
     const signIn = async () => {
+        email = email.trim();//tirar espacoes desnecessarios
+        //verificar se email existe e se é um email valido
         const validationResult = await validate({email}, constraintsEmail);
         if (validationResult){
             Alert.alert(
@@ -75,12 +88,26 @@ export default function Login({ navigation }) {
                 ],
                 { cancelable: false }
               );
-        } else {
+        } else { //se email é válido continua
+
+            //verifica se senha existe
+            if(pass === ''){
+                Alert.alert(
+                    "Aviso",
+                    'Nescessário preencher o campo de Senha',
+                    [
+                        { text: "OK"}
+                    ],
+                    { cancelable: false }
+                );
+                return '';
+            }
 
             try{
+                // envia email e senha para fazer login
                 const response = await api.post('login', {email, password});
-                await onSignIn(response.data.token);
-                navigation.navigate('Drawer');
+                await onSignIn(response.data.token);//registrar o login no context
+                navigation.navigate('Drawer'); //navegar para a parte da aplicacao de usuario logado
             }catch(err){
                 console.log(err)
                 Alert.alert(
@@ -122,9 +149,11 @@ export default function Login({ navigation }) {
                     style={styles.input}
                     placeholder="Email"
                     autoCompleteType='email'
+                    keyboardType='email-address'
                     value={email}
                     autoCorrect={false}
                     onChangeText={email => setEmail(email)} 
+                    onEndEditing= {e => setEmail(e.nativeEvent.text.trim())}
                 />
 
                 <TextInput

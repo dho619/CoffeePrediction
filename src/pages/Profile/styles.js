@@ -13,6 +13,7 @@ export default StyleSheet.create({
       margin: 20,
       width: 140,
       height: 140,
+      borderRadius: 10,
     },
     dtAtivacao: {
       fontSize: 15,

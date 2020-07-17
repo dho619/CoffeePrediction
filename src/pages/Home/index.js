@@ -7,14 +7,6 @@ import wallpapper from '../../assets/wallpapper.jpg';
 import styles from './styles';
 
 export default function Home({navigation}) {
-    // React.useEffect(() => {
-    //     const unsubscribe = navigation.addListener('drawerOpen', (e) => {
-    //         alert('Screen was focused')
-    //     });
-      
-    //     return unsubscribe;
-    //   }, [navigation]);
-
     return (
         <View style={styles.container}>
             <ImageBackground source={wallpapper} style={styles.image}>

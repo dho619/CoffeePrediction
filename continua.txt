@@ -1,15 +1,18 @@
 
 Telas a sere criadas ou alteradas:
 
- - editar tela de perfil, para ficar mais agradável e criar opção de editar perfil
- - adicionar opçao de contatos para adicionar quando cadastrar conta
- - tela para exibir, editar e apagar áreas
- - Tela de exibição de Detalhes da análise selecionada
- - tela de ajuda
+    - editar tela de perfil, para ficar mais agradável e criar opção de editar perfil
+    - adicionar opçao de contatos para adicionar quando cadastrar conta
+    - tela para exibir, editar e apagar áreas
+    - Tela de exibição de Detalhes da análise selecionada
+    - tela de ajuda
 
+Funções a serem feitas:
+    - esqueci a senha
+    - lembrar de mim
 
 Coisa para se ver se vai fazer e se for como fazer:
 
-- fazer conexão com o google
-- Localização como vai ser e como pegar (uma opção: Pegar localização quando cadastra usario e criar uma area, sera a padrao em de novas analises)
-- Tipos, deixa usuario cadastrar? Provavelmente melhor listar tds tipos
+    - fazer conexão com o google
+    - Localização como vai ser e como pegar (uma opção: Pegar localização quando cadastra usario e criar uma area, sera a padrao em de novas analises)
+    - Tipos, deixa usuario cadastrar? Provavelmente melhor listar tds tipos

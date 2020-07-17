@@ -1,11 +1,15 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import { View, KeyboardAvoidingView, Image, 
          Text, TouchableOpacity, TextInput,
-         Animated, StyleSheet, Keyboard
+         Animated, StyleSheet, Keyboard, Alert
 } from 'react-native';
+
+import api from '../../services/api';
 import { validate } from 'validate.js';
-import constraintsEmail from '../../utils/constraints';
+import { constraintsEmail, validatePassword } from '../../utils/constraints';
 const logo = require('../../assets/logo.png')
+
+import { Context } from '../../context/contextAuth';
 
 export default function Login({navigation}) {
 
@@ -18,16 +22,23 @@ export default function Login({navigation}) {
     const [marginTop] = useState(new Animated.Value(40))
     const [dimensao] = useState(new Animated.ValueXY({x: 250, y: 255}))
 
+    const { onSignIn } = useContext(Context);
+
     useEffect(() => {
+        //quando abre o teclado chama a funcao passada
         keboardDidShowListener = Keyboard.addListener('keyboardDidShow', keyboardDidShow)
+        //quando fecha o teclado chama a funcao passada
         keboardDidHideListener = Keyboard.addListener('keyboardDidHide', keyboardDidHide)
 
+        //executar mais de uma animacao em paralelo
         Animated.parallel([
+            //controla os "pulos" no form de registrar
             Animated.spring(offset.y, {
                 toValue: 0,
                 speed: 4,
                 bounciness: 20
             }),
+            //controla a opacidade
             Animated.timing(opacity, {
                 toValue: 1,
                 duration: 200,
@@ -36,15 +47,19 @@ export default function Login({navigation}) {
     }, []);
 
     function keyboardDidShow(){
+        //executar mais de uma animacao em paralelo
         Animated.parallel([
+            //controla o tamanho no eixo x
             Animated.timing(dimensao.x, {
                 toValue: 130,
                 duration: 100,
             }),
+            //controla o tamanho no eixo y
             Animated.timing(dimensao.y, {
                 toValue: 140,
                 duration: 100,
             }),
+            //controla a margin do topo
             Animated.timing(marginTop, {
                 toValue: 20,
                 duration: 100,
@@ -53,15 +68,19 @@ export default function Login({navigation}) {
     }
 
     function keyboardDidHide(){
+        //executar mais de uma animacao em paralelo
         Animated.parallel([
+            //controla o tamanho no eixo x
             Animated.timing(dimensao.x, {
                 toValue: 250,
                 duration: 100,
             }),
+            //controla o tamanho no eixo y
             Animated.timing(dimensao.y, {
                 toValue: 255,
                 duration: 100,
             }),
+            //controla a margin do topo
             Animated.timing(marginTop, {
                 toValue: 40,
                 duration: 100,
@@ -70,6 +89,20 @@ export default function Login({navigation}) {
     }
 
     const register = async () => {
+        //verificar se nome esta vazio
+        if(name === ''){
+            Alert.alert(
+                "Aviso",
+                'Nescessário preencher o campo de Nome',
+                [
+                    { text: "OK"}
+                ],
+                { cancelable: false }
+            );
+            return '';
+        }
+
+        //validar email
         const validationResult = await validate({email}, constraintsEmail);
         if (validationResult){
             Alert.alert(
@@ -80,7 +113,30 @@ export default function Login({navigation}) {
                 ],
                 { cancelable: false }
             );
+            return '';
         }
+        
+        //validando senha
+        validatePassword(password, password2);
+
+        try{
+            // envia email e senha para fazer cadastro
+            const response = await api.post('users', {name, email, password});
+            await onSignIn(response.data.token);//faz o login e ja registra no context
+            navigation.navigate('Drawer'); //navegar para a parte da aplicacao de usuario logado
+        }catch(err){
+            console.log(err)
+            Alert.alert(
+                "Aviso",
+                'Erro ao fazer o cadastro, tente novamente em alguns instantes!',
+                [
+                  { text: "OK"}
+                ],
+                { cancelable: false }
+              );
+        }
+
+    
     }
 
     return (
@@ -111,15 +167,18 @@ export default function Login({navigation}) {
                     value={name}
                     autoCorrect={false}
                     onChangeText={name => setName(name)}
+                    onEndEditing= {e => setName(e.nativeEvent.text.trim())}
                 />
 
                 <TextInput
                     style={styles.input}
                     placeholder="Email"
                     autoCompleteType='email'
+                    keyboardType='email-address'
                     value={email}
                     autoCorrect={false}
                     onChangeText={email => setEmail(email)}
+                    onEndEditing= {e => setEmail(e.nativeEvent.text.trim())}
                 />
 
                 <TextInput

@@ -23,7 +23,6 @@ export default function CustomDrawer({...props}){
         props.navigation.navigate('Profile')
     }
 
-
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -48,7 +47,7 @@ export default function CustomDrawer({...props}){
                         <TouchableOpacity onPress={accessProfile} >
                             <Text numberOfLines={1} style={styles.name}>{user.name}</Text>
                         </TouchableOpacity>
-                        <Text numberOfLines={1} style={styles.email}>KorapaykaWinchester@email.com</Text>
+                        <Text numberOfLines={1} style={styles.email}>{user.email}</Text>
                     </View>
                     <TouchableOpacity 
                         style={styles.btLogout}
