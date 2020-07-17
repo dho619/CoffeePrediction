@@ -4,8 +4,6 @@ import { DrawerItemList } from '@react-navigation/drawer';
 import { AntDesign, } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 
-import {onSignOut} from '../../services/auth';
-
 var avatar = require('../../assets/perfil.jpeg');
 import styles from './styles';
 
@@ -13,7 +11,9 @@ export default function CustomDrawer({...props}){
     const { state, ...rest } = props; // pegar os state (os itens que aparecerao na gaveta)
     const newState = { ...state}  //copia o state para não altera o original 
     newState.routes = newState.routes.filter(item => item.name !== 'Profile') //pega todos menos o Profile
-
+    
+    const {user, onSignOut} = props.descriptors[props.state.routes[0].key].options;
+    
     const signOut = () => {
         onSignOut()
         props.navigation.navigate('Login')
@@ -23,7 +23,6 @@ export default function CustomDrawer({...props}){
         props.navigation.navigate('Profile')
     }
 
-    const user = props.descriptors[props.state.routes[0].key].options.user;
 
     return (
         <View style={styles.container}>

@@ -1,32 +1,16 @@
-import React, { createContext, useState, useEffect } from 'react';
-import {isSignedIn, loggedUser} from '../services/auth';
+import React, { createContext } from 'react';
+
+import useAuth from './hooks/useAuth';
 
 const Context = createContext();
 
 function AuthProvider({ children }){
-    const [authenticated, setAuthenticated] = useState(false);
-    const [loading, setLoading] = useState(true);
-    const [user, setUser] = useState({});
 
-    useEffect(() => {
-        //cria uma funcao async, para aguardar antes de continuar
-        const isAuth = async () => { 
-            const token = await isSignedIn();
-            if (token) {
-                setAuthenticated(true);
-                setUser(await loggedUser());
-            }
-
-            setLoading(false);
-        }
-
-        isAuth(); //executa a funcao async
-        
-    }, []);
-
+    const {loading, authenticated, token, user, onSignIn, onSignOut} = useAuth();
+    
     //Context e para passar informacoes para os filhos, praticamente um redux simplificado
     return (
-        <Context.Provider value={{loading, authenticated, user}}>
+        <Context.Provider value={{loading, authenticated, token, user, onSignIn, onSignOut}}>
             {children}
         </Context.Provider>
     );

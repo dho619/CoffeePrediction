@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import {Context} from '../context/contextAuth';
-import {isSignedIn} from '../services/auth'
+import {isSignedIn} from '../context/auxAuth';
 
 import CustomDrawer from '../components/CustomDrawer';
 import Home from '../pages/Home';
@@ -14,20 +14,19 @@ import AreaRegister from '../pages/AreaRegister';
 
 const AppDrawer = createDrawerNavigator();
 
-function Drawer({navigation}) {
+function Drawer() {
     const [user, setUser] = useState({});
-    const { user: loggedUser} = useContext(Context);
+    const { user: loggedUser, onSignOut } = useContext(Context);
 
     useEffect(() => {
         setUser(loggedUser);
-        console.log(loggedUser.name)
-    }, [isSignedIn()]);
+    }, [isSignedIn()]);//se mudou o usuario logado, recarrega o usuario usado no drawer
 
     return (
         <AppDrawer.Navigator
             initialRouteName= {"Inicio"}
             drawerContent= {CustomDrawer}
-            screenOptions= {{swipeEnabled: false, user}}
+            screenOptions= {{swipeEnabled: false, user, onSignOut}}
             drawerContentOptions={{
                 activeTintColor: '#A0522D',
                 activeBackgroundColor: '#00622D',

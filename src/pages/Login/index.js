@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import { View, KeyboardAvoidingView, Image, 
          Text, TouchableOpacity, TextInput,
          Animated, StyleSheet, Keyboard, Alert
@@ -7,7 +7,8 @@ import { validate } from 'validate.js';
 
 import constraintsEmail from '../../utils/constraints';
 import api from '../../services/api';
-import {onSignIn} from '../../services/auth';
+// import {onSignIn} from '../../services/auth';
+import { Context } from '../../context/contextAuth';
 
 const logo = require('../../assets/logo.png');
 
@@ -17,6 +18,8 @@ export default function Login({ navigation }) {
     const [offset] = useState(new Animated.ValueXY({x:0, y:95}));
     const [opacity] = useState(new Animated.Value(0));
     const [dimensao] = useState(new Animated.ValueXY({x: 330, y: 345}));
+
+    const { onSignIn } = useContext(Context);
 
     useEffect(() => {
         keboardDidShowListener = Keyboard.addListener('keyboardDidShow', keyboardDidShow);

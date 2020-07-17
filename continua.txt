@@ -1,21 +1,11 @@
-PASSAR O LOGIN E LOGOUT PARA O CONTEXTO, PORQUE SE EU LOGAR OU DESLOGAR O CONTEXTO TEM 
-QUE ALTERAR TBM...
-isso pode trocar, ta apenas para saber quem ta logado
 
-function Drawer({navigation}) {
-    const [user, setUser] = useState({});
-    const { user: loggedUser} = useContext(Context);
+Telas a sere criadas ou alteradas:
 
-    useEffect(() => {
-        setUser(loggedUser);
-        console.log(loggedUser.name)
-    }, [isSignedIn()]);
-
-referencia: https://www.youtube.com/watch?v=AClyxTbfI08
-
-criar tela de perfil e editar perfil
-adicionar opçao de contatos para adicionar quando cadastrar conta
-tela para exibir, editar e apagar áreas
+ - editar tela de perfil, para ficar mais agradável e criar opção de editar perfil
+ - adicionar opçao de contatos para adicionar quando cadastrar conta
+ - tela para exibir, editar e apagar áreas
+ - Tela de exibição de Detalhes da análise selecionada
+ - tela de ajuda
 
 
 Coisa para se ver se vai fazer e se for como fazer:
