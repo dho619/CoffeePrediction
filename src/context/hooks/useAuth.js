@@ -12,12 +12,16 @@ export default function useAuth(){
         //cria uma funcao async, para aguardar antes de continuar
         const isAuth = async () => { 
             const token = await isSignedIn();
-            if (token !== '') {
+            const userLogged = await loggedUser()
+            if (userLogged) {
                 setAuthenticated(true);
                 setToken(token);
-                setUser(await loggedUser());
+                setUser(userLogged);
+            } else{
+                setAuthenticated(false);
+                setToken('');
+                setUser({}); 
             }
-
             setLoading(false);
         }
 

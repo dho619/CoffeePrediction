@@ -76,7 +76,6 @@ export default function Login({ navigation }) {
     }
 
     const signIn = async () => {
-        email = email.trim();//tirar espacoes desnecessarios
         //verificar se email existe e se é um email valido
         const validationResult = await validate({email}, constraintsEmail);
         if (validationResult){
@@ -89,19 +88,6 @@ export default function Login({ navigation }) {
                 { cancelable: false }
               );
         } else { //se email é válido continua
-
-            //verifica se senha existe
-            if(pass === ''){
-                Alert.alert(
-                    "Aviso",
-                    'Nescessário preencher o campo de Senha',
-                    [
-                        { text: "OK"}
-                    ],
-                    { cancelable: false }
-                );
-                return '';
-            }
 
             try{
                 // envia email e senha para fazer login

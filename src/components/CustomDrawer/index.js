@@ -7,10 +7,13 @@ import { Ionicons } from '@expo/vector-icons';
 var avatar = require('../../assets/perfil.jpeg');
 import styles from './styles';
 
+const hiddenItems = ['Profile', 'AreaRegister'];//itens da gaveta que ficarao escondidos
+
 export default function CustomDrawer({...props}){
     const { state, ...rest } = props; // pegar os state (os itens que aparecerao na gaveta)
     const newState = { ...state}  //copia o state para não altera o original 
-    newState.routes = newState.routes.filter(item => item.name !== 'Profile') //pega todos menos o Profile
+    newState.routes = newState.routes.filter(item => hiddenItems.indexOf(item.name) === -1)
+                                                 //pega todos que nao estao em hiddenItems
     
     const {user, onSignOut} = props.descriptors[props.state.routes[0].key].options;
     

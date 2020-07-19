@@ -7,19 +7,24 @@ const styles = StyleSheet.create({
     },
     areaViewKeyboard: {
         alignItems: 'center',
-        justifyContent:'center',
         flex: 1,
     },
-    containerHeader:{
-        height: '20%',
-        textAlign: 'center',
-        justifyContent: 'center',
-        alignItems: 'center',
+    headerContainer:{
+        height: '10%',
+        width: '80%',
+        marginTop: 10,
+        marginBottom: 25,
+        flexDirection: 'row',
+        alignItems: 'center'
     },
-    textHeader:{
-        fontSize: 35,
-        fontWeight: 'bold',  
+    headerText: {
+        fontSize: 25,
+        fontWeight: 'bold',
         color: "#00622D",
+    },
+    btNewArea: {
+        position: 'absolute',
+        right: 0,
     },
     containerForm: {
         flex: 1,
@@ -40,6 +45,7 @@ const styles = StyleSheet.create({
     inputMultiline: {
         backgroundColor: '#FFF',
         width: '90%',
+        maxHeight:82,
         marginBottom: 15,
         color: '#222',
         fontSize: 17,

@@ -6,26 +6,33 @@ export default StyleSheet.create({
       flexDirection: "column",
       backgroundColor: '#cf965e',
     },
-    title:{
+    headerContainer:{
         marginTop: 10,
         marginLeft: '10%',
         marginBottom: 25,
+        flexDirection: 'row',
+        alignItems: 'center'
     },
-    titleText: {
+    headerText: {
         fontSize: 25,
         fontWeight: 'bold',
         color: "#00622D",
     },
-    analysisContainer: {
+    btNewArea: {
+        position: 'absolute',
+        right: 30,
+
+    },
+    areaContainer: {
         alignItems: "center",
         justifyContent: "center",
     },
-    analysisList: {
+    areaList: {
         width: '90%',
         height: '75%',
         padding: 15,
     },
-    analysisArea: {
+    area: {
         backgroundColor: '#F5DEB3',
         padding: 20,
         borderRadius: 20,
@@ -40,7 +47,7 @@ export default StyleSheet.create({
 
         elevation: 14,
     },
-    analyzeHeader:{
+    areaHeader:{
         fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 5, 
@@ -49,4 +56,13 @@ export default StyleSheet.create({
         fontSize: 16,
 
     },
+    areaIcons: {
+        position: 'absolute',
+        flexDirection: 'row',
+        right: 20,
+        bottom: 10,
+    },
+    editIcon: {
+        marginRight: 15,
+    }
   });
