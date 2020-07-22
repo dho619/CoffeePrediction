@@ -16,7 +16,7 @@ export const addUserToken = (token) => AsyncStorage.setItem(USER_TOKEN_KEY, toke
 //retorna se o token do usuario
 export const isSignedIn = async () => {
   const token = await AsyncStorage.getItem(USER_TOKEN_KEY);
-
+  
   return (token !== null) ? token : '';
 };
 

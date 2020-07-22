@@ -123,7 +123,7 @@ export default function Login({navigation}) {
             // envia email e senha para fazer cadastro
             const response = await api.post('users', {name, email, password});
             await onSignIn(response.data.token);//faz o login e ja registra no context
-            navigation.navigate('Drawer'); //navegar para a parte da aplicacao de usuario logado
+            navigation.navigate('Drawer', { screen: 'Inicio'}); //navegar para a parte da aplicacao de usuario logado
         }catch(err){
             console.log(err)
             Alert.alert(

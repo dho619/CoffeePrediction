@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, ImageBackground } from 'react-native'
+import { View, Text, TouchableOpacity, ImageBackground } from 'react-native'
 import { AntDesign } from '@expo/vector-icons';
 
 import Header from '../../components/Header';

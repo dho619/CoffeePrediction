@@ -10,7 +10,7 @@ import styles from './styles';
 export default function Areas({navigation}) {
     const [areas, setAreas] = useState([]);
 
-    const { user } = useContext(Context);
+    const { token } = useContext(Context);
 
     useEffect(() => {
         fillAreas();
@@ -18,12 +18,12 @@ export default function Areas({navigation}) {
 
     const fillAreas = async () => {
         try {
-            const response = await api.get(`areas/${user.id}`, {
+            const response = await api.get('areas', {
                 headers: { 
                   Authorization: `Bearer ${token}`
                 }
             });
-            setTypes(response.data.data);
+            setAreas(response.data.data);
         } catch (err) {
             Alert.alert(
                 "Aviso",
@@ -54,22 +54,27 @@ export default function Areas({navigation}) {
             </View>
             <View style={styles.areaContainer}>
                 <ScrollView style={ styles.areaList}>
-                    <View style={styles.area}>
-                        <Text style={styles.areaHeader}>Nome: Minha Fazenda</Text>
-                        <Text style={styles.areaDesc}>
-                            Descrição: Minha Area de Fazenda para testes
-                        </Text>
-                        <Text style={styles.areaDesc}>Tipo: Fazenda</Text>
+                    {
+                        areas.map(area => (
+                            <View key={area.id} style={styles.area}>
+                                <Text style={styles.areaHeader}>Nome: {area.name}</Text>
+                                <Text style={styles.areaDesc}>
+                                    Descrição: {area.description}
+                                </Text>
+                                <Text style={styles.areaDesc}>Tipo: {area.type_area?area.type_area.description:''}</Text>
 
-                        <View style={styles.areaIcons}>
-                            <TouchableOpacity style={styles.editIcon}>
-                                <AntDesign name="edit" size={24} color="black" />
-                            </TouchableOpacity>
-                            <TouchableOpacity>
-                                <AntDesign name="delete" size={24} color="black" />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
+                                <View style={styles.areaIcons}>
+                                    <TouchableOpacity style={styles.editIcon}>
+                                        <AntDesign name="edit" size={24} color="black" />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity>
+                                        <AntDesign name="delete" size={24} color="black" />
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+
+                        ))
+                    }
                 </ScrollView>
             </View>
         </View>

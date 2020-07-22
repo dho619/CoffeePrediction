@@ -27,7 +27,7 @@ export default function Stack() {
         >
             <AppStack.Screen name="Login" component={Login} />
             <AppStack.Screen name="Register" component={Register} />
-            <AppStack.Screen name="Drawer" options={{unmountOnBlur: true}}component={Drawer} />
+            <AppStack.Screen name="Drawer" component={Drawer} />
         </AppStack.Navigator>
     )
 }

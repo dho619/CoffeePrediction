@@ -12,6 +12,8 @@ export default function useAuth(){
         //cria uma funcao async, para aguardar antes de continuar
         const isAuth = async () => { 
             const token = await isSignedIn();
+            console.log(`Bearer ${token}`)
+
             const userLogged = await loggedUser()
             if (userLogged) {
                 setAuthenticated(true);
@@ -31,6 +33,7 @@ export default function useAuth(){
 
     async function onSignIn(token){
         await addUserToken(token);
+        setToken(token);
         setUser(await loggedUser());
         setAuthenticated(true);
     };

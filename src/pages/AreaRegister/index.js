@@ -49,7 +49,7 @@ export default function AreaRegister({navigation}){
     };
 
     const register = async () => {
-
+        
         //verificar se nome esta vazio
         if(!user.id){
             Alert.alert(

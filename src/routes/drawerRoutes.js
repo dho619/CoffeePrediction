@@ -27,7 +27,11 @@ function Drawer() {
         <AppDrawer.Navigator
             initialRouteName= {"Inicio"}
             drawerContent= {CustomDrawer}
-            screenOptions= {{swipeEnabled: false, user, onSignOut}}
+            screenOptions= {{
+                                swipeEnabled: false, 
+                                unmountOnBlur: true, //remota as telas quando entra nelas novamente
+                                user, onSignOut,
+                            }}
             drawerContentOptions={{
                 activeTintColor: '#A0522D',
                 activeBackgroundColor: '#00622D',
@@ -36,11 +40,11 @@ function Drawer() {
             }}
         >
             <AppDrawer.Screen name = "Inicio" component={Home} />
-            <AppDrawer.Screen name = "Profile" component={Profile} />
-            <AppDrawer.Screen name = "Nova Análise" options={{unmountOnBlur: true}} component={NewPhotos}/>
+            <AppDrawer.Screen name = "Nova Análise" component={NewPhotos}/>
             <AppDrawer.Screen name = "Últimas Análises" component={LatestAnalysis}/>
             <AppDrawer.Screen name = "Ocorrências" component={Incidents}/>
             <AppDrawer.Screen name = "Minhas Áreas" component={Areas}/>
+            <AppDrawer.Screen name = "Profile" component={Profile} />
             <AppDrawer.Screen name = "AreaRegister" component={AreaRegister}/>
         </AppDrawer.Navigator>
     )

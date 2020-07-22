@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, Image, TouchableOpacity} from 'react-native';
+import {View, Text, Image, TouchableOpacity, AsyncStorage} from 'react-native';
 import { DrawerItemList } from '@react-navigation/drawer';
 import { AntDesign, } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
