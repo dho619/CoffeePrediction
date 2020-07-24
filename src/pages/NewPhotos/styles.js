@@ -40,8 +40,11 @@ export default StyleSheet.create({
         width:'100%',
         height: '100%',
     },
-    btClosePhoto: {
-        margin: 10,
-        alignSelf: "flex-end",
+    areaButtonPhoto: {
+        margin: 15,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    btPhoto: {
     },
 });

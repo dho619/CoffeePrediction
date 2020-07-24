@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Text, View, TouchableOpacity, Modal, ImageBackground } from 'react-native'
 import { Camera } from 'expo-camera';
-import { AntDesign, Fontisto, Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { launchImageLibraryAsync,  requestCameraRollPermissionsAsync} from 'expo-image-picker';
+import { AntDesign, Fontisto, Ionicons, MaterialIcons, MaterialCommunityIcons} from '@expo/vector-icons';
 
 import Header from '../../components/Header';
 import styles from './styles';
@@ -13,8 +14,7 @@ export default function NewPhotos({navigation}) {
     const [flash, setFlash] = useState(Camera.Constants.FlashMode.off); //camera traseira ou front
     const [flashIcon, setFlashIcon] = useState('ios-flash-off'); //camera traseira ou front
     const [capturedPhoto, setCapturePhoto] = useState(null);
-    const [open, setOpen] = useState(false);
-    
+    const [open, setOpen] = useState(false);   
 
     useEffect(() => {
     (async () => {
@@ -55,6 +55,32 @@ export default function NewPhotos({navigation}) {
             setOpen(true);
         }
     };
+
+    const uploadImage = async () => {
+        let permissionResult = await requestCameraRollPermissionsAsync();
+
+        if (permissionResult.granted === false) {
+          alert('Nescessário permissão para acessar as imagens!');
+          return;
+        }
+
+        let result = await launchImageLibraryAsync({
+            allowsEditing: true,
+            aspect: [6, 8],
+        });
+      
+        if(!result.cancelled){
+            setCapturePhoto(result.uri);
+            setOpen(true);
+        }
+    };
+
+    const sendReview = async () => {
+        alert('Foto enviada para análise!')
+        const image = require('../../assets/wallpapper.jpg');
+        console.log(image);
+        // setOpen(false);
+    }
     
 
     return (
@@ -81,8 +107,8 @@ export default function NewPhotos({navigation}) {
             <TouchableOpacity onPress={takePicture}>
                 <MaterialIcons name="photo-camera" size={80} color="black"/>
             </TouchableOpacity>
-            <TouchableOpacity>
-                <MaterialIcons name="insert-photo" size={80} color="black"/>
+            <TouchableOpacity onPress={uploadImage}>
+                <MaterialCommunityIcons name="file-upload" size={80} color="black" />
             </TouchableOpacity>
         </View>
         {/* Tela da Foto a abaixo*/}
@@ -96,9 +122,14 @@ export default function NewPhotos({navigation}) {
                     style={styles.photo}
                     source={{uri: capturedPhoto}}
                 >
-                    <TouchableOpacity  style={styles.btClosePhoto} onPress={() => setOpen(false)}>
-                        <AntDesign name="closecircle" size={50} color="white"/>
-                    </TouchableOpacity>
+                    <View style={styles.areaButtonPhoto}>
+                        <TouchableOpacity  style={styles.btPhoto} onPress={() => setOpen(false)}>
+                            <AntDesign name="closecircle" size={50} color="white"/>
+                        </TouchableOpacity>
+                        <TouchableOpacity  style={styles.btPhoto} onPress={sendReview}>
+                            <AntDesign name="check" size={50} color="white" />
+                        </TouchableOpacity>
+                    </View>
                 </ImageBackground>
             </View>
         </Modal>
