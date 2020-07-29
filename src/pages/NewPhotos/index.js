@@ -13,7 +13,8 @@ export default function NewPhotos({navigation}) {
     const [type, setType] = useState(Camera.Constants.Type.back); //camera traseira ou front
     const [flash, setFlash] = useState(Camera.Constants.FlashMode.off); //camera traseira ou front
     const [flashIcon, setFlashIcon] = useState('ios-flash-off'); //camera traseira ou front
-    const [capturedPhoto, setCapturePhoto] = useState(null);
+    const [uriPhoto, setUriPhoto] = useState('');
+    const [capturedPhoto, setCapturePhoto] = useState('');
     const [open, setOpen] = useState(false);   
 
     useEffect(() => {
@@ -50,8 +51,9 @@ export default function NewPhotos({navigation}) {
 
     const takePicture = async () => { //tirar foto
         if(camRef){
-            const data = await camRef.current.takePictureAsync();
-            setCapturePhoto(data.uri);
+            const data = await camRef.current.takePictureAsync({base64: true});
+            setUriPhoto(data.uri);
+            setCapturePhoto(data.base64);
             setOpen(true);
         }
     };
@@ -67,20 +69,27 @@ export default function NewPhotos({navigation}) {
         let result = await launchImageLibraryAsync({
             allowsEditing: true,
             aspect: [6, 8],
+            base64: true
         });
       
         if(!result.cancelled){
-            setCapturePhoto(result.uri);
+            setUriPhoto(result.uri);
+            setCapturePhoto(result.base64);
             setOpen(true);
         }
     };
 
-    const sendReview = async () => {
-        alert('Foto enviada para análise!')
-        const image = require('../../assets/wallpapper.jpg');
-        console.log(image);
-        // setOpen(false);
+    const sendForReview = () => {
+        setOpen(false);
+        navigation.navigate('NewClassifications', {uriPhoto, capturedPhoto})
     }
+
+    const cancelReview = () => {
+        setUriPhoto('');
+        setCapturePhoto('');
+        setOpen(false);
+    } 
+
     
 
     return (
@@ -120,13 +129,13 @@ export default function NewPhotos({navigation}) {
             <View style={styles.containerPhoto}> 
                 <ImageBackground 
                     style={styles.photo}
-                    source={{uri: capturedPhoto}}
+                    source={{uri: uriPhoto}}
                 >
                     <View style={styles.areaButtonPhoto}>
-                        <TouchableOpacity  style={styles.btPhoto} onPress={() => setOpen(false)}>
+                        <TouchableOpacity  style={styles.btPhoto} onPress={cancelReview}>
                             <AntDesign name="closecircle" size={50} color="white"/>
                         </TouchableOpacity>
-                        <TouchableOpacity  style={styles.btPhoto} onPress={sendReview}>
+                        <TouchableOpacity  style={styles.btPhoto} onPress={sendForReview}>
                             <AntDesign name="check" size={50} color="white" />
                         </TouchableOpacity>
                     </View>

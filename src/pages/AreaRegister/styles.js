@@ -69,8 +69,8 @@ const styles = StyleSheet.create({
         flex: 1,
         width: 540,
         height: 200,
-        position: 'absolute',
         bottom: 0,
+        position: 'absolute',
         zIndex: -1
     },
 });

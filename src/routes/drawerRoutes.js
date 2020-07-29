@@ -12,6 +12,7 @@ import LatestAnalysis from '../pages/LatestAnalysis';
 import NewPhotos from '../pages/NewPhotos';
 import Areas from '../pages/Areas';
 import AreaRegister from '../pages/AreaRegister';
+import NewClassifications from '../pages/NewClassifications';
 
 const AppDrawer = createDrawerNavigator();
 
@@ -46,6 +47,7 @@ function Drawer() {
             <AppDrawer.Screen name = "Minhas Áreas" component={Areas}/>
             <AppDrawer.Screen name = "Profile" component={Profile} />
             <AppDrawer.Screen name = "AreaRegister" component={AreaRegister}/>
+            <AppDrawer.Screen name = "NewClassifications" component={NewClassifications}/>
         </AppDrawer.Navigator>
     )
 }
