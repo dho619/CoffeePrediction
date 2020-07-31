@@ -15,7 +15,7 @@ export default function AreaRegister({navigation}){
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [location, setLocation] = useState('');
-    const [type, setType] = useState(0);
+    const [type, setType] = useState(-1);
     const [types, setTypes] = useState([]);
 
     const { user, token } = useContext(Context);
@@ -90,7 +90,7 @@ export default function AreaRegister({navigation}){
         }
 
         //verificar se o Type esta vazio
-        if(type === ''){
+        if(type === -1){
             Alert.alert(
                 "Aviso",
                 'Nescessário preencher o Tipo de Área',
