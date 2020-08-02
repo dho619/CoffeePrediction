@@ -22,16 +22,41 @@ export default StyleSheet.create({
     infGerais:{
       padding: 20,
     },
-    name: {
+    agroup: {
+      alignItems: 'center',
+      flexDirection: 'row',
+      marginBottom: 15,
+    },
+    field: {
       fontSize: 17,
       fontWeight: 'bold',
-      marginBottom: 5,
-      width: '90%',
+      width: 75,
     },
-    email: {
-      fontSize: 15,
-      fontWeight: 'bold',
-      marginBottom: 10,
-      width: '90%',
-    },
+    input: {
+      backgroundColor: '#FFF',
+      width: '60%',
+      color: '#222',
+      fontSize: 16,
+      borderRadius: 7,
+      padding: 5,
+  },
+  buttonsArea: {
+    marginTop: 30,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 10,
+  },
+  buttons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFF',
+    padding: 5,
+    borderRadius: 10,
+  },
+  textButtons: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginLeft: 10
+  }
 });

@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: "#00622D",
     },
-    btNewArea: {
+    btReturnig: {
         position: 'absolute',
         right: 0,
     },

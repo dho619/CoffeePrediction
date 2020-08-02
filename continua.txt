@@ -1,11 +1,9 @@
-ARRUMAR BackEnd para retornar areas do usuario no areas/id
-
+Estou montando a edição do usuario, adicionar o campos de senha quando estiver editando
 
 Telas a sere criadas ou alteradas:
 
     -* editar tela de perfil, para ficar mais agradável e criar opção de editar perfil
     - adicionar opçao de contatos para adicionar quando cadastrar conta
-    -* tela para exibir, editar e apagar áreas
     -* Tela de exibição de Detalhes da análise selecionada
     - tela de ajuda
 

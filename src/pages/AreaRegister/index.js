@@ -11,18 +11,55 @@ import area from '../../assets/area.png';
 import {Context} from '../../context/contextAuth';
 import {styles, pickerStyle} from './styles';
 
-export default function AreaRegister({navigation}){
+export default function AreaRegister({route, navigation}){
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [location, setLocation] = useState('');
     const [type, setType] = useState(-1);
     const [types, setTypes] = useState([]);
+    const [creating, setCreating] = useState(true);
 
     const { user, token } = useContext(Context);
+    const { area } = route.params;
 
     useEffect(()=>{
+        handleArea();
         fillTypes();
     }, []);
+
+    const handleArea = () => {
+        if(area.type_area){
+            console.log(route.params)
+            try {
+                setName(area.name);
+                setDescription(area.description);
+                setLocation(area.location);
+                setType(area.type_area.id);
+                setCreating(false);
+            } catch {
+                Alert.alert(
+                    "Aviso",
+                    'Erro ao carregar a Área',
+                    [
+                        { text: "OK"}
+                    ],
+                    { cancelable: false }
+                );
+                setName('');
+                setDescription('');
+                setLocation('');
+                setType(-1);
+                setCreating(true);
+                navigation.navigate('Minhas Áreas');
+            }
+        } else {
+            setName('');
+            setDescription('');
+            setLocation('');
+            setType(-1);
+            setCreating(true);
+        } 
+    }
 
     const fillTypes = async () => {
         try {
@@ -48,7 +85,7 @@ export default function AreaRegister({navigation}){
         }
     };
 
-    const register = async () => {
+    const registerOrAlter = async () => {
         
         //verificar se nome esta vazio
         if(!user.id){
@@ -102,40 +139,65 @@ export default function AreaRegister({navigation}){
             return '';
         }
         
-        const area = {
+        const newArea = {
             name, 
             description, 
             type_area_id: type,
             location,
-            user_id: user.id,
         };
 
         try{
-            // faz cadastro de area
-            const response = await api.post('areas', area, {
-                headers: { 
-                  Authorization: `Bearer ${token}`
-                }
-            });
+            if(creating){ //se esta criando uma nova area
+                // faz cadastro de area
+                newArea.user_id = user.id; //adiciona o usuario q esta logado
+                const response = await api.post('areas', newArea, {
+                    headers: { 
+                    Authorization: `Bearer ${token}`
+                    }
+                });
 
-            Alert.alert(
-                "Sucesso",
-                'Área cadastrada com sucesso!',
-                [
-                  { text: "OK"}
-                ],
-                { cancelable: false }
-            );
+                Alert.alert(
+                    "Sucesso",
+                    'Área cadastrada com sucesso!',
+                    [
+                    { text: "OK"}
+                    ],
+                    { cancelable: false }
+                );
 
-            setName('');
-            setDescription('');
-            setLocation('');
+                setName('');
+                setDescription('');
+                setLocation('');
+            } else {
+                // faz atualizacao da area
+                const response = await api.put(`areas/${area.id}`, newArea, {
+                    headers: { 
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+
+                Alert.alert(
+                    "Sucesso",
+                    'Área atualizada com sucesso!',
+                    [
+                    { text: "OK"}
+                    ],
+                    { cancelable: false }
+                );
+                setName('');
+                setDescription('');
+                setLocation('');
+                setCreating(true);
+                navigation.navigate('Minhas Áreas');
+            }
+            
+            
             
             
         }catch(err){
             Alert.alert(
                 "Aviso",
-                'Erro ao fazer o cadastro, tente novamente em alguns instantes!',
+                'Erro ao fazer a operação, tente novamente em alguns instantes!',
                 [
                 { text: "OK"}
                 ],
@@ -150,9 +212,9 @@ export default function AreaRegister({navigation}){
             <Header navigation={navigation} />
             <KeyboardAvoidingView style={styles.areaViewKeyboard}>
                 <View style={styles.headerContainer}>
-                    <Text style={styles.headerText}>Cadastro de Áreas:</Text>
+                    <Text style={styles.headerText}>{creating?'Cadastro de Área':'Atualização de Área'}:</Text>
                     <TouchableOpacity 
-                        style={styles.btNewArea}
+                        style={styles.btReturnig}
                         onPress={() => navigation.navigate('Minhas Áreas')}
                     >
                         <Ionicons name="ios-arrow-round-back" size={60} color="white" />
@@ -196,8 +258,8 @@ export default function AreaRegister({navigation}){
                             return <AntDesign name="downcircleo" size={24} color="black" />;
                         }}
                     /> 
-                    <TouchableOpacity style={styles.btnSubmit} onPress={register}>
-                        <Text style={styles.submitText}>Cadastrar Área</Text>
+                    <TouchableOpacity style={styles.btnSubmit} onPress={registerOrAlter}>
+                        <Text style={styles.submitText}>{creating?'Cadastrar Área':'Atualizar Área'}</Text>
                     </TouchableOpacity>
                 </View>
             </KeyboardAvoidingView>
