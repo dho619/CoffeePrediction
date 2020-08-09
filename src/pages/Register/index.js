@@ -117,7 +117,9 @@ export default function Login({navigation}) {
         }
         
         //validando senha
-        validatePassword(password, password2);
+        if (!validatePassword(password, password2)){
+            return '';
+        }
 
         try{
             // envia email e senha para fazer cadastro

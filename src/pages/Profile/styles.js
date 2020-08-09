@@ -11,13 +11,20 @@ export default StyleSheet.create({
     },
     avatar: {
       margin: 20,
-      width: 140,
-      height: 140,
+      marginBottom: 10,
       borderRadius: 10,
     },
-    dtAtivacao: {
+    datasUsuario: {
       fontSize: 15,
-      marginBottom: 10,
+    },
+    btEditar: {
+      marginTop: 10,
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    txtBtEditar:{
+      fontWeight: 'bold',
+      marginRight: 5,
     },
     infGerais:{
       padding: 20,
@@ -32,6 +39,10 @@ export default StyleSheet.create({
       fontWeight: 'bold',
       width: 75,
     },
+    titleSenha: {
+      fontSize: 17,
+      fontWeight: 'bold',
+    },
     input: {
       backgroundColor: '#FFF',
       width: '60%',
@@ -41,7 +52,6 @@ export default StyleSheet.create({
       padding: 5,
   },
   buttonsArea: {
-    marginTop: 30,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',

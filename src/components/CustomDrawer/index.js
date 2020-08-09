@@ -19,11 +19,11 @@ export default function CustomDrawer({...props}){
     
     const signOut = () => {
         onSignOut()
-        props.navigation.navigate('Login')
+        props.navigation.navigate('Login');
     }
 
     const accessProfile = () => {
-        props.navigation.navigate('Profile')
+        props.navigation.navigate('Profile');
     }
 
     return (

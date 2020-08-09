@@ -23,7 +23,7 @@ export function validatePassword(pass, pass2){
             ],
             { cancelable: false }
         );
-        return '';
+        return false;
     }
 
     //verifica se senha 2 existe
@@ -36,7 +36,7 @@ export function validatePassword(pass, pass2){
             ],
             { cancelable: false }
         );
-        return '';
+        return false;
     }
 
     //verifica se sao iguais
@@ -49,7 +49,7 @@ export function validatePassword(pass, pass2){
             ],
             { cancelable: false }
         );
-        return '';
+        return false;
     }
 
     //verifica se tem mais de 8 caracteres
@@ -62,6 +62,8 @@ export function validatePassword(pass, pass2){
             ],
             { cancelable: false }
         );
-        return ''; 
+        return false; 
     }
+
+    return true;
 };
