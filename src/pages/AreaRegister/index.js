@@ -20,7 +20,7 @@ export default function AreaRegister({route, navigation}){
     const [creating, setCreating] = useState(true);
 
     const { user, token } = useContext(Context);
-    const { area } = route.params;
+    const { imgArea } = route.params;
 
     useEffect(()=>{
         handleArea();
@@ -263,7 +263,7 @@ export default function AreaRegister({route, navigation}){
                     </TouchableOpacity>
                 </View>
             </KeyboardAvoidingView>
-            <ImageBackground source={area} style={styles.imageBackground}/>
+            <ImageBackground source={imgArea} style={styles.imageBackground}/>
         </View>
     );
 };

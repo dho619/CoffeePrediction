@@ -1,4 +1,4 @@
-
+********Ver pq imagem não esta aparecendo no background 
 
 Telas a sere criadas ou alteradas:
 
@@ -8,7 +8,6 @@ Telas a sere criadas ou alteradas:
 
 Funções a serem feitas:
     -* esqueci a senha
-    -* lembrar de mim
 
 Coisa para se ver se vai fazer e se for como fazer:
 

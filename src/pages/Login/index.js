@@ -1,18 +1,25 @@
 import React, {useState, useEffect, useContext} from 'react';
 import { View, KeyboardAvoidingView, Image, 
          Text, TouchableOpacity, TextInput,
-         Animated, StyleSheet, Keyboard, Alert
+         Animated, AsyncStorage, Keyboard, Alert
 } from 'react-native';
 import { validate } from 'validate.js';
+import { RadioButton } from 'react-native-paper';
+import { MaterialIcons } from '@expo/vector-icons';
 
-import {constraintsEmail} from '../../utils/constraints';
 import api from '../../services/api';
-
+import {constraintsEmail} from '../../utils/constraints';
 import { Context } from '../../context/contextAuth';
-
+import { REMEMBER_EMAIL, REMEMBER_PASS } from '../../../config';
 const logo = require('../../assets/logo.png');
+import styles from './styles';
+
+
+
 
 export default function Login({ navigation }) {
+    const [remember, setRemember] = useState(false);
+    const [visiblePass, setVisiblePass] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [offset] = useState(new Animated.ValueXY({x:0, y:95}));
@@ -26,7 +33,7 @@ export default function Login({ navigation }) {
         keboardDidShowListener = Keyboard.addListener('keyboardDidShow', keyboardDidShow);
         //quando fecha o teclado chama a funcao passada
         keboardDidHideListener = Keyboard.addListener('keyboardDidHide', keyboardDidHide);
-
+        
         //executar mais de uma animacao em paralelo
         Animated.parallel([
             //controla os "pulos" do form de login
@@ -41,6 +48,8 @@ export default function Login({ navigation }) {
                 duration: 200,
             })
         ]).start();
+        
+        fillEmailPass();
     }, []);
 
     function keyboardDidShow(){
@@ -57,7 +66,7 @@ export default function Login({ navigation }) {
                 duration: 100,
             }),
         ]).start();
-    }
+    };
 
     function keyboardDidHide(){
         //executar mais de uma animacao em paralelo
@@ -73,7 +82,34 @@ export default function Login({ navigation }) {
                 duration: 100,
             }),
         ]).start();
+    };
+
+    async function fillEmailPass(){
+        const rememberEmail = await AsyncStorage.getItem(REMEMBER_EMAIL);
+        const rememberPass = await AsyncStorage.getItem(REMEMBER_PASS);
+
+        if( rememberEmail && rememberPass){
+            setEmail(rememberEmail);
+            setPassword(rememberPass);
+            setRemember(true);
+        } else {
+            setRemember(false);
+        }
     }
+
+    async function rememberUser(){
+        if (remember){
+            await AsyncStorage.setItem(REMEMBER_EMAIL, email);
+            await AsyncStorage.setItem(REMEMBER_PASS, password);
+        } else {
+            await AsyncStorage.removeItem(REMEMBER_EMAIL);
+            await AsyncStorage.removeItem(REMEMBER_PASS);
+            //limpar campos, para nao restar lixo quando voltar nessa tela
+            setEmail(''); 
+            setPassword('');
+        }
+        
+    };
 
     const signIn = async () => {
         //verificar se email existe e se é um email valido
@@ -93,9 +129,9 @@ export default function Login({ navigation }) {
                 // envia email e senha para fazer login
                 const response = await api.post('login', {email, password});
                 await onSignIn(response.data.token);//registrar o login no context
+                await rememberUser(); //para salvar ou limpar email e senha de acordo com o lembrar de mim
                 navigation.navigate('Drawer', { screen: 'Inicio' }); //navegar para a parte da aplicacao de usuario logado
             }catch(err){
-                console.log(err)
                 Alert.alert(
                     "Aviso",
                     'Usuário ou senha incorretos',
@@ -141,19 +177,43 @@ export default function Login({ navigation }) {
                     onChangeText={email => setEmail(email)} 
                     onEndEditing= {e => setEmail(e.nativeEvent.text.trim())}
                 />
-
-                <TextInput
-                    style={styles.input}
-                    placeholder="Senha"
-                    autoCorrect={false}
-                    value={password}
-                    onChangeText={password => setPassword(password)} 
-                    secureTextEntry={true}
-                />
+                <View style={styles.containerPass}>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Senha"
+                        autoCorrect={false}
+                        value={password}
+                        onChangeText={password => setPassword(password)} 
+                        secureTextEntry={!visiblePass}
+                    />
+                    <TouchableOpacity 
+                        style={styles.visibilityPass}
+                        onPressIn={() => setVisiblePass(!visiblePass)}
+                        onPressOut={() => setVisiblePass(false)}
+                    >
+                        <MaterialIcons 
+                            style={styles.iconVisibility}
+                            name={visiblePass?"visibility":"visibility-off"}
+                            size={30} 
+                            color="black" 
+                        />
+                    </TouchableOpacity>
+                </View>
 
                 <TouchableOpacity style={styles.btnSubmit} onPress={signIn}>
                     <Text style={styles.submitText}>Logar</Text>
                 </TouchableOpacity>
+                <View style={styles.containerRemember}>
+                    <RadioButton
+                                value= {remember}
+                                status= {remember? 'checked': 'unchecked'}
+                                onPress={() => setRemember(!remember)}
+                                color= {'#00622D'}
+                    />
+                    <TouchableOpacity onPress={() => setRemember(!remember)}>
+                        <Text style={styles.textRemember}>Lembrar de mim</Text>
+                    </TouchableOpacity>
+                </View>
 
                 <TouchableOpacity style={styles.btnRegister} onPress={() => navigation.navigate('Register')}>
                     <Text style={styles.registerText}>Criar conta gratuita</Text>
@@ -162,53 +222,3 @@ export default function Login({ navigation }) {
         </KeyboardAvoidingView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#cf965e',
-    alignItems: 'center',
-    justifyContent:'center',
-  },
-  containerLogo:{
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginTop: 40,
-  },
-  containerForm: {
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: '90%',
-      paddingBottom: 50,
-  },
-  input: {
-      backgroundColor: '#FFF',
-      width: '90%',
-      marginBottom: 15,
-      color: '#222',
-      fontSize: 17,
-      borderRadius: 7,
-      padding: 10,
-  },
-  btnSubmit: {
-      backgroundColor: '#00622D',
-      width: '90%',
-      height: 45,
-      alignItems: 'center',
-      justifyContent: 'center',
-      borderRadius: 7
-  },
-  submitText: {
-      color: '#FFF',
-      fontSize: 18,
-  },
-  btnRegister: {
-      marginTop: 20,
-  },
-  registerText: {
-      color: '#FFF',
-      fontSize: 18,
-  }
-});

@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext} from 'react';
 import { Text, TextInput, View, Image, TouchableOpacity, 
          KeyboardAvoidingView, Keyboard, Alert } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
 import { RadioButton } from 'react-native-paper';
+import { AntDesign } from '@expo/vector-icons';
 
 import api from '../../services/api';
 import { validatePassword } from '../../utils/constraints';
