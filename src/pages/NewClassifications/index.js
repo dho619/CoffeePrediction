@@ -120,7 +120,7 @@ export default function NewPhotos({route, navigation}) {
             setDescription('');            
             
         }catch(err){
-            console.log(err)
+            // console.log(err)
             Alert.alert(
                 "Aviso",
                 'Erro ao fazer o envio, tente novamente em alguns instantes!',

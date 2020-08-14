@@ -1,13 +1,16 @@
-********Ver pq imagem não esta aparecendo no background 
 
 Telas a sere criadas ou alteradas:
 
     - adicionar opçao de contatos para adicionar quando cadastrar conta
     -* Tela de exibição de Detalhes da análise selecionada
+    ----Menos importante----
     - tela de ajuda
+    - tela de splash
+    - tela carregando
 
 Funções a serem feitas:
     -* esqueci a senha
+    - adicionar foto
 
 Coisa para se ver se vai fazer e se for como fazer:
 

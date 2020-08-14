@@ -7,9 +7,9 @@ import { Ionicons } from '@expo/vector-icons';
 
 import api from '../../services/api';
 import Header from '../../components/Header';
-import area from '../../assets/area.png';
 import {Context} from '../../context/contextAuth';
 import {styles, pickerStyle} from './styles';
+import imgArea from '../../assets/area.png';
 
 export default function AreaRegister({route, navigation}){
     const [name, setName] = useState('');
@@ -20,7 +20,7 @@ export default function AreaRegister({route, navigation}){
     const [creating, setCreating] = useState(true);
 
     const { user, token } = useContext(Context);
-    const { imgArea } = route.params;
+    const { area } = route.params;
 
     useEffect(()=>{
         handleArea();
@@ -29,7 +29,6 @@ export default function AreaRegister({route, navigation}){
 
     const handleArea = () => {
         if(area.type_area){
-            console.log(route.params)
             try {
                 setName(area.name);
                 setDescription(area.description);

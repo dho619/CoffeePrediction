@@ -127,7 +127,7 @@ export default function Login({navigation}) {
             await onSignIn(response.data.token);//faz o login e ja registra no context
             navigation.navigate('Drawer', { screen: 'Inicio'}); //navegar para a parte da aplicacao de usuario logado
         }catch(err){
-            console.log(err)
+            // console.log(err)
             Alert.alert(
                 "Aviso",
                 'Erro ao fazer o cadastro, tente novamente em alguns instantes!',

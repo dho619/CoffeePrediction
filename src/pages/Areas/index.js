@@ -9,6 +9,7 @@ import styles from './styles';
 
 export default function Areas({navigation}) {
     const [areas, setAreas] = useState([]);
+    const [selectedArea, setSelectedArea] = useState(-1);
 
     const { token } = useContext(Context);
 
@@ -83,13 +84,19 @@ export default function Areas({navigation}) {
                 <ScrollView style={ styles.areaList}>
                     {
                         areas.map(area => (
-                            <View key={area.id} style={styles.area}>
+                            <TouchableOpacity 
+                                key={area.id} 
+                                style={selectedArea === area.id?styles.areaSelected:styles.area}
+                                onPress={() => {setSelectedArea(selectedArea === area.id?-1:area.id)}}
+                            >
                                 <Text style={styles.areaHeader}>Nome: {area.name}</Text>
-                                <Text style={styles.areaDesc}>
+                                <Text style={styles.areaDesc} numberOfLines={selectedArea===area.id?100:1}>
                                     Descrição: {area.description}
                                 </Text>
                                 <Text style={styles.areaDesc}>Tipo: {area.type_area?area.type_area.description:''}</Text>
-
+                                
+                                <Text style={styles.areaDesc} >Location: {area.location}</Text>
+                                
                                 <View style={styles.areaIcons}>
                                     <TouchableOpacity 
                                         style={styles.editIcon}
@@ -101,7 +108,7 @@ export default function Areas({navigation}) {
                                         <AntDesign name="delete" size={24} color="black" />
                                     </TouchableOpacity>
                                 </View>
-                            </View>
+                            </TouchableOpacity>
 
                         ))
                     }

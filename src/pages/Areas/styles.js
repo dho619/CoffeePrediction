@@ -47,6 +47,20 @@ export default StyleSheet.create({
 
         elevation: 14,
     },
+    areaSelected: {
+        backgroundColor: '#FFE',
+        padding: 20,
+        borderRadius: 20,
+        marginBottom: 25,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 7,
+        },
+        shadowOpacity: 0.41,
+        shadowRadius: 9.11,
+        elevation: 14,
+    },
     areaHeader:{
         fontSize: 20,
         fontWeight: 'bold',
@@ -54,7 +68,6 @@ export default StyleSheet.create({
     },
     analyzeDesc:{
         fontSize: 16,
-
     },
     areaIcons: {
         position: 'absolute',
