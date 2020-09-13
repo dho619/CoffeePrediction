@@ -97,17 +97,19 @@ export default function Areas({navigation}) {
                                 
                                 <Text style={styles.areaDesc} >Location: {area.location}</Text>
                                 
-                                <View style={styles.areaIcons}>
-                                    <TouchableOpacity 
-                                        style={styles.editIcon}
-                                        onPress={() => navigation.navigate('AreaRegister', {area})}
-                                    >
-                                        <AntDesign name="edit" size={24} color="black" />
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => deleteArea(area.id)}>
-                                        <AntDesign name="delete" size={24} color="black" />
-                                    </TouchableOpacity>
-                                </View>
+                                {selectedArea===area.id &&
+                                    <View style={styles.areaIcons}>
+                                        <TouchableOpacity 
+                                            style={styles.editIcon}
+                                            onPress={() => navigation.navigate('AreaRegister', {area})}
+                                        >
+                                            <AntDesign name="edit" size={24} color="black" />
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => deleteArea(area.id)}>
+                                            <AntDesign name="delete" size={24} color="black" />
+                                        </TouchableOpacity>
+                                    </View>
+                                }
                             </TouchableOpacity>
 
                         ))

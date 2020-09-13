@@ -117,7 +117,8 @@ export default function NewPhotos({route, navigation}) {
             );
 
             setName('');
-            setDescription('');            
+            setDescription('');
+            navigation.navigate('Inicio')           
             
         }catch(err){
             // console.log(err)

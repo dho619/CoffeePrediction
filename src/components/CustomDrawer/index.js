@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, Image, TouchableOpacity, AsyncStorage} from 'react-native';
+import {View, Text, Image, TouchableOpacity, AsyncStorage, Alert} from 'react-native';
 import { DrawerItemList } from '@react-navigation/drawer';
 import { AntDesign, } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
@@ -16,7 +16,7 @@ export default function CustomDrawer({...props}){
                                                  //pega todos que nao estao em hiddenItems
     
     const {user, onSignOut} = props.descriptors[props.state.routes[0].key].options;
-    
+
     const signOut = () => {
         onSignOut()
         props.navigation.navigate('Login');
