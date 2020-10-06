@@ -23,8 +23,10 @@ export default function AreaRegister({route, navigation}){
     const { area } = route.params;
 
     useEffect(()=>{
+        let mounted = true;
         handleArea();
         fillTypes();
+        return () => mounted = false;
     }, []);
 
     const handleArea = () => {
@@ -57,7 +59,7 @@ export default function AreaRegister({route, navigation}){
             setLocation('');
             setType(-1);
             setCreating(true);
-        } 
+        }
     }
 
     const fillTypes = async () => {

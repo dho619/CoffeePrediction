@@ -1,12 +1,16 @@
 
 Telas a sere criadas ou alteradas:
 
-    - adicionar opçao de contatos para adicionar quando cadastrar conta
+    - verificar se melhor usar guid no lugar de id, para trabalhar offline e depois sincronizar
+    - na questão de cima, pode ser tbm mapear o id que tava no banco offline e o novo id do banco do servidor
+    - quando funcionar offline tera que pegar informações do dois bancos
     -* Tela de exibição de Detalhes da análise selecionada
+    
     ----Menos importante----
     - tela de ajuda
     - tela de splash
     - tela carregando
+    - verificar questões de contatos
 
 Funções a serem feitas:
     -* esqueci a senha
@@ -15,5 +19,5 @@ Funções a serem feitas:
 Coisa para se ver se vai fazer e se for como fazer:
 
     - fazer conexão com o google
-    - Localização como vai ser e como pegar (uma opção: Pegar localização quando cadastra usario e criar uma area, sera a padrao em de novas analises)
+    - Localização como vai ser e como pegar (uma opção: Pegar localização quando cadastra usuario e criar uma area, sera a padrao em de novas analises)
     - Tipos, deixa usuario cadastrar? Provavelmente melhor listar tds tipos

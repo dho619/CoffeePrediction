@@ -7,11 +7,11 @@ import { Context } from '../../context/contextAuth';
 import Header from '../../components/Header';
 import styles from './styles';
 
-export default function Areas({navigation}) {
+export default function Areas({ navigation }) {
     const [areas, setAreas] = useState([]);
     const [selectedArea, setSelectedArea] = useState(-1);
 
-    const { token } = useContext(Context);
+    const { token, user } = useContext(Context);
 
     useEffect(() => {
         fillAreas();

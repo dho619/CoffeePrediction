@@ -1,7 +1,8 @@
 import axios from 'axios';
+import { HOST_API } from '../../config.js';
 
 const api = axios.create({
-    baseURL: 'http://192.168.0.115:5000'
+    baseURL: HOST_API
 });    
 
 export default api;

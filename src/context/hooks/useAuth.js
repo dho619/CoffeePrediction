@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-import { isSignedIn, loggedUser, addUserToken, clearUserToken } from '../auxAuth';
+import { isSignedIn, loggedUser, addUserToken, clearUserToken } from '../authenticationFunctions';
 
 export default function useAuth(){
     const [authenticated, setAuthenticated] = useState(false);

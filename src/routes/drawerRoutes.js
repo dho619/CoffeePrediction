@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import {Context} from '../context/contextAuth';
-import {isSignedIn} from '../context/auxAuth';
+import {isSignedIn} from '../context/authenticationFunctions';
 
 import CustomDrawer from '../components/CustomDrawer';
 import Home from '../pages/Home';
