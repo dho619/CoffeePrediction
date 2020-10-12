@@ -16,7 +16,7 @@ export default function Stack() {
     //se esta carregando, fica na tela de carregamento
     if(loading){
         return (
-            <Text>Carregando</Text>
+            <Text>Carregando...</Text>
         )
     }
 

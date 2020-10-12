@@ -6,15 +6,24 @@ import api from '../../services/api';
 import { Context } from '../../context/contextAuth';
 import Header from '../../components/Header';
 import styles from './styles';
+import { isOnline } from '../../services/Network';
+import { execute_db_offline } from '../../db/db_offline';
 
 export default function Areas({ navigation }) {
+    const [online, setOnline] = useState(false);
     const [areas, setAreas] = useState([]);
     const [selectedArea, setSelectedArea] = useState(-1);
 
     const { token, user } = useContext(Context);
 
     useEffect(() => {
-        fillAreas();
+        setOnline(isOnline())
+        if(false){
+            fillAreas();
+        } else {
+            fillAreasOffline();
+        }
+
     }, []);
 
     const fillAreas = async () => {
@@ -25,6 +34,22 @@ export default function Areas({ navigation }) {
                 }
             });
             setAreas(response.data.data);
+        } catch (err) {
+            Alert.alert(
+                "Aviso",
+                'Erro ao carregar as Áreas, tente recarregar a página para resolver o problema!',
+                [
+                    { text: "OK"}
+                ],
+                { cancelable: false }
+            );
+        }
+    }
+
+    const fillAreasOffline = async () => {
+        try {
+            let areas_offline = await execute_db_offline("SELECT * FROM areas")
+            setAreas([...areas_offline, ...user.areas]);
         } catch (err) {
             Alert.alert(
                 "Aviso",
@@ -50,6 +75,23 @@ export default function Areas({ navigation }) {
             }
         }
 
+        async function handleDeleteOffline(id){
+            try{
+                var area = await execute_db_offline("SELECT id FROM areas WHERE id = ? and type_action = 'insert'", [id])
+            } catch {}
+            if (area && area.length){
+                try {
+                    await execute_db_offline("DELETE FROM areas WHERE id = ?", [id])
+                    fillAreasOffline();
+                    alert('Área apagada com sucesso!')    
+                } catch {
+                    alert('Erro ao apagar a área, tente novamente mais tarde!')    
+                }
+            } else {
+
+            }
+        }
+
         Alert.alert(
             "Confirmação:",
             "Deseja realmente apagar essa área?",
@@ -58,7 +100,7 @@ export default function Areas({ navigation }) {
                 text: "Cancel",
                 style: "cancel"
               },
-              { text: "OK", onPress: () => handleDelete(id)}
+              { text: "OK", onPress: () => false?handleDelete(id):handleDeleteOffline(id)}
             ],
             { cancelable: false }
         );

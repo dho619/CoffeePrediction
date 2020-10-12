@@ -10,6 +10,7 @@ npm-debug.*
 web-build/
 web-report/
 config.js
+ondeContinua.txt
 
 # macOS
 .DS_Store

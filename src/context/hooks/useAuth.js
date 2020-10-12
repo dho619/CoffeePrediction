@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 
 import { isSignedIn, loggedUser, addUserToken, clearUserToken } from '../authenticationFunctions';
+import { isOnline } from '../../services/Network';
+import create_tables_if_not_exists from '../../db/create_tables';
 
 export default function useAuth(){
     const [authenticated, setAuthenticated] = useState(false);
@@ -33,8 +35,9 @@ export default function useAuth(){
     async function onSignIn(token){
         await addUserToken(token);
         setToken(token);
-        setUser(await loggedUser());
+        if(isOnline()) setUser(await loggedUser());
         setAuthenticated(true);
+        create_tables_if_not_exists()
     };
 
     async function onSignOut(){
