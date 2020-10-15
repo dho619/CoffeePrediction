@@ -5,13 +5,20 @@ import RNPickerSelect from 'react-native-picker-select';
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 
-import api from '../../services/api';
+import { execute_db_offline, get_guid } from '../../db/db_offline';
+import { isOnline } from '../../services/Network';
+import { registerOnline } from './queryArea/registerOnline';
+import { registerOffline } from './queryArea/registerOffline';
+import { alterOnline } from './queryArea/alterOnline';
+import { alterOffline } from './queryArea/alterOffline';
+
 import Header from '../../components/Header';
 import {Context} from '../../context/contextAuth';
 import {styles, pickerStyle} from './styles';
 import imgArea from '../../assets/area.png';
 
 export default function AreaRegister({route, navigation}){
+    const [online, setOnline] = useState(false);
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [location, setLocation] = useState('');
@@ -24,18 +31,19 @@ export default function AreaRegister({route, navigation}){
 
     useEffect(()=>{
         let mounted = true;
+        setOnline(isOnline())
         handleArea();
         fillTypes();
         return () => mounted = false;
     }, []);
 
     const handleArea = () => {
-        if(area.type_area){
+        if(area.type_area || area.type_area_id){
             try {
                 setName(area.name);
                 setDescription(area.description);
                 setLocation(area.location);
-                setType(area.type_area.id);
+                setType(area.type_area? area.type_area.id: area.type_area_id);
                 setCreating(false);
             } catch {
                 Alert.alert(
@@ -63,14 +71,11 @@ export default function AreaRegister({route, navigation}){
     }
 
     const fillTypes = async () => {
+        let types = []
         try {
-            const response = await api.get('typeAreas', {
-                headers: { 
-                  Authorization: `Bearer ${token}`
-                }
-              });
-            const types = []
-            await response.data.data.map(type => {
+            
+            const type_areas = await execute_db_offline('SELECT * from type_areas order by name');
+            await type_areas.map(type => {
                 types.push({label: type.description, value: type.id});
             });
             setTypes(types);
@@ -83,12 +88,11 @@ export default function AreaRegister({route, navigation}){
                 ],
                 { cancelable: false }
             );
+            console.log(err);
         }
     };
 
     const registerOrAlter = async () => {
-        
-        //verificar se nome esta vazio
         if(!user.id){
             Alert.alert(
                 "Aviso",
@@ -101,7 +105,6 @@ export default function AreaRegister({route, navigation}){
             return '';
         }
 
-        //verificar se nome esta vazio
         if(name === ''){
             Alert.alert(
                 "Aviso",
@@ -114,7 +117,6 @@ export default function AreaRegister({route, navigation}){
             return '';
         }
 
-        //verificar se a localizacao esta vazio
         if(location === ''){
             Alert.alert(
                 "Aviso",
@@ -127,7 +129,6 @@ export default function AreaRegister({route, navigation}){
             return '';
         }
 
-        //verificar se o Type esta vazio
         if(type === -1){
             Alert.alert(
                 "Aviso",
@@ -140,70 +141,40 @@ export default function AreaRegister({route, navigation}){
             return '';
         }
         
+        const type_area_name = await types.filter(function(type_area) { return type_area.value == type;})[0].label;
+
         const newArea = {
             name, 
             description, 
             type_area_id: type,
+            type_area_name,
             location,
         };
 
-        try{
-            if(creating){ //se esta criando uma nova area
-                // faz cadastro de area
-                newArea.user_id = user.id; //adiciona o usuario q esta logado
-                const response = await api.post('areas', newArea, {
-                    headers: { 
-                    Authorization: `Bearer ${token}`
-                    }
-                });
-
-                Alert.alert(
-                    "Sucesso",
-                    'Área cadastrada com sucesso!',
-                    [
-                    { text: "OK"}
-                    ],
-                    { cancelable: false }
-                );
-
-                setName('');
-                setDescription('');
-                setLocation('');
+        if(creating){
+            newArea.user_id = user.id; 
+            if (false){
+                await registerOnline(newArea, token)
             } else {
-                // faz atualizacao da area
-                const response = await api.put(`areas/${area.id}`, newArea, {
-                    headers: { 
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-
-                Alert.alert(
-                    "Sucesso",
-                    'Área atualizada com sucesso!',
-                    [
-                    { text: "OK"}
-                    ],
-                    { cancelable: false }
-                );
-                setName('');
-                setDescription('');
-                setLocation('');
-                setCreating(true);
-                navigation.navigate('Minhas Áreas');
+                await registerOffline(newArea)
             }
-            
-            
-            
-            
-        }catch(err){
-            Alert.alert(
-                "Aviso",
-                'Erro ao fazer a operação, tente novamente em alguns instantes!',
-                [
-                { text: "OK"}
-                ],
-                { cancelable: false }
-            );
+            setName('');
+            setDescription('');
+            setLocation('');
+            setType(-1);
+
+        }else {
+            if (false){
+                await alterOnline(area.id, newArea, token)
+            } else {
+                newArea.user_id = user.id; 
+                await alterOffline(area.id, newArea)
+            }
+            setName('');
+            setDescription('');
+            setLocation('');
+            setCreating(true);
+            navigation.navigate('Minhas Áreas');
         }
 
     }

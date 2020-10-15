@@ -48,7 +48,8 @@ export default function Areas({ navigation }) {
 
     const fillAreasOffline = async () => {
         try {
-            let areas_offline = await execute_db_offline("SELECT * FROM areas")
+            let areas_offline = await execute_db_offline("SELECT * FROM areas WHERE type_action <> 'delete'")
+            
             setAreas([...areas_offline, ...user.areas]);
         } catch (err) {
             Alert.alert(
@@ -135,7 +136,7 @@ export default function Areas({ navigation }) {
                                 <Text style={styles.areaDesc} numberOfLines={selectedArea===area.id?100:1}>
                                     Descrição: {area.description}
                                 </Text>
-                                <Text style={styles.areaDesc}>Tipo: {area.type_area?area.type_area.description:''}</Text>
+                                <Text style={styles.areaDesc}>Tipo: {area.type_area?area.type_area.description:area.type_area_name}</Text>
                                 
                                 <Text style={styles.areaDesc} >Location: {area.location}</Text>
                                 

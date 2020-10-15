@@ -112,7 +112,6 @@ export default function Login({ navigation }) {
     };
 
     const signIn = async () => {
-        //verificar se email existe e se é um email valido
         const validationResult = await validate({email}, constraintsEmail);
         if (validationResult){
             Alert.alert(
@@ -123,18 +122,29 @@ export default function Login({ navigation }) {
                 ],
                 { cancelable: false }
               );
-        } else { //se email é válido continua
+        } else {
 
             try{
-                // envia email e senha para fazer login
                 const response = await api.post('login', {email, password});
-                await onSignIn(response.data.token);
-                await rememberUser(); 
-                navigation.navigate('Drawer', { screen: 'Inicio' }); //navegar para a parte da aplicacao de usuario logado
+               
+                if(!(response.data.token)){
+                    Alert.alert(
+                        "Aviso",
+                        'Usuário ou senha incorretos',
+                        [
+                          { text: "OK"}
+                        ],
+                        { cancelable: false }
+                      );
+                } else{
+                    await onSignIn(response.data.token);
+                    await rememberUser(); 
+                    navigation.navigate('Drawer', { screen: 'Inicio' });
+                }
             }catch(err){
                 Alert.alert(
-                    "Aviso",
-                    'Usuário ou senha incorretos',
+                    "Erro",
+                    'Erro ao processar o login, tente novamente em instantes!',
                     [
                       { text: "OK"}
                     ],
