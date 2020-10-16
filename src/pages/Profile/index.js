@@ -1,6 +1,8 @@
-import React, { useState, useEffect, useContext} from 'react';
-import { Text, TextInput, View, Image, TouchableOpacity, 
-         KeyboardAvoidingView, Keyboard, Alert } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import {
+    Text, TextInput, View, Image, TouchableOpacity,
+    KeyboardAvoidingView, Keyboard, Alert
+} from 'react-native';
 import { RadioButton } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
 
@@ -10,10 +12,13 @@ import { Context } from '../../context/contextAuth';
 import { formatDatePython, dateNow } from '../../utils/date';
 import Header from '../../components/Header';
 import styles from './styles';
+import { updateOnline } from './queryUser/updateOnline';
+import { updateOffline } from './queryUser/updateOffline';
 
 var avatar = require('../../assets/perfil.jpeg');
 
-export default function Profile({navigation}) {
+export default function Profile({ navigation }) {
+    const [online, setOnline] = useState(false);
     const [editing, setEditing] = useState(false);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -23,7 +28,7 @@ export default function Profile({navigation}) {
     const [password3, setPassword3] = useState('');
     const [widthImage, setWidthImage] = useState(120);
     const [heightImage, setHeightImage] = useState(120);
-    
+
     const { user, token } = useContext(Context);
 
     useEffect(() => {
@@ -31,25 +36,27 @@ export default function Profile({navigation}) {
         keboardDidShowListener = Keyboard.addListener('keyboardDidShow', keyboardDidShow)
         //quando fecha o teclado chama a funcao passada
         keboardDidHideListener = Keyboard.addListener('keyboardDidHide', keyboardDidHide)
+        // setOnline(isOnline());
+        setOnline(false);
         fillUser();
     }, []);
 
-    const fillUser = () => {
+    const fillUser = async () => {
         setName(user.name);
         setEmail(user.email);
     }
 
-    function keyboardDidShow(){
+    function keyboardDidShow() {
         setHeightImage(50);
         setWidthImage(50);
     }
 
-    function keyboardDidHide(){
+    function keyboardDidHide() {
         setHeightImage(120);
         setWidthImage(120);
     }
 
-    function clearFields(){
+    function clearFields() {
         setName(user.name);
         setPassword('');
         setPassword2('');
@@ -62,99 +69,110 @@ export default function Profile({navigation}) {
         clearFields();
     }
 
+    const handleUpdatePass = () => {
+        if (online) {
+            setUpdatePass(!updatePass)
+        } else {
+            Alert.alert(
+                "Aviso",
+                'Só é possível alterar a senha se estiver online!',
+                [
+                    { text: "OK" }
+                ],
+                { cancelable: false }
+            );
+        }
+    }
+
     const sendEditing = async () => {
-        //verificar se nome esta vazio
-        if(name === ''){
+        if (name === '') {
             Alert.alert(
                 "Aviso",
                 'Nescessário preencher o campo de Nome',
                 [
-                    { text: "OK"}
+                    { text: "OK" }
                 ],
                 { cancelable: false }
             );
             return '';
         }
 
-        const updateUser = {name};
+        const updateUser = { name, email };
 
-        var response;
-
-        if (updatePass){ //se esta habilitado para trocar senha
-            //faz um login, para verificar se a senha passada esta correta
-            try{
-                response = await api.post('login', {email, password});
+        if (updatePass && online) {
+            try {
+                const response = await api.post('login', { email, password });
             }
             catch{
                 Alert.alert(
                     "Aviso",
                     'Senha atual inválida',
                     [
-                        { text: "OK"}
+                        { text: "OK" }
                     ],
                     { cancelable: false }
                 );
                 return '';
             }
-            if (!validatePassword(password2, password3)){
+            if (!validatePassword(password2, password3)) {
                 return '';
             }
             updateUser.password = password2;
         }
 
-        try{
-            // envia email e senha para fazer cadastro
-            response = await api.put(`users/${user.id}`, updateUser, {
-                headers: { 
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            
-            user.name = name; //atualizar o nome do usuario na aplicacao
-            user.updated_at = dateNow(false, true); //dateNow(exibirHoras, pythonFormat)
+        let success = false;
+        if (online) {
+            success = await updateOnline(user.id, updateUser, token);
+        } else {
+            success = await updateOffline(user.id, updateUser);
+        }
+
+        if (success) {
+            user.name = name;
+            user.updated_at = dateNow(false, true);
             clearFields();
             Alert.alert(
                 "Sucess",
                 'Usuario atualizado com sucesso!',
                 [
-                  { text: "OK"}
+                    { text: "OK" }
                 ],
                 { cancelable: false }
             );
-        }catch(err){
+        } else {
             Alert.alert(
                 "Aviso",
-                'Erro ao fazer o cadastro, tente novamente em alguns instantes!',
+                'Erro ao fazer a atualização, tente novamente em alguns instantes!',
                 [
-                  { text: "OK"}
+                    { text: "OK" }
                 ],
                 { cancelable: false }
             );
         }
-        fillUser(); //recarregar os campos;
+        fillUser();
     }
 
     return (
         <KeyboardAvoidingView style={styles.container}>
             <Header navigation={navigation} />
             <View style={styles.header}>
-                <Image 
+                <Image
                     source={avatar}
-                    style={[styles.avatar, {width: widthImage, height: heightImage}]}
+                    style={[styles.avatar, { width: widthImage, height: heightImage }]}
                 />
                 <View style={styles.infHeader}>
                     <Text style={styles.datasUsuario}>Ativo desde: {formatDatePython(user.created_at)}</Text>
                     <Text style={styles.datasUsuario}>Última Atualização: {formatDatePython(user.updated_at)}</Text>
                     {
-                        !editing && 
-                        <TouchableOpacity 
+                        !editing &&
+                        <TouchableOpacity
                             onPress={() => setEditing(true)}
                             style={styles.btEditar}
                         >
-                                <Text style={styles.txtBtEditar}>
-                                    Editar informações de perfil
+                            <Text style={styles.txtBtEditar}>
+                                Editar informações de perfil
                                 </Text>
-                                <AntDesign name="edit" size={24} color="black" />
+                            <AntDesign name="edit" size={24} color="black" />
                         </TouchableOpacity>
                     }
                 </View>
@@ -178,23 +196,23 @@ export default function Profile({navigation}) {
                         editable={false}
                         autoCorrect={false}
                         autoCompleteType='email'
-                        keyboardType='email-address'    
+                        keyboardType='email-address'
                         onChangeText={email => setEmail(email)}
                     />
                 </View>
-                
+
                 {editing && <>
                     <View style={styles.agroup}>
                         <Text style={styles.titleSenha}>Trocar senha também: </Text>
                         <RadioButton
-                            value= {updatePass}
-                            status= {updatePass? 'checked': 'unchecked'}
-                            onPress={() => setUpdatePass(!updatePass)}
-                            color= {'#00622D'}
+                            value={updatePass}
+                            status={updatePass ? 'checked' : 'unchecked'}
+                            onPress={handleUpdatePass}
+                            color={'#00622D'}
                         />
                     </View>
                     {updatePass && <>
-                        
+
                         <View style={styles.agroup}>
                             <Text style={styles.field}></Text>
                             <TextInput
@@ -230,15 +248,15 @@ export default function Profile({navigation}) {
                                 secureTextEntry={true}
                             />
                         </View>
-                    
+
                     </>}
-                           
+
                     <View style={styles.buttonsArea}>
-                        <TouchableOpacity  style={styles.buttons} onPress={cancelEditing}>
-                            <AntDesign name="closecircle" size={30} color="black"/>
+                        <TouchableOpacity style={styles.buttons} onPress={cancelEditing}>
+                            <AntDesign name="closecircle" size={30} color="black" />
                             <Text style={styles.textButtons}>Cancelar</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity  style={styles.buttons} onPress={sendEditing}>
+                        <TouchableOpacity style={styles.buttons} onPress={sendEditing}>
                             <AntDesign name="check" size={30} color="black" />
                             <Text style={styles.textButtons}>Salvar</Text>
                         </TouchableOpacity>

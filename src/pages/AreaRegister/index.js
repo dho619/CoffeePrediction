@@ -1,23 +1,19 @@
-import React, { useState, useEffect, useContext} from 'react';
-import {View, Text, TextInput, KeyboardAvoidingView, 
-        ImageBackground, TouchableOpacity, Alert} from 'react-native';
+import { AntDesign, Ionicons } from '@expo/vector-icons';
+import React, { useContext, useEffect, useState } from 'react';
+import { Alert, ImageBackground, KeyboardAvoidingView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
-import { AntDesign } from '@expo/vector-icons';
-import { Ionicons } from '@expo/vector-icons';
-
-import { execute_db_offline, get_guid } from '../../db/db_offline';
-import { isOnline } from '../../services/Network';
-import { registerOnline } from './queryArea/registerOnline';
-import { registerOffline } from './queryArea/registerOffline';
-import { alterOnline } from './queryArea/alterOnline';
-import { alterOffline } from './queryArea/alterOffline';
-
-import Header from '../../components/Header';
-import {Context} from '../../context/contextAuth';
-import {styles, pickerStyle} from './styles';
 import imgArea from '../../assets/area.png';
+import Header from '../../components/Header';
+import { Context } from '../../context/contextAuth';
+import { execute_db_offline } from '../../db/db_offline';
+import { isOnline } from '../../services/Network';
+import { alterOffline } from './queryAreaRegister/alterOffline';
+import { alterOnline } from './queryAreaRegister/alterOnline';
+import { registerOffline } from './queryAreaRegister/registerOffline';
+import { registerOnline } from './queryAreaRegister/registerOnline';
+import { pickerStyle, styles } from './styles';
 
-export default function AreaRegister({route, navigation}){
+export default function AreaRegister({ route, navigation }) {
     const [online, setOnline] = useState(false);
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
@@ -29,7 +25,7 @@ export default function AreaRegister({route, navigation}){
     const { user, token } = useContext(Context);
     const { area } = route.params;
 
-    useEffect(()=>{
+    useEffect(() => {
         let mounted = true;
         setOnline(isOnline())
         handleArea();
@@ -38,19 +34,19 @@ export default function AreaRegister({route, navigation}){
     }, []);
 
     const handleArea = () => {
-        if(area.type_area || area.type_area_id){
+        if (area.type_area || area.type_area_id) {
             try {
                 setName(area.name);
                 setDescription(area.description);
                 setLocation(area.location);
-                setType(area.type_area? area.type_area.id: area.type_area_id);
+                setType(area.type_area ? area.type_area.id : area.type_area_id);
                 setCreating(false);
             } catch {
                 Alert.alert(
                     "Aviso",
                     'Erro ao carregar a Área',
                     [
-                        { text: "OK"}
+                        { text: "OK" }
                     ],
                     { cancelable: false }
                 );
@@ -73,10 +69,10 @@ export default function AreaRegister({route, navigation}){
     const fillTypes = async () => {
         let types = []
         try {
-            
+
             const type_areas = await execute_db_offline('SELECT * from type_areas order by name');
             await type_areas.map(type => {
-                types.push({label: type.description, value: type.id});
+                types.push({ label: type.description, value: type.id });
             });
             setTypes(types);
         } catch (err) {
@@ -84,7 +80,7 @@ export default function AreaRegister({route, navigation}){
                 "Aviso",
                 'Erro ao carregar os tipos de Áreas, tente recarregar a página para resolver o problema!',
                 [
-                    { text: "OK"}
+                    { text: "OK" }
                 ],
                 { cancelable: false }
             );
@@ -93,67 +89,67 @@ export default function AreaRegister({route, navigation}){
     };
 
     const registerOrAlter = async () => {
-        if(!user.id){
+        if (!user.id) {
             Alert.alert(
                 "Aviso",
                 'Não foi possível identificar o usuário logado, deslogue e logue novamente para resolver o problema!',
                 [
-                    { text: "OK"}
+                    { text: "OK" }
                 ],
                 { cancelable: false }
             );
             return '';
         }
 
-        if(name === ''){
+        if (name === '') {
             Alert.alert(
                 "Aviso",
                 'Nescessário preencher o campo de Nome',
                 [
-                    { text: "OK"}
+                    { text: "OK" }
                 ],
                 { cancelable: false }
             );
             return '';
         }
 
-        if(location === ''){
+        if (location === '') {
             Alert.alert(
                 "Aviso",
                 'Nescessário preencher o campo de Localização',
                 [
-                    { text: "OK"}
+                    { text: "OK" }
                 ],
                 { cancelable: false }
             );
             return '';
         }
 
-        if(type === -1){
+        if (type === -1) {
             Alert.alert(
                 "Aviso",
                 'Nescessário preencher o Tipo de Área',
                 [
-                    { text: "OK"}
+                    { text: "OK" }
                 ],
                 { cancelable: false }
             );
             return '';
         }
-        
-        const type_area_name = await types.filter(function(type_area) { return type_area.value == type;})[0].label;
+
+        const type_area_name = await types.filter(type_area => type_area.value == type)[0].label;
 
         const newArea = {
-            name, 
-            description, 
+            name,
+            description,
             type_area_id: type,
             type_area_name,
             location,
         };
 
-        if(creating){
-            newArea.user_id = user.id; 
-            if (false){
+        if (creating) {
+            newArea.user_id = user.id;
+            if (online) {
                 await registerOnline(newArea, token)
             } else {
                 await registerOffline(newArea)
@@ -163,11 +159,11 @@ export default function AreaRegister({route, navigation}){
             setLocation('');
             setType(-1);
 
-        }else {
-            if (false){
+        } else {
+            if (online) {
                 await alterOnline(area.id, newArea, token)
             } else {
-                newArea.user_id = user.id; 
+                newArea.user_id = user.id;
                 await alterOffline(area.id, newArea)
             }
             setName('');
@@ -184,8 +180,8 @@ export default function AreaRegister({route, navigation}){
             <Header navigation={navigation} />
             <KeyboardAvoidingView style={styles.areaViewKeyboard}>
                 <View style={styles.headerContainer}>
-                    <Text style={styles.headerText}>{creating?'Cadastro de Área':'Atualização de Área'}:</Text>
-                    <TouchableOpacity 
+                    <Text style={styles.headerText}>{creating ? 'Cadastro de Área' : 'Atualização de Área'}:</Text>
+                    <TouchableOpacity
                         style={styles.btReturnig}
                         onPress={() => navigation.navigate('Minhas Áreas')}
                     >
@@ -193,28 +189,28 @@ export default function AreaRegister({route, navigation}){
                     </TouchableOpacity>
                 </View>
                 <View style={styles.containerForm}>
-                    <TextInput 
+                    <TextInput
                         style={styles.input}
                         value={name}
                         placeholder={'Nome'}
                         autoCorrect={false}
-                        onChangeText={name => setName(name)} 
+                        onChangeText={name => setName(name)}
                     />
-                    <TextInput 
+                    <TextInput
                         style={styles.inputMultiline}
                         value={description}
                         placeholder={'Descrição'}
                         numberOfLines={3}
                         maxLength={500}
                         multiline={true}
-                        onChangeText={description => setDescription(description)} 
+                        onChangeText={description => setDescription(description)}
                     />
-                    <TextInput 
+                    <TextInput
                         style={styles.input}
                         value={location}
                         placeholder={'Localização'}
-                        keyboardType = 'numeric'
-                        onChangeText={location => setLocation(location)} 
+                        keyboardType='numeric'
+                        onChangeText={location => setLocation(location)}
                     />
                     <RNPickerSelect
                         placeholder={{
@@ -229,13 +225,13 @@ export default function AreaRegister({route, navigation}){
                         Icon={() => {
                             return <AntDesign name="downcircleo" size={24} color="black" />;
                         }}
-                    /> 
+                    />
                     <TouchableOpacity style={styles.btnSubmit} onPress={registerOrAlter}>
-                        <Text style={styles.submitText}>{creating?'Cadastrar Área':'Atualizar Área'}</Text>
+                        <Text style={styles.submitText}>{creating ? 'Cadastrar Área' : 'Atualizar Área'}</Text>
                     </TouchableOpacity>
                 </View>
             </KeyboardAvoidingView>
-            <ImageBackground source={imgArea} style={styles.imageBackground}/>
+            <ImageBackground source={imgArea} style={styles.imageBackground} />
         </View>
     );
 };

@@ -1,21 +1,39 @@
 import React from 'react';
-import {View, Text, Image, TouchableOpacity, AsyncStorage, Alert} from 'react-native';
+import { View, Text, Image, TouchableOpacity, AsyncStorage, Alert } from 'react-native';
 import { DrawerItemList } from '@react-navigation/drawer';
 import { AntDesign, } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
+
+import { execute_db_offline } from '../../db/db_offline';
+import { isOnline } from '../../services/Network';
 
 var avatar = require('../../assets/perfil.jpeg');
 import styles from './styles';
 
 const hiddenItems = ['Profile', 'AreaRegister', 'NewClassifications'];//itens da gaveta que ficarao escondidos
 
-export default function CustomDrawer({...props}){
+export default function CustomDrawer({ ...props }) {
     const { state, ...rest } = props; // pegar os state (os itens que aparecerao na gaveta)
-    const newState = { ...state}  //copia o state para não altera o original 
+    const newState = { ...state }  //copia o state para não altera o original 
     newState.routes = newState.routes.filter(item => hiddenItems.indexOf(item.name) === -1)
-                                                 //pega todos que nao estao em hiddenItems
-    
-    const {user, onSignOut} = props.descriptors[props.state.routes[0].key].options;
+    //pega todos que nao estao em hiddenItems
+
+    const { user, onSignOut } = props.descriptors[props.state.routes[0].key].options;
+
+    const loadUser = async () => {
+        let online = await isOnline();
+        if (!online) {
+            try {
+                const userOffline = await execute_db_offline("SELECT * FROM users WHERE id = ?", [user.id]);
+                if (userOffline.length) {
+                    user.name = userOffline[0].name;
+                    user.email = userOffline[0].email;
+                }
+                console.log(userOffline)
+            } catch{
+            }
+        }
+    }
 
     const signOut = () => {
         onSignOut()
@@ -26,14 +44,16 @@ export default function CustomDrawer({...props}){
         props.navigation.navigate('Profile');
     }
 
+    loadUser();
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <TouchableOpacity 
+                <TouchableOpacity
                     style={styles.btBack}
                     onPress={props.navigation.closeDrawer}
                 >
-                    <Ionicons 
+                    <Ionicons
                         name="md-arrow-round-back"
                         size={30}
                         color="black"
@@ -41,7 +61,7 @@ export default function CustomDrawer({...props}){
                 </TouchableOpacity>
                 <View style={styles.userArea}>
                     <TouchableOpacity onPress={accessProfile} >
-                        <Image 
+                        <Image
                             source={avatar}
                             style={styles.avatar}
                         />
@@ -52,19 +72,19 @@ export default function CustomDrawer({...props}){
                         </TouchableOpacity>
                         <Text numberOfLines={1} style={styles.email}>{user.email}</Text>
                     </View>
-                    <TouchableOpacity 
+                    <TouchableOpacity
                         style={styles.btLogout}
-                        onPress={signOut}   
+                        onPress={signOut}
                     >
-                        <AntDesign 
-                            name="logout" 
-                            size={28} 
-                            color="black" 
+                        <AntDesign
+                            name="logout"
+                            size={28}
+                            color="black"
                         />
                     </TouchableOpacity>
                 </View>
-                
-                <TouchableOpacity 
+
+                <TouchableOpacity
                     style={styles.titleArea}
                     onPress={() => props.navigation.navigate('Inicio')}
                 >
