@@ -1,9 +1,9 @@
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
-    container: { 
-        flex: 1, 
-        justifyContent: 'center', 
+    container: {
+        flex: 1,
+        justifyContent: 'center',
         backgroundColor: '#cf965e',
     },
 
@@ -27,17 +27,17 @@ export default StyleSheet.create({
         alignItems: 'center',
     },
 
-    borderBtType: { 
-        padding: 10, 
-        borderRadius: 50, 
-        borderColor: '#FFF', 
+    borderBtType: {
+        padding: 10,
+        borderRadius: 50,
+        borderColor: '#FFF',
         borderWidth: 5
     },
-    containerPhoto: { 
-        flex: 1, 
+    containerPhoto: {
+        flex: 1,
     },
     photo: {
-        width:'100%',
+        width: '100%',
         height: '100%',
     },
     areaButtonPhoto: {

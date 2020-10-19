@@ -10,18 +10,22 @@ import { fillAreasOffline } from './queryArea/fillAreasOffline';
 import { fillAreasOnline } from './queryArea/fillAreasOnline';
 import styles from './styles';
 
-
-
 export default function Areas({ navigation }) {
-    const [online, setOnline] = useState(false);
+    const [online, setOnline] = useState(true);
     const [areas, setAreas] = useState([]);
     const [selectedArea, setSelectedArea] = useState(-1);
 
     const { token, user } = useContext(Context);
 
     useEffect(() => {
-        setOnline(isOnline())
-        fillAreas()
+        const loadInfo = async () => {
+            const situation = await isOnline();
+            setOnline(situation)
+            await fillAreas()
+        }
+        let mounted = true;
+        loadInfo();
+        return () => mounted = false;
     }, []);
 
     const fillAreas = async () => {

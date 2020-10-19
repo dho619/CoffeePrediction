@@ -9,6 +9,7 @@ import { AntDesign } from '@expo/vector-icons';
 import api from '../../services/api';
 import { validatePassword } from '../../utils/constraints';
 import { Context } from '../../context/contextAuth';
+import { isOnline } from '../../services/Network';
 import { formatDatePython, dateNow } from '../../utils/date';
 import Header from '../../components/Header';
 import styles from './styles';
@@ -32,13 +33,16 @@ export default function Profile({ navigation }) {
     const { user, token } = useContext(Context);
 
     useEffect(() => {
-        //quando abre o teclado chama a funcao passada
-        keboardDidShowListener = Keyboard.addListener('keyboardDidShow', keyboardDidShow)
-        //quando fecha o teclado chama a funcao passada
-        keboardDidHideListener = Keyboard.addListener('keyboardDidHide', keyboardDidHide)
-        // setOnline(isOnline());
-        setOnline(false);
-        fillUser();
+        const loadInfo = async () => {
+            const situation = await isOnline();
+            setOnline(situation);
+            await fillUser();
+            keboardDidShowListener = Keyboard.addListener('keyboardDidShow', keyboardDidShow)
+            keboardDidHideListener = Keyboard.addListener('keyboardDidHide', keyboardDidHide)
+        }
+        let mounted = true;
+        loadInfo();
+        return () => mounted = false;
     }, []);
 
     const fillUser = async () => {

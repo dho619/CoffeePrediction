@@ -1,14 +1,15 @@
-import React, {useState, useEffect, useContext} from 'react';
-import { View, KeyboardAvoidingView, Image, 
-         Text, TouchableOpacity, TextInput,
-         Animated, AsyncStorage, Keyboard, Alert
+import React, { useState, useEffect, useContext } from 'react';
+import {
+    View, KeyboardAvoidingView, Image,
+    Text, TouchableOpacity, TextInput,
+    Animated, AsyncStorage, Keyboard, Alert
 } from 'react-native';
 import { validate } from 'validate.js';
 import { RadioButton } from 'react-native-paper';
 import { MaterialIcons } from '@expo/vector-icons';
 
 import api from '../../services/api';
-import {constraintsEmail} from '../../utils/constraints';
+import { constraintsEmail } from '../../utils/constraints';
 import { Context } from '../../context/contextAuth';
 import { REMEMBER_EMAIL, REMEMBER_PASS } from '../../../config';
 const logo = require('../../assets/logo.png');
@@ -22,9 +23,9 @@ export default function Login({ navigation }) {
     const [visiblePass, setVisiblePass] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [offset] = useState(new Animated.ValueXY({x:0, y:95}));
+    const [offset] = useState(new Animated.ValueXY({ x: 0, y: 95 }));
     const [opacity] = useState(new Animated.Value(0));
-    const [dimensao] = useState(new Animated.ValueXY({x: 330, y: 345}));
+    const [dimensao] = useState(new Animated.ValueXY({ x: 330, y: 345 }));
 
     const { onSignIn } = useContext(Context);
 
@@ -33,7 +34,7 @@ export default function Login({ navigation }) {
         keboardDidShowListener = Keyboard.addListener('keyboardDidShow', keyboardDidShow);
         //quando fecha o teclado chama a funcao passada
         keboardDidHideListener = Keyboard.addListener('keyboardDidHide', keyboardDidHide);
-        
+
         //executar mais de uma animacao em paralelo
         Animated.parallel([
             //controla os "pulos" do form de login
@@ -48,11 +49,11 @@ export default function Login({ navigation }) {
                 duration: 200,
             })
         ]).start();
-        
+
         fillEmailPass();
     }, []);
 
-    function keyboardDidShow(){
+    function keyboardDidShow() {
         //executar mais de uma animacao em paralelo
         Animated.parallel([
             //controla o tamanho no eixo x
@@ -68,7 +69,7 @@ export default function Login({ navigation }) {
         ]).start();
     };
 
-    function keyboardDidHide(){
+    function keyboardDidHide() {
         //executar mais de uma animacao em paralelo
         Animated.parallel([
             //controla o tamanho no eixo x
@@ -84,11 +85,11 @@ export default function Login({ navigation }) {
         ]).start();
     };
 
-    async function fillEmailPass(){
+    async function fillEmailPass() {
         const rememberEmail = await AsyncStorage.getItem(REMEMBER_EMAIL);
         const rememberPass = await AsyncStorage.getItem(REMEMBER_PASS);
 
-        if( rememberEmail && rememberPass){
+        if (rememberEmail && rememberPass) {
             setEmail(rememberEmail);
             setPassword(rememberPass);
             setRemember(true);
@@ -97,84 +98,84 @@ export default function Login({ navigation }) {
         }
     }
 
-    async function rememberUser(){
-        if (remember){
+    async function rememberUser() {
+        if (remember) {
             await AsyncStorage.setItem(REMEMBER_EMAIL, email);
             await AsyncStorage.setItem(REMEMBER_PASS, password);
         } else {
             await AsyncStorage.removeItem(REMEMBER_EMAIL);
             await AsyncStorage.removeItem(REMEMBER_PASS);
             //limpar campos, para nao restar lixo quando voltar nessa tela
-            setEmail(''); 
+            setEmail('');
             setPassword('');
         }
-        
+
     };
 
     const signIn = async () => {
-        const validationResult = await validate({email}, constraintsEmail);
-        if (validationResult){
+        const validationResult = await validate({ email }, constraintsEmail);
+        if (validationResult) {
             Alert.alert(
                 "Aviso",
                 validationResult.email[0],
                 [
-                  { text: "OK"}
+                    { text: "OK" }
                 ],
                 { cancelable: false }
-              );
+            );
         } else {
 
-            try{
-                const response = await api.post('login', {email, password});
-               
-                if(!(response.data.token)){
+            try {
+                const response = await api.post('login', { email, password });
+
+                if (!(response.data.token)) {
                     Alert.alert(
                         "Aviso",
                         'Usuário ou senha incorretos',
                         [
-                          { text: "OK"}
+                            { text: "OK" }
                         ],
                         { cancelable: false }
-                      );
-                } else{
+                    );
+                } else {
                     await onSignIn(response.data.token);
-                    await rememberUser(); 
+                    await rememberUser();
                     navigation.navigate('Drawer', { screen: 'Inicio' });
                 }
-            }catch(err){
+            } catch (err) {
                 Alert.alert(
                     "Erro",
                     'Erro ao processar o login, tente novamente em instantes!',
                     [
-                      { text: "OK"}
+                        { text: "OK" }
                     ],
                     { cancelable: false }
-                  );
+                );
             }
         }
     }
 
 
-  return (
-    <KeyboardAvoidingView style={styles.container}>
+    return (
+        <KeyboardAvoidingView style={styles.container}>
             <View style={styles.containerLogo}>
-                <Animated.Image 
+                <Animated.Image
                     style={{
                         width: dimensao.x,
                         height: dimensao.y,
-                        marginLeft: 40, 
-                    }} 
-                    source={logo} 
+                        marginLeft: 40,
+                    }}
+                    source={logo}
                 />
             </View>
-            <Animated.View 
+            <Animated.View
                 style={[styles.containerForm,
-                    {
-                        opacity: opacity,
-                        transform: [
-                            { translateY: offset.y}
-                        ]
-                    }
+                {
+                    opacity: opacity,
+                    transform: [
+                        { translateY: offset.y }
+                    ]
+                }
                 ]}
             >
                 <TextInput
@@ -184,8 +185,8 @@ export default function Login({ navigation }) {
                     keyboardType='email-address'
                     value={email}
                     autoCorrect={false}
-                    onChangeText={email => setEmail(email)} 
-                    onEndEditing= {e => setEmail(e.nativeEvent.text.trim())}
+                    onChangeText={email => setEmail(email)}
+                    onEndEditing={e => setEmail(e.nativeEvent.text.trim())}
                 />
                 <View style={styles.containerPass}>
                     <TextInput
@@ -193,19 +194,19 @@ export default function Login({ navigation }) {
                         placeholder="Senha"
                         autoCorrect={false}
                         value={password}
-                        onChangeText={password => setPassword(password)} 
+                        onChangeText={password => setPassword(password)}
                         secureTextEntry={!visiblePass}
                     />
-                    <TouchableOpacity 
+                    <TouchableOpacity
                         style={styles.visibilityPass}
                         onPressIn={() => setVisiblePass(!visiblePass)}
                         onPressOut={() => setVisiblePass(false)}
                     >
-                        <MaterialIcons 
+                        <MaterialIcons
                             style={styles.iconVisibility}
-                            name={visiblePass?"visibility":"visibility-off"}
-                            size={30} 
-                            color="black" 
+                            name={visiblePass ? "visibility" : "visibility-off"}
+                            size={30}
+                            color="black"
                         />
                     </TouchableOpacity>
                 </View>
@@ -215,10 +216,10 @@ export default function Login({ navigation }) {
                 </TouchableOpacity>
                 <View style={styles.containerRemember}>
                     <RadioButton
-                                value= {remember}
-                                status= {remember? 'checked': 'unchecked'}
-                                onPress={() => setRemember(!remember)}
-                                color= {'#00622D'}
+                        value={remember}
+                        status={remember ? 'checked' : 'unchecked'}
+                        onPress={() => setRemember(!remember)}
+                        color={'#00622D'}
                     />
                     <TouchableOpacity onPress={() => setRemember(!remember)}>
                         <Text style={styles.textRemember}>Lembrar de mim</Text>
@@ -230,5 +231,5 @@ export default function Login({ navigation }) {
                 </TouchableOpacity>
             </Animated.View>
         </KeyboardAvoidingView>
-  );
+    );
 }

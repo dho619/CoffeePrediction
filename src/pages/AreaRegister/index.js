@@ -26,14 +26,18 @@ export default function AreaRegister({ route, navigation }) {
     const { area } = route.params;
 
     useEffect(() => {
+        const loadInfo = async () => {
+            const response = await isOnline();
+            setOnline(response);
+            await handleArea();
+            await fillTypes();
+        }
         let mounted = true;
-        setOnline(isOnline())
-        handleArea();
-        fillTypes();
+        loadInfo();
         return () => mounted = false;
     }, []);
 
-    const handleArea = () => {
+    const handleArea = async () => {
         if (area.type_area || area.type_area_id) {
             try {
                 setName(area.name);

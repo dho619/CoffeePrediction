@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Alert } from 'react-native'
 import { AntDesign } from '@expo/vector-icons';
 
@@ -7,21 +7,23 @@ import { Context } from '../../context/contextAuth';
 import Header from '../../components/Header';
 import styles from './styles';
 
-export default function LatestAnalysis({navigation}) {
+export default function LatestAnalysis({ navigation }) {
     const [classification, setClassification] = useState([]);
     const [selectedClassification, setSelectedClassification] = useState(-1);
 
     const { token } = useContext(Context);
 
     useEffect(() => {
+        let mounted = true;
         fillClassification();
+        return () => mounted = false;
     }, []);
 
     const fillClassification = async () => {
         try {
             const response = await api.get('classifications', {
-                headers: { 
-                  Authorization: `Bearer ${token}`
+                headers: {
+                    Authorization: `Bearer ${token}`
                 }
             });
             setClassification(response.data.data);
@@ -30,7 +32,7 @@ export default function LatestAnalysis({navigation}) {
                 "Aviso",
                 'Erro ao carregar as Análises, tente recarregar a página para resolver o problema!',
                 [
-                    { text: "OK"}
+                    { text: "OK" }
                 ],
                 { cancelable: false }
             );
@@ -38,13 +40,13 @@ export default function LatestAnalysis({navigation}) {
     }
 
     const deleteclassification = (id) => {
-        async function handleDelete(id){
+        async function handleDelete(id) {
             const response = await api.delete(`classifications/${id}`, {
-                headers: { 
-                Authorization: `Bearer ${token}`
+                headers: {
+                    Authorization: `Bearer ${token}`
                 }
             });
-            if (response.status = 201){
+            if (response.status = 201) {
                 fillClassification();
                 alert('Análise apagada com sucesso!')
             }
@@ -54,11 +56,11 @@ export default function LatestAnalysis({navigation}) {
             "Confirmação:",
             "Deseja realmente apagar essa Análise?",
             [
-              {
-                text: "Cancel",
-                style: "cancel"
-              },
-              { text: "OK", onPress: () => handleDelete(id)}
+                {
+                    text: "Cancel",
+                    style: "cancel"
+                },
+                { text: "OK", onPress: () => handleDelete(id) }
             ],
             { cancelable: false }
         );
@@ -71,28 +73,28 @@ export default function LatestAnalysis({navigation}) {
                 <Text style={styles.headerText}>Últimas Análises:</Text>
             </View>
             <View style={styles.classificationContainer}>
-                <ScrollView style={ styles.classificationList}>
+                <ScrollView style={styles.classificationList}>
                     {
                         classification.map(classification => (
-                            <TouchableOpacity 
-                                key={classification.id} 
-                                style={selectedClassification === classification.id?styles.classificationSelected:styles.classification}
-                                onPress={() => {setSelectedClassification(selectedClassification === classification.id?-1:classification.id)}}
+                            <TouchableOpacity
+                                key={classification.id}
+                                style={selectedClassification === classification.id ? styles.classificationSelected : styles.classification}
+                                onPress={() => { setSelectedClassification(selectedClassification === classification.id ? -1 : classification.id) }}
                             >
                                 <Text style={styles.classificationHeader}>Nome: {classification.name}</Text>
-                                <Text style={styles.classificationDesc} numberOfLines={selectedClassification===classification.id?100:1}>
+                                <Text style={styles.classificationDesc} numberOfLines={selectedClassification === classification.id ? 100 : 1}>
                                     Descrição: {classification.description}
                                 </Text>
-                                <Text style={styles.classificationDesc}>Local: {classification.area?classification.area.name:''}</Text>
-                                
-                                <Text style={styles.classificationDesc} >Doente: {classification.healthy?'Não':'Sim'}</Text>
+                                <Text style={styles.classificationDesc}>Local: {classification.area ? classification.area.name : ''}</Text>
+
+                                <Text style={styles.classificationDesc} >Doente: {classification.healthy ? 'Não' : 'Sim'}</Text>
                                 <Text style={styles.classificationDesc} >Doença: {classification.disease}</Text>
-                                
-                                {selectedClassification===classification.id &&
+
+                                {selectedClassification === classification.id &&
                                     <View style={styles.classificationIcons}>
-                                        <TouchableOpacity 
+                                        <TouchableOpacity
                                             style={styles.editIcon}
-                                            onPress={() => {}}
+                                            onPress={() => { }}
                                         >
                                             <AntDesign name="edit" size={24} color="black" />
                                         </TouchableOpacity>

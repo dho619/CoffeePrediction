@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Text, View, TouchableOpacity, Modal, ImageBackground } from 'react-native'
 import { Camera } from 'expo-camera';
-import { launchImageLibraryAsync,  requestCameraRollPermissionsAsync} from 'expo-image-picker';
-import { AntDesign, Fontisto, Ionicons, MaterialIcons, MaterialCommunityIcons} from '@expo/vector-icons';
+import { launchImageLibraryAsync, requestCameraRollPermissionsAsync } from 'expo-image-picker';
+import { AntDesign, Fontisto, Ionicons, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 import Header from '../../components/Header';
 import styles from './styles';
 
-export default function NewPhotos({navigation}) {
+export default function NewPhotos({ navigation }) {
     const camRef = useRef(null) //criando uma referencia
     const [hasPermission, setHasPermission] = useState(null); //para guardar se ja teve permissao
     const [type, setType] = useState(Camera.Constants.Type.back); //camera traseira ou front
@@ -15,20 +15,22 @@ export default function NewPhotos({navigation}) {
     const [flashIcon, setFlashIcon] = useState('ios-flash-off'); //camera traseira ou front
     const [uriPhoto, setUriPhoto] = useState('');
     const [capturedPhoto, setCapturePhoto] = useState('');
-    const [open, setOpen] = useState(false);   
+    const [open, setOpen] = useState(false);
 
     useEffect(() => {
-    (async () => {
-        const { status } = await Camera.requestPermissionsAsync(); //pedindo permissao, caso nao tenha
-        setHasPermission(status === 'granted');
-    })();
+        let mounted = true;
+        (async () => {
+            const { status } = await Camera.requestPermissionsAsync(); //pedindo permissao, caso nao tenha
+            setHasPermission(status === 'granted');
+        })();
+        return () => mounted = false;
     }, []);
 
     if (hasPermission === null) { //protecao quando estiver null
-    return <View />;
+        return <View />;
     };
     if (hasPermission === false) { //se nao deu permissao, exibe mensagem
-    return <Text>No access to camera</Text>;
+        return <Text>No access to camera</Text>;
     };
 
     const turnCamera = () => {//inverte a camera selecionada
@@ -36,11 +38,11 @@ export default function NewPhotos({navigation}) {
             type === Camera.Constants.Type.back
                 ? Camera.Constants.Type.front
                 : Camera.Constants.Type.back
-            );
+        );
     };
 
     const turnFlash = () => {//inverte a camera selecionada
-        if (flash === Camera.Constants.FlashMode.off){
+        if (flash === Camera.Constants.FlashMode.off) {
             setFlash(Camera.Constants.FlashMode.on);
             setFlashIcon('ios-flash')
         } else {
@@ -50,8 +52,8 @@ export default function NewPhotos({navigation}) {
     };
 
     const takePicture = async () => { //tirar foto
-        if(camRef){
-            const data = await camRef.current.takePictureAsync({base64: true});
+        if (camRef) {
+            const data = await camRef.current.takePictureAsync({ base64: true });
             setUriPhoto(data.uri);
             setCapturePhoto(data.base64);
             setOpen(true);
@@ -62,8 +64,8 @@ export default function NewPhotos({navigation}) {
         let permissionResult = await requestCameraRollPermissionsAsync();
 
         if (permissionResult.granted === false) {
-          alert('Nescessário permissão para acessar as imagens!');
-          return;
+            alert('Nescessário permissão para acessar as imagens!');
+            return;
         }
 
         let result = await launchImageLibraryAsync({
@@ -71,8 +73,8 @@ export default function NewPhotos({navigation}) {
             aspect: [6, 8],
             base64: true
         });
-      
-        if(!result.cancelled){
+
+        if (!result.cancelled) {
             setUriPhoto(result.uri);
             setCapturePhoto(result.base64);
             setOpen(true);
@@ -81,67 +83,67 @@ export default function NewPhotos({navigation}) {
 
     const sendForReview = () => {
         setOpen(false);
-        navigation.navigate('NewClassifications', {uriPhoto, capturedPhoto})
+        navigation.navigate('NewClassifications', { uriPhoto, capturedPhoto })
     }
 
     const cancelReview = () => {
         setUriPhoto('');
         setCapturePhoto('');
         setOpen(false);
-    } 
+    }
 
-    
+
 
     return (
-    <View style={styles.container}>
-        <Header navigation={navigation} />
-        <Camera 
-            style={styles.camera} 
-            type={type}
-            flashMode={flash}
-            ref={camRef}
-            
-        >
-            <TouchableOpacity  style={styles.btFlash} onPress={turnFlash}>
-                <Ionicons name={flashIcon} size={50} color="white" />
-            </TouchableOpacity>
-        </Camera>
-        <View
-            style={styles.areaButtons}>
-            <TouchableOpacity style={styles.btTypeCamera} onPress={turnCamera}>
-                <View style={styles.borderBtType}>
-                    <Fontisto name="spinner-rotate-forward" size={50} color="black" />
-                </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={takePicture}>
-                <MaterialIcons name="photo-camera" size={80} color="black"/>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={uploadImage}>
-                <MaterialCommunityIcons name="file-upload" size={80} color="black" />
-            </TouchableOpacity>
-        </View>
-        {/* Tela da Foto a abaixo*/}
-        <Modal 
-            animationType='slide'
-            transparent={false}
-            visible={open}        
-        >
-            <View style={styles.containerPhoto}> 
-                <ImageBackground 
-                    style={styles.photo}
-                    source={{uri: uriPhoto}}
-                >
-                    <View style={styles.areaButtonPhoto}>
-                        <TouchableOpacity  style={styles.btPhoto} onPress={cancelReview}>
-                            <AntDesign name="closecircle" size={50} color="white"/>
-                        </TouchableOpacity>
-                        <TouchableOpacity  style={styles.btPhoto} onPress={sendForReview}>
-                            <AntDesign name="check" size={50} color="white" />
-                        </TouchableOpacity>
+        <View style={styles.container}>
+            <Header navigation={navigation} />
+            <Camera
+                style={styles.camera}
+                type={type}
+                flashMode={flash}
+                ref={camRef}
+
+            >
+                <TouchableOpacity style={styles.btFlash} onPress={turnFlash}>
+                    <Ionicons name={flashIcon} size={50} color="white" />
+                </TouchableOpacity>
+            </Camera>
+            <View
+                style={styles.areaButtons}>
+                <TouchableOpacity style={styles.btTypeCamera} onPress={turnCamera}>
+                    <View style={styles.borderBtType}>
+                        <Fontisto name="spinner-rotate-forward" size={50} color="black" />
                     </View>
-                </ImageBackground>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={takePicture}>
+                    <MaterialIcons name="photo-camera" size={80} color="black" />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={uploadImage}>
+                    <MaterialCommunityIcons name="file-upload" size={80} color="black" />
+                </TouchableOpacity>
             </View>
-        </Modal>
-    </View>
+            {/* Tela da Foto a abaixo*/}
+            <Modal
+                animationType='slide'
+                transparent={false}
+                visible={open}
+            >
+                <View style={styles.containerPhoto}>
+                    <ImageBackground
+                        style={styles.photo}
+                        source={{ uri: uriPhoto }}
+                    >
+                        <View style={styles.areaButtonPhoto}>
+                            <TouchableOpacity style={styles.btPhoto} onPress={cancelReview}>
+                                <AntDesign name="closecircle" size={50} color="white" />
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.btPhoto} onPress={sendForReview}>
+                                <AntDesign name="check" size={50} color="white" />
+                            </TouchableOpacity>
+                        </View>
+                    </ImageBackground>
+                </View>
+            </Modal>
+        </View>
     );
 }
