@@ -21,12 +21,15 @@ export default function Areas({ navigation }) {
         const loadInfo = async () => {
             const situation = await isOnline();
             setOnline(situation)
-            await fillAreas()
         }
         let mounted = true;
         loadInfo();
         return () => mounted = false;
     }, []);
+
+    useEffect(() => {
+        fillClassification();
+    }, [online]);
 
     const fillAreas = async () => {
         if (online) {

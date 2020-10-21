@@ -19,9 +19,7 @@ const USER_IMAGE_DIR = FileSystem.documentDirectory + 'imgOffline';
 //     return imageSource;
 // }
 
-export const registerOffline = async (newClassification, uri, token) => {
-    console.log(`************************`)
-    console.log(`Começando a registrar...`)
+export const registerOffline = async (newClassification, uri) => {
     try {
         id = await get_guid();
 

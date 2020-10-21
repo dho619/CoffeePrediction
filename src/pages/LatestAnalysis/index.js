@@ -4,38 +4,43 @@ import { AntDesign } from '@expo/vector-icons';
 
 import api from '../../services/api';
 import { Context } from '../../context/contextAuth';
+import { isOnline } from '../../services/Network';
+// import { handleDeleteOffline } from './queryClassification/deleteClassificationOffline';
+// import { handleDeleteOnline } from './queryClassification/deleteClassificationOnline';
+import { fillClassificationsOffline } from './queryClassification/fillClassificationsOffline';
+import { fillClassificationOnline } from './queryClassification/fillClassificationsOnline';
 import Header from '../../components/Header';
 import styles from './styles';
 
 export default function LatestAnalysis({ navigation }) {
+    const [online, setOnline] = useState(true);
     const [classification, setClassification] = useState([]);
     const [selectedClassification, setSelectedClassification] = useState(-1);
 
-    const { token } = useContext(Context);
+    const { user, token } = useContext(Context);
 
     useEffect(() => {
+        const loadInfo = async () => {
+            const situation = await isOnline();
+            setOnline(false)
+        }
         let mounted = true;
-        fillClassification();
+        loadInfo();
         return () => mounted = false;
     }, []);
 
+    useEffect(() => {
+        fillClassification();
+    }, [online]);
+
     const fillClassification = async () => {
-        try {
-            const response = await api.get('classifications', {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            setClassification(response.data.data);
-        } catch (err) {
-            Alert.alert(
-                "Aviso",
-                'Erro ao carregar as Análises, tente recarregar a página para resolver o problema!',
-                [
-                    { text: "OK" }
-                ],
-                { cancelable: false }
-            );
+        console.log(online)
+        if (online) {
+            let classification = await fillClassificationOnline(token)
+            setClassification(classification);
+        } else {
+            let classification = await fillClassificationsOffline(user.classifications)
+            setClassification(classification);
         }
     }
 
@@ -75,7 +80,7 @@ export default function LatestAnalysis({ navigation }) {
             <View style={styles.classificationContainer}>
                 <ScrollView style={styles.classificationList}>
                     {
-                        classification.map(classification => (
+                        classification && classification.map(classification => (
                             <TouchableOpacity
                                 key={classification.id}
                                 style={selectedClassification === classification.id ? styles.classificationSelected : styles.classification}
