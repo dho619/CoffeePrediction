@@ -53,7 +53,7 @@ export default function NewPhotos({ navigation }) {
 
     const takePicture = async () => { //tirar foto
         if (camRef) {
-            const data = await camRef.current.takePictureAsync({ base64: true });
+            const data = await camRef.current.takePictureAsync({ base64: true, ratio: '6:8' });
             setUriPhoto(data.uri);
             setCapturePhoto(data.base64);
             setOpen(true);
@@ -122,7 +122,6 @@ export default function NewPhotos({ navigation }) {
                     <MaterialCommunityIcons name="file-upload" size={80} color="black" />
                 </TouchableOpacity>
             </View>
-            {/* Tela da Foto a abaixo*/}
             <Modal
                 animationType='slide'
                 transparent={false}
@@ -135,10 +134,10 @@ export default function NewPhotos({ navigation }) {
                     >
                         <View style={styles.areaButtonPhoto}>
                             <TouchableOpacity style={styles.btPhoto} onPress={cancelReview}>
-                                <AntDesign name="closecircle" size={50} color="white" />
+                                <AntDesign name="closecircle" size={50} color="#00622D" />
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.btPhoto} onPress={sendForReview}>
-                                <AntDesign name="check" size={50} color="white" />
+                                <AntDesign name="check" size={50} color="#00622D" />
                             </TouchableOpacity>
                         </View>
                     </ImageBackground>

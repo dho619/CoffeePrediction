@@ -29,7 +29,6 @@ export default function CustomDrawer({ ...props }) {
                     user.name = userOffline[0].name;
                     user.email = userOffline[0].email;
                 }
-                console.log(userOffline)
             } catch{
             }
         }

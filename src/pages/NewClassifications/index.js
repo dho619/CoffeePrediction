@@ -112,7 +112,7 @@ export default function NewPhotos({ route, navigation }) {
         if (online) {
             sucess = await registerOnline(classification, token);
         } else {
-            sucess = await registerOffline(classification);
+            sucess = await registerOffline(classification, uri, token);
         }
 
         if (sucess) {

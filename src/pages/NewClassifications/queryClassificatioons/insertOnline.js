@@ -17,7 +17,8 @@ export const registerOnline = async (newClassification, token) => {
             { cancelable: false }
         );
         return true;
-    } catch {
+    } catch (err) {
+        console.log(err.message)
         return false;
     }
 }
