@@ -28,7 +28,7 @@ export default function Areas({ navigation }) {
     }, []);
 
     useEffect(() => {
-        fillClassification();
+        fillAreas();
     }, [online]);
 
     const fillAreas = async () => {

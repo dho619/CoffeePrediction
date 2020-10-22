@@ -2,19 +2,18 @@ import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Alert } from 'react-native'
 import { AntDesign } from '@expo/vector-icons';
 
-import api from '../../services/api';
 import { Context } from '../../context/contextAuth';
 import { isOnline } from '../../services/Network';
-// import { handleDeleteOffline } from './queryClassification/deleteClassificationOffline';
-// import { handleDeleteOnline } from './queryClassification/deleteClassificationOnline';
+import { handleDeleteOffline } from './queryClassification/deleteClassificationOffline';
+import { handleDeleteOnline } from './queryClassification/deleteClassificationOnline';
 import { fillClassificationsOffline } from './queryClassification/fillClassificationsOffline';
 import { fillClassificationOnline } from './queryClassification/fillClassificationsOnline';
 import Header from '../../components/Header';
 import styles from './styles';
 
 export default function LatestAnalysis({ navigation }) {
-    const [online, setOnline] = useState(true);
-    const [classification, setClassification] = useState([]);
+    const [online, setOnline] = useState(false);
+    const [classifications, setClassifications] = useState([]);
     const [selectedClassification, setSelectedClassification] = useState(-1);
 
     const { user, token } = useContext(Context);
@@ -34,27 +33,23 @@ export default function LatestAnalysis({ navigation }) {
     }, [online]);
 
     const fillClassification = async () => {
-        console.log(online)
+        let loadedClassifications = []
         if (online) {
-            let classification = await fillClassificationOnline(token)
-            setClassification(classification);
+            loadedClassifications = await fillClassificationOnline(token)
         } else {
-            let classification = await fillClassificationsOffline(user.classifications)
-            setClassification(classification);
+            loadedClassifications = await fillClassificationsOffline(user.classifications)
         }
+        setClassifications(loadedClassifications);
     }
 
     const deleteclassification = (id) => {
         async function handleDelete(id) {
-            const response = await api.delete(`classifications/${id}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            if (response.status = 201) {
-                fillClassification();
-                alert('Análise apagada com sucesso!')
+            if (online) {
+                await handleDeleteOnline(id, token);
+            } else {
+                await handleDeleteOffline(id, user.areas);
             }
+            fillClassification();
         }
 
         Alert.alert(
@@ -80,7 +75,7 @@ export default function LatestAnalysis({ navigation }) {
             <View style={styles.classificationContainer}>
                 <ScrollView style={styles.classificationList}>
                     {
-                        classification && classification.map(classification => (
+                        classifications && classifications.map(classification => (
                             <TouchableOpacity
                                 key={classification.id}
                                 style={selectedClassification === classification.id ? styles.classificationSelected : styles.classification}

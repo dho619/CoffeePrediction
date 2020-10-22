@@ -12,6 +12,7 @@ export async function has_new_version(versionName) {
             execute_db_offline("INSERT INTO database_versions (name, version, description) VALUES (?, ?, ?);", [versionName, '0.0.0', 'Versão desse banco']);
         }
 
+
         const response02 = await Api.get(`/version/${versionName}`);
         const dbVersion = response02.data.data.version;
 
@@ -26,7 +27,7 @@ export async function has_new_version(versionName) {
         if ((subVersion[0] === subDbVersion[0]) && (subVersion[1] < subDbVersion[1])) {
             return dbVersion;
         }
-        if ((subVersion[0] === subDbVersion[0]) && (subVersion[1] === subDbVersion[1]) && (subVersion[3] < subDbVersion[3])) {
+        if ((subVersion[0] === subDbVersion[0]) && (subVersion[1] === subDbVersion[1]) && (subVersion[2] < subDbVersion[2])) {
             return dbVersion;
         }
         return false;

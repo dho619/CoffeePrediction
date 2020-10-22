@@ -2,19 +2,19 @@ import api from '../../../services/api';
 
 export async function handleDeleteOnline(id, token) {
     try {
-        const response = await api.delete(`areas/${id}`, {
+        const response = await api.delete(`classifications/${id}`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         });
         if (response.status = 201) {
             fillAreas();
-            alert('Área apagada com sucesso!')
+            alert('Análise apagada com sucesso!')
         } else {
-            alert('Erro ao apagar a área, tente novamente mais tarde!')
+            alert('Erro ao apagar a análise, tente novamente mais tarde!')
         }
 
     } catch {
-        alert('Erro ao apagar a área, tente novamente mais tarde!')
+        alert('Erro ao apagar a análise, tente novamente mais tarde!')
     }
 }

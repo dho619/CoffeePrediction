@@ -101,10 +101,13 @@ export default function NewPhotos({ route, navigation }) {
             return '';
         }
 
+        const area_name = await areas.filter(areaComboBox => areaComboBox.value == area)[0].label;
+
         const classification = {
             name,
             description,
             area_id: area,
+            area_name,
             image: photo,
             user_id: user.id,
         };

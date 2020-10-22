@@ -1,17 +1,18 @@
 import { execute_db_offline } from '../../../db/db_offline';
 
-export async function handleDeleteOffline(id, areas) {
-    let area_online = await areas.filter(area => area.id === id);
+export async function handleDeleteOffline(id, classifications) {
+    let classification_online = await classifications.filter(classification => classification.id === id);
     try {
-        await execute_db_offline("DELETE FROM areas WHERE id = ?", [id])
-        if (area_online.length) {
-            await execute_db_offline(`INSERT INTO areas (id, type_action) VALUES 
+
+        await execute_db_offline("DELETE FROM classifications WHERE id = ?", [id])
+        if (classification_online.length) {
+            await execute_db_offline(`INSERT INTO classifications (id, type_action) VALUES 
                 (?, ?)`, [id, 'delete']
             );
         }
     } catch {
-        alert('Erro ao excluir a area!');
+        alert('Erro ao excluir a Análise!');
     }
 
-    alert('Área apagada com sucesso!')
+    alert('Análise apagada com sucesso!')
 }

@@ -23,11 +23,11 @@ export const registerOffline = async (newClassification, uri) => {
     try {
         id = await get_guid();
 
-        await execute_db_offline("INSERT INTO classifications (id, name, description, image, user_id, area_id, type_action) "
-            + " VALUES (?, ?, ?, ?, ?, ?, ?)",
+        await execute_db_offline("INSERT INTO classifications (id, name, description, image, user_id, area_id, area_name, type_action) "
+            + " VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
             [id, newClassification.name,
                 newClassification.description, uri,
-                newClassification.user_id, newClassification.area_id, `insert`
+                newClassification.user_id, newClassification.area_id, newClassification.area_name, `insert`
             ]
         );
         Alert.alert(
@@ -46,18 +46,3 @@ export const registerOffline = async (newClassification, uri) => {
         return false;
     }
 }
-
-// const classifications = await execute_db_offline("select * from classifications where id <> 'aa';");
-// await classifications.map(async classification => {
-//     console.log(classification);
-//     let asset = await FileSystem.readAsStringAsync(classification.image, { encoding: FileSystem.EncodingType.Base64 })
-//     const newClassification = {
-//         name: classification.name,
-//         description: classification.description,
-//         area_id: classification.area_id,
-//         image: asset,
-//         user_id: classification.user_id,
-//     };
-//     console.log(newClassification)
-//     await registerOnline(newClassification, token);
-// });
