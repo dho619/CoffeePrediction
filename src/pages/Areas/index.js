@@ -11,7 +11,7 @@ import { fillAreasOnline } from './queryArea/fillAreasOnline';
 import styles from './styles';
 
 export default function Areas({ navigation }) {
-    const [online, setOnline] = useState(true);
+    const [online, setOnline] = useState(false);
     const [areas, setAreas] = useState([]);
     const [selectedArea, setSelectedArea] = useState(-1);
 

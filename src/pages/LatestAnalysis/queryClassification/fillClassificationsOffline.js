@@ -1,4 +1,5 @@
 import { Alert } from 'react-native';
+import { execute_db_offline } from '../../../db/db_offline';
 
 export const fillClassificationsOffline = async (classifications) => {
     try {
@@ -11,6 +12,7 @@ export const fillClassificationsOffline = async (classifications) => {
 
         return [...filtered_classifications_offline, ...filtered_classifications];
     } catch (err) {
+        console.log(err)
         Alert.alert(
             "Aviso",
             'Erro ao carregar as Análises, tente recarregar a página para resolver o problema!',

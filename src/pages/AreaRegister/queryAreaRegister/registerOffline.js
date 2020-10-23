@@ -20,6 +20,7 @@ export const registerOffline = async (newArea) => {
             ],
             { cancelable: false }
         );
+        return true;
     } catch (err) {
         Alert.alert(
             "Aviso",
@@ -29,6 +30,7 @@ export const registerOffline = async (newArea) => {
             ],
             { cancelable: false }
         );
-        console.log(err);
+        // console.log(err);
+        return false;
     }
 }

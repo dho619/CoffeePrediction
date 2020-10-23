@@ -134,10 +134,10 @@ export default function NewPhotos({ navigation }) {
                     >
                         <View style={styles.areaButtonPhoto}>
                             <TouchableOpacity style={styles.btPhoto} onPress={cancelReview}>
-                                <AntDesign name="closecircle" size={50} color="#00622D" />
+                                <AntDesign name="closecircle" size={50} color="orange" />
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.btPhoto} onPress={sendForReview}>
-                                <AntDesign name="check" size={50} color="#00622D" />
+                                <AntDesign name="check" size={50} color="orange" />
                             </TouchableOpacity>
                         </View>
                     </ImageBackground>

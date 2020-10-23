@@ -119,9 +119,9 @@ export default function NewPhotos({ route, navigation }) {
         }
 
         if (sucess) {
-            // setName('');
-            // setDescription('');
-            // navigation.navigate('Inicio')
+            setName('');
+            setDescription('');
+            navigation.navigate('Inicio')
         } else {
             // console.log(err)
             Alert.alert(

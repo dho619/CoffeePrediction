@@ -5,7 +5,6 @@ import { AntDesign, } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 
 import { execute_db_offline } from '../../db/db_offline';
-import { isOnline } from '../../services/Network';
 
 var avatar = require('../../assets/perfil.jpeg');
 import styles from './styles';
@@ -21,14 +20,16 @@ export default function CustomDrawer({ ...props }) {
     const { user, onSignOut } = props.descriptors[props.state.routes[0].key].options;
 
     const loadUser = async () => {
-        let online = await isOnline();
-        if (!online) {
+        let userOffline = []
+        try {
+            userOffline = await execute_db_offline("SELECT * FROM users WHERE id = ?", [user.id]);
+        } catch{
+
+        }
+        if (userOffline.length) {
             try {
-                const userOffline = await execute_db_offline("SELECT * FROM users WHERE id = ?", [user.id]);
-                if (userOffline.length) {
-                    user.name = userOffline[0].name;
-                    user.email = userOffline[0].email;
-                }
+                user.name = userOffline[0].name;
+                user.email = userOffline[0].email;
             } catch{
             }
         }

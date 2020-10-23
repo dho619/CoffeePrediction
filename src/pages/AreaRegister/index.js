@@ -27,8 +27,8 @@ export default function AreaRegister({ route, navigation }) {
 
     useEffect(() => {
         const loadInfo = async () => {
-            const response = await isOnline();
-            setOnline(response);
+            const situation = await isOnline();
+            setOnline(situation);
             await handleArea();
             await fillTypes();
         }
@@ -153,15 +153,18 @@ export default function AreaRegister({ route, navigation }) {
 
         if (creating) {
             newArea.user_id = user.id;
+            let sucess = false;
             if (online) {
-                await registerOnline(newArea, token)
+                sucess = await registerOnline(newArea, token)
             } else {
-                await registerOffline(newArea)
+                sucess = await registerOffline(newArea)
             }
-            setName('');
-            setDescription('');
-            setLocation('');
-            setType(-1);
+            if (sucess) {
+                setName('');
+                setDescription('');
+                setLocation('');
+                setType(-1);
+            }
 
         } else {
             if (online) {

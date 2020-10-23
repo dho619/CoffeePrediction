@@ -1,11 +1,9 @@
-import { execute_db_offline } from '../../../../db/db_offline';
-import { api } from '../api/api';
+import { execute_db_offline } from '../../db/db_offline';
+import api from '../api';
+import { isSignedIn } from '../../context/authenticationFunctions';
 
 export const replicate_users = async () => {
-    await update_users();
-}
-
-const update_users = async () => {
+    const token = await isSignedIn();
     const users = await execute_db_offline("select * from users;");
     await users.map(async user => {
         const newuser = {
@@ -20,8 +18,13 @@ const update_users = async () => {
             });
             await execute_db_offline("DELETE FROM users WHERE id = ?;", [user.id]);
         } catch (err) {
-
+            console.log(err)
         }
+        // if (user.id === userLogado.id) {
+        //     userLogado.name = user.name
+        //     userLogado.email = user.email
+        // }
     });
 }
+
 

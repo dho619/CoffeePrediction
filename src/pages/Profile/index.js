@@ -35,7 +35,7 @@ export default function Profile({ navigation }) {
     useEffect(() => {
         const loadInfo = async () => {
             const situation = await isOnline();
-            setOnline(situation);
+            setOnline(false);
             await fillUser();
             keboardDidShowListener = Keyboard.addListener('keyboardDidShow', keyboardDidShow)
             keboardDidHideListener = Keyboard.addListener('keyboardDidHide', keyboardDidHide)

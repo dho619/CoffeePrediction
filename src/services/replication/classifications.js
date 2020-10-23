@@ -1,16 +1,20 @@
-import { execute_db_offline } from '../../../../db/db_offline';
-import { api } from '../api/api';
+import * as FileSystem from 'expo-file-system';
+
+import { execute_db_offline } from '../../db/db_offline';
+import api from '../api';
+import { isSignedIn } from '../../context/authenticationFunctions';
 
 export const replicate_classifications = async () => {
-    await insert_classifications();
-    await update_classifications();
-    await delete_classifications();
+    const token = await isSignedIn()
+
+    await insert_classifications(token);
+    await update_classifications(token);
+    await delete_classifications(token);
 }
 
-const insert_classifications = async () => {
+const insert_classifications = async (token) => {
     const classifications = await execute_db_offline("SELECT * FROM classifications WHERE type_action = 'insert';");
     await classifications.map(async classification => {
-        console.log(classification);
         let asset = await FileSystem.readAsStringAsync(classification.image, { encoding: FileSystem.EncodingType.Base64 })
         const newClassification = {
             id: classification.id,
@@ -28,11 +32,12 @@ const insert_classifications = async () => {
             });
             await execute_db_offline("DELETE FROM classifications WHERE id = ?;", [classification.id]);
         } catch (err) {
+            console.log(err);
         }
     });
 }
 
-const update_classifications = async () => {
+const update_classifications = async (token) => {
     const classifications = await execute_db_offline("select * from classifications where type_action = 'update';");
     await classifications.map(async classification => {
         const newClassification = {
@@ -52,7 +57,7 @@ const update_classifications = async () => {
     });
 }
 
-const delete_classifications = async () => {
+const delete_classifications = async (token) => {
     const classifications = await execute_db_offline("select * from classifications where type_action = 'delete';");
     await classifications.map(async classification => {
         try {
