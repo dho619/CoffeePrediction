@@ -20,6 +20,7 @@ export default function NewPhotos({ route, navigation }) {
     const [online, setOnline] = useState(false);
     const [uri, setUri] = useState('../../assets/loading.png');
     const [photo, setPhoto] = useState('');
+    const [location, setLocation] = useState('');
     const [areas, setAreas] = useState([]);
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
@@ -29,19 +30,22 @@ export default function NewPhotos({ route, navigation }) {
 
     useEffect(() => {
         const loadInfo = async () => {
-            const { uriPhoto, capturedPhoto } = route.params;
+            const { uriPhoto, capturedPhoto, location } = route.params;
             const situation = await isOnline();
-            setOnline(false);
-            await fillAreas();
+            setOnline(situation);
             setUri(uriPhoto);
             setPhoto(capturedPhoto);
+            setLocation(location);
+            await fillAreas();
         }
         let mounted = true;
         loadInfo();
         return () => mounted = false;
     }, []);
 
+
     const fillAreas = async () => {
+
         if (online) {
             const response = await fillAreasOnline(token)
             let loadedAreas = [];
@@ -62,7 +66,6 @@ export default function NewPhotos({ route, navigation }) {
     }
 
     const submitClassification = async () => {
-        //verificar se nome esta vazio
         if (!user.id) {
             Alert.alert(
                 "Aviso",
@@ -110,6 +113,7 @@ export default function NewPhotos({ route, navigation }) {
             area_name,
             image: photo,
             user_id: user.id,
+            location: location,
         };
         let sucess = false;
         if (online) {

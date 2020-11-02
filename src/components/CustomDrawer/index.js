@@ -61,10 +61,13 @@ export default function CustomDrawer({ ...props }) {
                 </TouchableOpacity>
                 <View style={styles.userArea}>
                     <TouchableOpacity onPress={accessProfile} >
-                        <Image
+                        {/* <Image
                             source={avatar}
                             style={styles.avatar}
-                        />
+                        /> */}
+                        <View style={styles.avatar}>
+                            <Text style={styles.avatarText}>{`${user.name}`.substring(0, 1)}</Text>
+                        </View>
                     </TouchableOpacity>
                     <View style={styles.userText}>
                         <TouchableOpacity onPress={accessProfile} >

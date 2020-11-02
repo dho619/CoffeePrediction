@@ -17,7 +17,6 @@ export default function AreaRegister({ route, navigation }) {
     const [online, setOnline] = useState(false);
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
-    const [location, setLocation] = useState('');
     const [type, setType] = useState(-1);
     const [types, setTypes] = useState([]);
     const [creating, setCreating] = useState(true);
@@ -37,12 +36,18 @@ export default function AreaRegister({ route, navigation }) {
         return () => mounted = false;
     }, []);
 
+    const clear_fields = () => {
+        setName('');
+        setDescription('');
+        setType(-1);
+        setCreating(true);
+    }
+
     const handleArea = async () => {
         if (area.type_area || area.type_area_id) {
             try {
                 setName(area.name);
                 setDescription(area.description);
-                setLocation(area.location);
                 setType(area.type_area ? area.type_area.id : area.type_area_id);
                 setCreating(false);
             } catch {
@@ -54,19 +59,11 @@ export default function AreaRegister({ route, navigation }) {
                     ],
                     { cancelable: false }
                 );
-                setName('');
-                setDescription('');
-                setLocation('');
-                setType(-1);
-                setCreating(true);
+                clear_fields();
                 navigation.navigate('Minhas Áreas');
             }
         } else {
-            setName('');
-            setDescription('');
-            setLocation('');
-            setType(-1);
-            setCreating(true);
+            clear_fields();
         }
     }
 
@@ -117,18 +114,6 @@ export default function AreaRegister({ route, navigation }) {
             return '';
         }
 
-        if (location === '') {
-            Alert.alert(
-                "Aviso",
-                'Nescessário preencher o campo de Localização',
-                [
-                    { text: "OK" }
-                ],
-                { cancelable: false }
-            );
-            return '';
-        }
-
         if (type === -1) {
             Alert.alert(
                 "Aviso",
@@ -148,7 +133,6 @@ export default function AreaRegister({ route, navigation }) {
             description,
             type_area_id: type,
             type_area_name,
-            location,
         };
 
         if (creating) {
@@ -160,10 +144,7 @@ export default function AreaRegister({ route, navigation }) {
                 sucess = await registerOffline(newArea)
             }
             if (sucess) {
-                setName('');
-                setDescription('');
-                setLocation('');
-                setType(-1);
+                clear_fields();
             }
 
         } else {
@@ -173,10 +154,7 @@ export default function AreaRegister({ route, navigation }) {
                 newArea.user_id = user.id;
                 await alterOffline(area.id, newArea)
             }
-            setName('');
-            setDescription('');
-            setLocation('');
-            setCreating(true);
+            clear_fields();
             navigation.navigate('Minhas Áreas');
         }
 
@@ -211,13 +189,6 @@ export default function AreaRegister({ route, navigation }) {
                         maxLength={500}
                         multiline={true}
                         onChangeText={description => setDescription(description)}
-                    />
-                    <TextInput
-                        style={styles.input}
-                        value={location}
-                        placeholder={'Localização'}
-                        keyboardType='numeric'
-                        onChangeText={location => setLocation(location)}
                     />
                     <RNPickerSelect
                         placeholder={{

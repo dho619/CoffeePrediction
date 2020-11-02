@@ -96,8 +96,6 @@ export default function Areas({ navigation }) {
                                 </Text>
                                 <Text style={styles.areaDesc}>Tipo: {area.type_area ? area.type_area.description : area.type_area_name}</Text>
 
-                                <Text style={styles.areaDesc} >Location: {area.location}</Text>
-
                                 {selectedArea === area.id &&
                                     <View style={styles.areaIcons}>
                                         <TouchableOpacity

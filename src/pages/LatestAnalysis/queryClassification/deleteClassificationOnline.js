@@ -14,7 +14,8 @@ export async function handleDeleteOnline(id, token) {
             alert('Erro ao apagar a análise, tente novamente mais tarde!')
         }
 
-    } catch {
+    } catch (err) {
+        console.log(err)
         alert('Erro ao apagar a análise, tente novamente mais tarde!')
     }
 }

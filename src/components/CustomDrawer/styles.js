@@ -2,8 +2,8 @@ import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
     container: {
-      flex: 1,
-      backgroundColor: '#6b3600'
+        flex: 1,
+        backgroundColor: '#6b3600'
     },
     header: {
         padding: 10,
@@ -35,9 +35,14 @@ export default StyleSheet.create({
         borderRadius: 50,
         marginRight: 10,
         marginLeft: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#00622D'
     },
-    userText: {
-
+    avatarText: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#fff'
     },
     name: {
         width: 135,
@@ -56,7 +61,7 @@ export default StyleSheet.create({
     },
     title: {
         fontSize: 20,
-        fontWeight: 'bold' ,
+        fontWeight: 'bold',
         color: '#00622D',
     },
-  });
+});

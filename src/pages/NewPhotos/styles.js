@@ -21,18 +21,6 @@ export default StyleSheet.create({
         justifyContent: 'space-between',
         padding: 10,
     },
-
-    btTypeCamera: {
-        alignSelf: 'flex-end',
-        alignItems: 'center',
-    },
-
-    borderBtType: {
-        padding: 10,
-        borderRadius: 50,
-        borderColor: '#FFF',
-        borderWidth: 5
-    },
     containerPhoto: {
         flex: 1,
     },

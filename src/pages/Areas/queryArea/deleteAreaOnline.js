@@ -8,7 +8,6 @@ export async function handleDeleteOnline(id, token) {
             }
         });
         if (response.status = 201) {
-            fillAreas();
             alert('Área apagada com sucesso!')
         } else {
             alert('Erro ao apagar a área, tente novamente mais tarde!')

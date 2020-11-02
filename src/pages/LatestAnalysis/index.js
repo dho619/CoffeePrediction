@@ -21,7 +21,7 @@ export default function LatestAnalysis({ navigation }) {
     useEffect(() => {
         const loadInfo = async () => {
             const situation = await isOnline();
-            setOnline(false)
+            setOnline(situation)
         }
         let mounted = true;
         loadInfo();
