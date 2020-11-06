@@ -35,7 +35,7 @@ export default function Profile({ navigation }) {
     useEffect(() => {
         const loadInfo = async () => {
             const situation = await isOnline();
-            setOnline(false);
+            setOnline(situation);
             await fillUser();
             keboardDidShowListener = Keyboard.addListener('keyboardDidShow', keyboardDidShow)
             keboardDidHideListener = Keyboard.addListener('keyboardDidHide', keyboardDidHide)
@@ -190,6 +190,7 @@ export default function Profile({ navigation }) {
                         editable={editing}
                         autoCorrect={false}
                         onChangeText={name => setName(name)}
+                        maxLength={100}
                     />
                 </View>
                 <View style={styles.agroup}>
@@ -197,6 +198,7 @@ export default function Profile({ navigation }) {
                     <TextInput
                         style={styles.input}
                         value={email}
+                        maxLength={100}
                         editable={false}
                         autoCorrect={false}
                         autoCompleteType='email'

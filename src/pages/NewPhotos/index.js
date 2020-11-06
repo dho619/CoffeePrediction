@@ -18,6 +18,7 @@ export default function NewPhotos({ navigation }) {
     const [capturedPhoto, setCapturePhoto] = useState('');
     const [location, setLocation] = useState({});
     const [open, setOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         let mounted = true;
@@ -63,6 +64,8 @@ export default function NewPhotos({ navigation }) {
             );
             setUriPhoto(data.uri);
             setCapturePhoto(data.base64);
+            setOpen(true);
+            setLoading(true);
 
             let { status } = await Location.requestPermissionsAsync();
             let location = {};
@@ -75,7 +78,7 @@ export default function NewPhotos({ navigation }) {
                 location = {};
             }
             setLocation(location);
-            setOpen(true);
+            setLoading(false);
         }
     };
 
@@ -98,12 +101,12 @@ export default function NewPhotos({ navigation }) {
             setCapturePhoto(result.base64);
             setLocation({});
             setOpen(true);
-        }
+        };
     };
 
     const sendForReview = () => {
         setOpen(false);
-        navigation.navigate('NewClassifications', { uriPhoto, capturedPhoto, location })
+        navigation.navigate('NewClassifications', { uriPhoto, capturedPhoto, location });
     }
 
     const cancelReview = () => {
@@ -149,15 +152,18 @@ export default function NewPhotos({ navigation }) {
                     <ImageBackground
                         style={styles.photo}
                         source={{ uri: uriPhoto }}
+                        blurRadius={loading ? 6 : 0}
                     >
-                        <View style={styles.areaButtonPhoto}>
-                            <TouchableOpacity style={styles.btPhoto} onPress={cancelReview}>
-                                <AntDesign name="closecircle" size={50} color="orange" />
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.btPhoto} onPress={sendForReview}>
-                                <AntDesign name="check" size={50} color="orange" />
-                            </TouchableOpacity>
-                        </View>
+                        {!loading &&
+                            <View style={styles.areaButtonPhoto}>
+                                <TouchableOpacity style={styles.btPhoto} onPress={cancelReview}>
+                                    <AntDesign name="closecircle" size={50} color="orange" />
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.btPhoto} onPress={sendForReview}>
+                                    <AntDesign name="check" size={50} color="orange" />
+                                </TouchableOpacity>
+                            </View>
+                        }
                     </ImageBackground>
                 </View>
             </Modal>

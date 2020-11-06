@@ -9,6 +9,7 @@ import Home from '../pages/Home';
 import Profile from '../pages/Profile';
 import Incidents from '../pages/Incidents';
 import LatestAnalysis from '../pages/LatestAnalysis';
+import Analyze from '../pages/Analyze';
 import NewPhotos from '../pages/NewPhotos';
 import Areas from '../pages/Areas';
 import AreaRegister from '../pages/AreaRegister';
@@ -46,10 +47,11 @@ function Drawer() {
             {/* <AppDrawer.Screen name = "Ocorrências" component={Incidents}/> */}
             <AppDrawer.Screen name="Minhas Áreas" component={Areas} />
             <AppDrawer.Screen name="Profile" component={Profile} />
-            <AppDrawer.Screen name="AreaRegister" component={AreaRegister} />
-            <AppDrawer.Screen name="NewClassifications" component={NewClassifications} />
             <AppDrawer.Screen name="Ajuda" component={Incidents} />
             <AppDrawer.Screen name="Sobre" component={Incidents} />
+            <AppDrawer.Screen name="AreaRegister" component={AreaRegister} />
+            <AppDrawer.Screen name="NewClassifications" component={NewClassifications} />
+            <AppDrawer.Screen name="Analyze" component={Analyze} />
         </AppDrawer.Navigator>
     )
 }

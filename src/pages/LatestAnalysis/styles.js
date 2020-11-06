@@ -2,11 +2,11 @@ import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
     container: {
-      flex: 1,
-      flexDirection: "column",
-      backgroundColor: '#cf965e',
+        flex: 1,
+        flexDirection: "column",
+        backgroundColor: '#cf965e',
     },
-    headerContainer:{
+    headerContainer: {
         marginTop: 10,
         marginLeft: '10%',
         marginBottom: 25,
@@ -56,21 +56,22 @@ export default StyleSheet.create({
         shadowRadius: 9.11,
         elevation: 14,
     },
-    classificationHeader:{
-        fontSize: 20,
+    classificationHeader: {
+        fontSize: 17,
         fontWeight: 'bold',
-        marginBottom: 5, 
+        marginBottom: 5,
     },
-    analyzeDesc:{
-        fontSize: 16,
+    analyzeDesc: {
+        fontSize: 15,
     },
-    classificationIcons: {
+    analyzeLocal: {
+        fontSize: 15,
+        width: 260
+    },
+    ExpandIcon: {
         position: 'absolute',
         flexDirection: 'row',
         right: 20,
         bottom: 10,
     },
-    editIcon: {
-        marginRight: 15,
-    }
-  });
+});

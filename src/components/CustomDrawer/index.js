@@ -9,7 +9,7 @@ import { execute_db_offline } from '../../db/db_offline';
 var avatar = require('../../assets/perfil.jpeg');
 import styles from './styles';
 
-const hiddenItems = ['Profile', 'AreaRegister', 'NewClassifications'];//itens da gaveta que ficarao escondidos
+const hiddenItems = ['Profile', 'AreaRegister', 'NewClassifications', 'Analyze'];//itens da gaveta que ficarao escondidos
 
 export default function CustomDrawer({ ...props }) {
     const { state, ...rest } = props; // pegar os state (os itens que aparecerao na gaveta)

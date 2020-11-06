@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import {
     Text, View, TouchableOpacity, KeyboardAvoidingView,
-    TextInput, Image, ImageBackground, Alert
+    TextInput, Image, Alert
 } from 'react-native'
 import RNPickerSelect from 'react-native-picker-select';
 import { AntDesign } from '@expo/vector-icons';
@@ -14,7 +14,6 @@ import { fillAreasOffline } from '../Areas/queryArea/fillAreasOffline';
 import { fillAreasOnline } from '../Areas/queryArea/fillAreasOnline';
 import Header from '../../components/Header';
 import { styles, pickerStyle } from './styles';
-import background from '../../assets/FundoClassification.png';
 
 export default function NewPhotos({ route, navigation }) {
     const [online, setOnline] = useState(false);
@@ -153,6 +152,7 @@ export default function NewPhotos({ route, navigation }) {
                     placeholder={'Dê um nome para a Análise'}
                     autoCorrect={false}
                     onChangeText={name => setName(name)}
+                    maxLength={100}
                 />
                 <TextInput
                     style={styles.inputMultiline}
@@ -184,7 +184,6 @@ export default function NewPhotos({ route, navigation }) {
                 </TouchableOpacity>
                 <View style={{ flex: 1 }} />
             </KeyboardAvoidingView>
-            <ImageBackground source={background} style={styles.imageBackground} />
         </View>
     );
 }

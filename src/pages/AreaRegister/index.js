@@ -180,6 +180,7 @@ export default function AreaRegister({ route, navigation }) {
                         placeholder={'Nome'}
                         autoCorrect={false}
                         onChangeText={name => setName(name)}
+                        maxLength={100}
                     />
                     <TextInput
                         style={styles.inputMultiline}

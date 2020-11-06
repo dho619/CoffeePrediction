@@ -1,13 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Alert } from 'react-native'
+import { View, Text, TouchableOpacity, ScrollView, Image, Alert } from 'react-native'
 import { AntDesign } from '@expo/vector-icons';
 
 import { Context } from '../../context/contextAuth';
 import { isOnline } from '../../services/Network';
-import { handleDeleteOffline } from './queryClassification/deleteClassificationOffline';
-import { handleDeleteOnline } from './queryClassification/deleteClassificationOnline';
-import { fillClassificationsOffline } from './queryClassification/fillClassificationsOffline';
-import { fillClassificationOnline } from './queryClassification/fillClassificationsOnline';
+import { fillClassificationsOffline } from './queryClassifications/fillClassificationsOffline';
+import { fillClassificationOnline } from './queryClassifications/fillClassificationsOnline';
 import Header from '../../components/Header';
 import styles from './styles';
 
@@ -42,30 +40,6 @@ export default function LatestAnalysis({ navigation }) {
         setClassifications(loadedClassifications);
     }
 
-    const deleteclassification = (id) => {
-        async function handleDelete(id) {
-            if (online) {
-                await handleDeleteOnline(id, token);
-            } else {
-                await handleDeleteOffline(id, user.areas);
-            }
-            fillClassification();
-        }
-
-        Alert.alert(
-            "Confirmação:",
-            "Deseja realmente apagar essa Análise?",
-            [
-                {
-                    text: "Cancel",
-                    style: "cancel"
-                },
-                { text: "OK", onPress: () => handleDelete(id) }
-            ],
-            { cancelable: false }
-        );
-    }
-
     return (
         <View style={styles.container}>
             <Header navigation={navigation} />
@@ -82,27 +56,21 @@ export default function LatestAnalysis({ navigation }) {
                                 onPress={() => { setSelectedClassification(selectedClassification === classification.id ? -1 : classification.id) }}
                             >
                                 <Text style={styles.classificationHeader}>Nome: {classification.name}</Text>
-                                <Text style={styles.classificationDesc} numberOfLines={selectedClassification === classification.id ? 100 : 1}>
+                                <Text style={styles.analyzeDesc} numberOfLines={selectedClassification === classification.id ? 100 : 1}>
                                     Descrição: {classification.description}
                                 </Text>
-                                <Text style={styles.classificationDesc}>Local: {classification.area ? classification.area.name : ''}</Text>
-
-                                <Text style={styles.classificationDesc} >Doente: {classification.healthy ? 'Não' : 'Sim'}</Text>
-                                <Text style={styles.classificationDesc} >Doença: {classification.disease}</Text>
-
-                                {selectedClassification === classification.id &&
-                                    <View style={styles.classificationIcons}>
-                                        <TouchableOpacity
-                                            style={styles.editIcon}
-                                            onPress={() => { }}
-                                        >
-                                            <AntDesign name="edit" size={24} color="black" />
-                                        </TouchableOpacity>
-                                        <TouchableOpacity onPress={() => deleteclassification(classification.id)}>
-                                            <AntDesign name="delete" size={24} color="black" />
-                                        </TouchableOpacity>
-                                    </View>
-                                }
+                                <Text
+                                    style={styles.analyzeLocal}
+                                    numberOfLines={1}
+                                >
+                                    Local: {classification.area ? classification.area.name : ''}
+                                </Text>
+                                <TouchableOpacity
+                                    style={styles.ExpandIcon}
+                                    onPress={() => navigation.navigate('Analyze', { classification, sentToAPI: classification.created_at ? true : false })}
+                                >
+                                    <AntDesign name="arrowright" size={27} color="black" />
+                                </TouchableOpacity>
                             </TouchableOpacity>
 
                         ))
