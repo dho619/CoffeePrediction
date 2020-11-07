@@ -30,20 +30,15 @@ export default function Login({ navigation }) {
     const { onSignIn } = useContext(Context);
 
     useEffect(() => {
-        //quando abre o teclado chama a funcao passada
         keboardDidShowListener = Keyboard.addListener('keyboardDidShow', keyboardDidShow);
-        //quando fecha o teclado chama a funcao passada
         keboardDidHideListener = Keyboard.addListener('keyboardDidHide', keyboardDidHide);
 
-        //executar mais de uma animacao em paralelo
         Animated.parallel([
-            //controla os "pulos" do form de login
             Animated.spring(offset.y, {
                 toValue: 0,
                 speed: 4,
                 bounciness: 20,
             }),
-            //controla opacidade
             Animated.timing(opacity, {
                 toValue: 1,
                 duration: 200,
@@ -54,14 +49,11 @@ export default function Login({ navigation }) {
     }, []);
 
     function keyboardDidShow() {
-        //executar mais de uma animacao em paralelo
         Animated.parallel([
-            //controla o tamanho no eixo x
             Animated.timing(dimensao.x, {
                 toValue: 200,
                 duration: 100,
             }),
-            //controla o tamanho no eixo y
             Animated.timing(dimensao.y, {
                 toValue: 205,
                 duration: 100,
@@ -105,7 +97,6 @@ export default function Login({ navigation }) {
         } else {
             await AsyncStorage.removeItem(REMEMBER_EMAIL);
             await AsyncStorage.removeItem(REMEMBER_PASS);
-            //limpar campos, para nao restar lixo quando voltar nessa tela
             setEmail('');
             setPassword('');
         }

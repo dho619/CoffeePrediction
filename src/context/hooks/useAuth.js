@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 import { isSignedIn, loggedUser, addUserToken, clearUserToken } from '../authenticationFunctions';
-import { isOnline } from '../../services/Network';
+import { isOnline, replicate_to_the_backend } from '../../services/Network';
 import create_tables_if_not_exists from '../../db/create_tables';
 import { update_type_areas } from '../../db/update_offline_db_types';
 
@@ -39,6 +39,7 @@ export default function useAuth() {
         await create_tables_if_not_exists();
         const online = await isOnline();
         if (online) {
+            replicate_to_the_backend();
             setUser(await loggedUser());
             await update_type_areas()
         }

@@ -8,8 +8,8 @@ import CustomDrawer from '../components/CustomDrawer';
 import Home from '../pages/Home';
 import Profile from '../pages/Profile';
 import Incidents from '../pages/Incidents';
-import LatestAnalysis from '../pages/LatestAnalysis';
-import Analyze from '../pages/Analyze';
+import LatestClassifications from '../pages/LatestClassifications';
+import Classification from '../pages/Classification';
 import NewPhotos from '../pages/NewPhotos';
 import Areas from '../pages/Areas';
 import AreaRegister from '../pages/AreaRegister';
@@ -43,7 +43,7 @@ function Drawer() {
         >
             <AppDrawer.Screen name="Inicio" component={Home} />
             <AppDrawer.Screen name="Nova Análise" component={NewPhotos} />
-            <AppDrawer.Screen name="Últimas Análises" component={LatestAnalysis} />
+            <AppDrawer.Screen name="Últimas Análises" component={LatestClassifications} />
             {/* <AppDrawer.Screen name = "Ocorrências" component={Incidents}/> */}
             <AppDrawer.Screen name="Minhas Áreas" component={Areas} />
             <AppDrawer.Screen name="Profile" component={Profile} />
@@ -51,7 +51,7 @@ function Drawer() {
             <AppDrawer.Screen name="Sobre" component={Incidents} />
             <AppDrawer.Screen name="AreaRegister" component={AreaRegister} />
             <AppDrawer.Screen name="NewClassifications" component={NewClassifications} />
-            <AppDrawer.Screen name="Analyze" component={Analyze} />
+            <AppDrawer.Screen name="Classification" component={Classification} />
         </AppDrawer.Navigator>
     )
 }

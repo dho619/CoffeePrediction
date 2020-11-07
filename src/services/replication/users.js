@@ -4,7 +4,7 @@ import { isSignedIn } from '../../context/authenticationFunctions';
 
 export const replicate_users = async () => {
     const token = await isSignedIn();
-    const users = await execute_db_offline("select * from users;");
+    const users = await execute_db_offline("select * from users order by replication_sequence;");
     await users.map(async user => {
         const newuser = {
             name: user.name,
@@ -20,10 +20,6 @@ export const replicate_users = async () => {
         } catch (err) {
             console.log(err)
         }
-        // if (user.id === userLogado.id) {
-        //     userLogado.name = user.name
-        //     userLogado.email = user.email
-        // }
     });
 }
 

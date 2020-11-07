@@ -55,7 +55,7 @@ export default function CustomDrawer({ ...props }) {
                 >
                     <Ionicons
                         name="md-arrow-round-back"
-                        size={30}
+                        size={35}
                         color="black"
                     />
                 </TouchableOpacity>

@@ -152,7 +152,7 @@ export default function NewPhotos({ route, navigation }) {
                     placeholder={'Dê um nome para a Análise'}
                     autoCorrect={false}
                     onChangeText={name => setName(name)}
-                    maxLength={100}
+                    maxLength={50}
                 />
                 <TextInput
                     style={styles.inputMultiline}

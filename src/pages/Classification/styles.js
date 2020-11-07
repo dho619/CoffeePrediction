@@ -79,7 +79,6 @@ export default StyleSheet.create({
     inputMultiline: {
         backgroundColor: '#FFF',
         width: '100%',
-        maxHeight: 82,
         marginBottom: 15,
         color: '#222',
         fontSize: 17,

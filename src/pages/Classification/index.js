@@ -10,6 +10,7 @@ import { isOnline } from '../../services/Network';
 import { formatDatePython, dateNow } from '../../utils/date';
 import Header from '../../components/Header';
 import styles from './styles';
+import { handleClassification } from './queryClassification/handleClassification';
 import { updateOnline } from './queryClassification/updateOnline';
 import { updateOffline } from './queryClassification/updateOffline';
 import { handleDeleteOffline } from './queryClassification/deleteClassificationOffline';
@@ -17,9 +18,12 @@ import { handleDeleteOnline } from './queryClassification/deleteClassificationOn
 
 var avatar = require('../../assets/perfil.jpeg');
 
-export default function Analyze({ route, navigation }) {
+
+export default function Classification({ route, navigation }) {
     const [online, setOnline] = useState(false);
     const [editing, setEditing] = useState(false);
+    const [treatedClassification, setTreatedClassification] = useState({});
+    const [id, setId] = useState('');
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [widthImage, setWidthImage] = useState(120);
@@ -32,7 +36,7 @@ export default function Analyze({ route, navigation }) {
     useEffect(() => {
         const loadInfo = async () => {
             const situation = await isOnline();
-            setOnline(false);
+            setOnline(situation);
             await fillClassification();
             keboardDidShowListener = Keyboard.addListener('keyboardDidShow', keyboardDidShow)
             keboardDidHideListener = Keyboard.addListener('keyboardDidHide', keyboardDidHide)
@@ -42,9 +46,17 @@ export default function Analyze({ route, navigation }) {
         return () => mounted = false;
     }, []);
 
+    useEffect(() => {
+        let mounted = true;
+        fillClassification();
+        return () => mounted = false;
+    }, [treatedClassification])
+
     const fillClassification = async () => {
-        setName(classification.name);
-        setDescription(classification.description);
+        setTreatedClassification(await handleClassification(classification));
+        setId(treatedClassification.id);
+        setName(treatedClassification.name);
+        setDescription(treatedClassification.description);
     }
 
     function keyboardDidShow() {
@@ -58,8 +70,8 @@ export default function Analyze({ route, navigation }) {
     }
 
     function clearFields() {
-        setName(classification.name);
-        setDescription(classification.description);
+        setName(treatedClassification.name);
+        setDescription(treatedClassification.description);
         setEditing(false);
     }
 
@@ -72,7 +84,7 @@ export default function Analyze({ route, navigation }) {
             if (online) {
                 await handleDeleteOnline(id, token);
             } else {
-                await handleDeleteOffline(id, user.areas);
+                await handleDeleteOffline(id, user.classifications);
             }
             navigation.navigate('Últimas Análises');
         }
@@ -108,9 +120,9 @@ export default function Analyze({ route, navigation }) {
 
         let success = false;
         if (online) {
-            success = await updateOnline(user.id, updateClassification, token);
+            success = await updateOnline(id, updateClassification, token);
         } else {
-            success = await updateOffline(user.id, updateClassification);
+            success = await updateOffline(id, updateClassification);
         }
 
         if (success) {
@@ -125,6 +137,10 @@ export default function Analyze({ route, navigation }) {
                 ],
                 { cancelable: false }
             );
+            classification.name = name;
+            classification.description = description;
+            classification.updated_at = dateNow(false, true);
+            fillClassification();
         } else {
             Alert.alert(
                 "Aviso",
@@ -135,7 +151,6 @@ export default function Analyze({ route, navigation }) {
                 { cancelable: false }
             );
         }
-        fillClassification();
     }
 
     return (
@@ -156,6 +171,7 @@ export default function Analyze({ route, navigation }) {
                 />
                 <View style={[styles.agroupInformation, { height: heightImage }]}>
                     <View>
+                        <Text style={[styles.classificationInformation, { marginBottom: 5 }]}>Local: {classification.area ? classification.area.name : classification.area_name}</Text>
                         {sentToAPI ?
                             <>
                                 <Text style={styles.informations}>Enviado: {formatDatePython(classification.created_at)}</Text>
@@ -199,18 +215,19 @@ export default function Analyze({ route, navigation }) {
                     autoCorrect={false}
                     multiline={true}
                     onChangeText={name => setName(name)}
-                    maxLength={100}
+                    maxLength={50}
                 />
                 <Text style={styles.field}>Descrição: </Text>
                 <TextInput
-                    style={styles.inputMultiline}
+                    style={[styles.inputMultiline, editing ? { maxHeight: 82 } : {}]}
                     value={description}
-                    placeholder={'Descrição da análise'}
                     editable={editing}
+                    placeholder={'Descrição da análise'}
                     numberOfLines={3}
                     maxLength={500}
                     multiline={true}
-                    onChangeText={description => setDescription(description)}
+                    onPress={() => Keyboard.dismiss()}
+                    onChangeText={descriptionInput => editing ? setDescription(descriptionInput) : descriptionInput = description}
                 />
 
                 {editing ?

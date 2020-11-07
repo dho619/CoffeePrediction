@@ -10,7 +10,11 @@ export const isOnline = async () => {
 }
 
 export const replicate_to_the_backend = async () => {
-    await replicate_users();
-    await replicate_areas();
-    await replicate_classifications();
+    console.log('Replicando dados para o backend...')
+    try {
+        await replicate_users();
+        await replicate_areas();
+        await replicate_classifications();
+    } catch (err) {
+    }
 } 

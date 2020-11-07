@@ -9,7 +9,7 @@ import { fillClassificationOnline } from './queryClassifications/fillClassificat
 import Header from '../../components/Header';
 import styles from './styles';
 
-export default function LatestAnalysis({ navigation }) {
+export default function LatestClassifications({ navigation }) {
     const [online, setOnline] = useState(false);
     const [classifications, setClassifications] = useState([]);
     const [selectedClassification, setSelectedClassification] = useState(-1);
@@ -21,9 +21,7 @@ export default function LatestAnalysis({ navigation }) {
             const situation = await isOnline();
             setOnline(situation)
         }
-        let mounted = true;
         loadInfo();
-        return () => mounted = false;
     }, []);
 
     useEffect(() => {
@@ -63,11 +61,11 @@ export default function LatestAnalysis({ navigation }) {
                                     style={styles.analyzeLocal}
                                     numberOfLines={1}
                                 >
-                                    Local: {classification.area ? classification.area.name : ''}
+                                    Local: {classification.area ? classification.area.name : classification.area_name}
                                 </Text>
                                 <TouchableOpacity
                                     style={styles.ExpandIcon}
-                                    onPress={() => navigation.navigate('Analyze', { classification, sentToAPI: classification.created_at ? true : false })}
+                                    onPress={() => navigation.navigate('Classification', { classification, sentToAPI: classification.created_at ? true : false })}
                                 >
                                     <AntDesign name="arrowright" size={27} color="black" />
                                 </TouchableOpacity>
