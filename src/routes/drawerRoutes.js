@@ -14,6 +14,8 @@ import NewPhotos from '../pages/NewPhotos';
 import Areas from '../pages/Areas';
 import AreaRegister from '../pages/AreaRegister';
 import NewClassifications from '../pages/NewClassifications';
+import About from '../pages/About';
+import Feedback from '../pages/Feedback';
 
 const AppDrawer = createDrawerNavigator();
 
@@ -47,11 +49,11 @@ function Drawer() {
             {/* <AppDrawer.Screen name = "Ocorrências" component={Incidents}/> */}
             <AppDrawer.Screen name="Minhas Áreas" component={Areas} />
             <AppDrawer.Screen name="Profile" component={Profile} />
-            <AppDrawer.Screen name="Ajuda" component={Incidents} />
-            <AppDrawer.Screen name="Sobre" component={Incidents} />
+            <AppDrawer.Screen name="Sobre" component={About} />
             <AppDrawer.Screen name="AreaRegister" component={AreaRegister} />
             <AppDrawer.Screen name="NewClassifications" component={NewClassifications} />
             <AppDrawer.Screen name="Classification" component={Classification} />
+            <AppDrawer.Screen name="Feedback" component={Feedback} />
         </AppDrawer.Navigator>
     )
 }

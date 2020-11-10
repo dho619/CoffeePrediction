@@ -36,7 +36,7 @@ export default function NewPhotos({ navigation }) {
         return <Text>No access to camera</Text>;
     };
 
-    const turnCamera = () => {//inverte a camera selecionada
+    const handleTurnCamera = () => {//inverte a camera selecionada
         setType(
             type === Camera.Constants.Type.back
                 ? Camera.Constants.Type.front
@@ -44,7 +44,7 @@ export default function NewPhotos({ navigation }) {
         );
     };
 
-    const turnFlash = () => {
+    const handleTurnFlash = () => {
         if (flash === Camera.Constants.FlashMode.off) {
             setFlash(Camera.Constants.FlashMode.on);
             setFlashIcon('ios-flash')
@@ -54,7 +54,7 @@ export default function NewPhotos({ navigation }) {
         }
     };
 
-    const takePicture = async () => {
+    const handleTakingPicture = async () => {
         if (camRef) {
             const data = await camRef.current.takePictureAsync(
                 {
@@ -82,7 +82,7 @@ export default function NewPhotos({ navigation }) {
         }
     };
 
-    const uploadImage = async () => {
+    const handleImageUpload = async () => {
         let permissionResult = await requestCameraRollPermissionsAsync();
 
         if (permissionResult.granted === false) {
@@ -115,8 +115,6 @@ export default function NewPhotos({ navigation }) {
         setOpen(false);
     }
 
-
-
     return (
         <View style={styles.container}>
             <Header navigation={navigation} />
@@ -127,19 +125,19 @@ export default function NewPhotos({ navigation }) {
                 ref={camRef}
 
             >
-                <TouchableOpacity style={styles.btFlash} onPress={turnFlash}>
+                <TouchableOpacity style={styles.btFlash} onPress={handleTurnFlash}>
                     <Ionicons name={flashIcon} size={50} color="white" />
                 </TouchableOpacity>
             </Camera>
             <View
                 style={styles.areaButtons}>
-                <TouchableOpacity onPress={turnCamera}>
+                <TouchableOpacity onPress={handleTurnCamera}>
                     <Ionicons name="md-reverse-camera" size={80} color="black" />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={takePicture}>
+                <TouchableOpacity onPress={handleTakingPicture}>
                     <MaterialIcons name="photo-camera" size={80} color="black" />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={uploadImage}>
+                <TouchableOpacity onPress={handleImageUpload}>
                     <MaterialCommunityIcons name="file-upload" size={80} color="black" />
                 </TouchableOpacity>
             </View>
