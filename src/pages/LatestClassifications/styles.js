@@ -18,6 +18,15 @@ export default StyleSheet.create({
         fontWeight: 'bold',
         color: "#00622D",
     },
+    loading: {
+        flex: .8,
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    loadingImage: {
+        width: 250,
+        height: 250
+    },
     classificationContainer: {
         alignItems: "center",
         justifyContent: "center",

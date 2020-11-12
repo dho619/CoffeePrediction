@@ -16,9 +16,6 @@ import { updateOffline } from './queryClassification/updateOffline';
 import { handleDeleteOffline } from './queryClassification/deleteClassificationOffline';
 import { handleDeleteOnline } from './queryClassification/deleteClassificationOnline';
 
-var avatar = require('../../assets/perfil.jpeg');
-
-
 export default function Classification({ route, navigation }) {
     const [online, setOnline] = useState(false);
     const [editing, setEditing] = useState(false);
@@ -32,6 +29,8 @@ export default function Classification({ route, navigation }) {
     const { user, token } = useContext(Context);
 
     const { classification, sentToAPI } = route.params;
+    console.log(classification.image)
+    const offlineImage = ``;
 
     useEffect(() => {
         const loadInfo = async () => {
@@ -166,7 +165,11 @@ export default function Classification({ route, navigation }) {
             </View>
             <View style={styles.classificationData}>
                 <Image
-                    source={avatar}
+                    source={sentToAPI ?
+                        { uri: `data:image/gif;base64,${classification.image_base64}` }
+                        :
+                        { uri: classification.image }
+                    }
                     style={[styles.photo, { width: widthImage, height: heightImage }]}
                 />
                 <View style={[styles.agroupInformation, { height: heightImage }]}>

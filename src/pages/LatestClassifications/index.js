@@ -9,8 +9,11 @@ import { fillClassificationOnline } from './queryClassifications/fillClassificat
 import Header from '../../components/Header';
 import styles from './styles';
 
+var loadingImage = require('../../assets/loading.gif');
+
 export default function LatestClassifications({ navigation }) {
-    const [online, setOnline] = useState(false);
+    const [online, setOnline] = useState('seeking...');
+    const [loading, setLoading] = useState(true);
     const [classifications, setClassifications] = useState([]);
     const [selectedClassification, setSelectedClassification] = useState(-1);
 
@@ -29,6 +32,7 @@ export default function LatestClassifications({ navigation }) {
     }, [online]);
 
     const fillClassification = async () => {
+        if (online === 'seeking...') return;
         let loadedClassifications = []
         if (online) {
             loadedClassifications = await fillClassificationOnline(token)
@@ -36,6 +40,7 @@ export default function LatestClassifications({ navigation }) {
             loadedClassifications = await fillClassificationsOffline(user.classifications)
         }
         setClassifications(loadedClassifications);
+        setLoading(false);
     }
 
     return (
@@ -44,37 +49,46 @@ export default function LatestClassifications({ navigation }) {
             <View style={styles.headerContainer}>
                 <Text style={styles.headerText}>Últimas Análises:</Text>
             </View>
-            <View style={styles.classificationContainer}>
-                <ScrollView style={styles.classificationList}>
-                    {
-                        classifications && classifications.map(classification => (
-                            <TouchableOpacity
-                                key={classification.id}
-                                style={selectedClassification === classification.id ? styles.classificationSelected : styles.classification}
-                                onPress={() => { setSelectedClassification(selectedClassification === classification.id ? -1 : classification.id) }}
-                            >
-                                <Text style={styles.classificationHeader}>Nome: {classification.name}</Text>
-                                <Text style={styles.analyzeDesc} numberOfLines={selectedClassification === classification.id ? 100 : 1}>
-                                    Descrição: {classification.description}
-                                </Text>
-                                <Text
-                                    style={styles.analyzeLocal}
-                                    numberOfLines={1}
-                                >
-                                    Local: {classification.area ? classification.area.name : classification.area_name}
-                                </Text>
+            {loading ?
+                <View style={styles.loading}>
+                    <Image
+                        source={loadingImage}
+                        style={styles.loadingImage}
+                    />
+                </View>
+                :
+                <View style={styles.classificationContainer}>
+                    <ScrollView style={styles.classificationList}>
+                        {
+                            classifications && classifications.map(classification => (
                                 <TouchableOpacity
-                                    style={styles.ExpandIcon}
-                                    onPress={() => navigation.navigate('Classification', { classification, sentToAPI: classification.created_at ? true : false })}
+                                    key={classification.id}
+                                    style={selectedClassification === classification.id ? styles.classificationSelected : styles.classification}
+                                    onPress={() => { setSelectedClassification(selectedClassification === classification.id ? -1 : classification.id) }}
                                 >
-                                    <AntDesign name="arrowright" size={27} color="black" />
+                                    <Text style={styles.classificationHeader}>Nome: {classification.name}</Text>
+                                    <Text style={styles.analyzeDesc} numberOfLines={selectedClassification === classification.id ? 100 : 1}>
+                                        Descrição: {classification.description}
+                                    </Text>
+                                    <Text
+                                        style={styles.analyzeLocal}
+                                        numberOfLines={1}
+                                    >
+                                        Local: {classification.area ? classification.area.name : classification.area_name}
+                                    </Text>
+                                    <TouchableOpacity
+                                        style={styles.ExpandIcon}
+                                        onPress={() => navigation.navigate('Classification', { classification, sentToAPI: classification.created_at ? true : false })}
+                                    >
+                                        <AntDesign name="arrowright" size={27} color="black" />
+                                    </TouchableOpacity>
                                 </TouchableOpacity>
-                            </TouchableOpacity>
 
-                        ))
-                    }
-                </ScrollView>
-            </View>
+                            ))
+                        }
+                    </ScrollView>
+                </View>
+            }
         </View>
     )
 }

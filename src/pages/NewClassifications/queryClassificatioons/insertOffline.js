@@ -22,14 +22,18 @@ const USER_IMAGE_DIR = FileSystem.documentDirectory + 'imgOffline';
 export const registerOffline = async (newClassification, uri) => {
     try {
         id = await get_guid();
-
+        console.log([id, newClassification.name, newClassification.location,
+            newClassification.description, uri, newClassification.user_id,
+            newClassification.area_id, newClassification.area_name, `insert`
+        ]);
         await execute_db_offline("INSERT INTO classifications (id, name, location, description, image, user_id, area_id, area_name, type_action) "
-            + " VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+            + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
             [id, newClassification.name, newClassification.location,
                 newClassification.description, uri, newClassification.user_id,
                 newClassification.area_id, newClassification.area_name, `insert`
             ]
         );
+
         Alert.alert(
             "Sucesso",
             'Você se encontra sem internet no momento, sua foto foi guardada e assim que'

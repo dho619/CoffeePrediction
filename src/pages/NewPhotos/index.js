@@ -16,7 +16,7 @@ export default function NewPhotos({ navigation }) {
     const [flashIcon, setFlashIcon] = useState('ios-flash-off'); //camera traseira ou front
     const [uriPhoto, setUriPhoto] = useState('');
     const [capturedPhoto, setCapturePhoto] = useState('');
-    const [location, setLocation] = useState({});
+    const [location, setLocation] = useState('');
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
 
@@ -75,7 +75,7 @@ export default function NewPhotos({ navigation }) {
                     location = `${response.coords.latitude}:${response.coords.longitude}`
                 }
             } catch {
-                location = {};
+                location = '';
             }
             setLocation(location);
             setLoading(false);
@@ -99,7 +99,7 @@ export default function NewPhotos({ navigation }) {
         if (!result.cancelled) {
             setUriPhoto(result.uri);
             setCapturePhoto(result.base64);
-            setLocation({});
+            setLocation('');
             setOpen(true);
         };
     };

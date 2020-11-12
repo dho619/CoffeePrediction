@@ -1,6 +1,6 @@
 import { AntDesign } from '@expo/vector-icons';
 import React, { useContext, useEffect, useState } from 'react';
-import { Alert, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, ScrollView, Text, TouchableOpacity, View, Image } from 'react-native';
 import Header from '../../components/Header';
 import { Context } from '../../context/contextAuth';
 import { isOnline } from '../../services/Network';
@@ -9,9 +9,11 @@ import { handleDeleteOnline } from './queryArea/deleteAreaOnline';
 import { fillAreasOffline } from './queryArea/fillAreasOffline';
 import { fillAreasOnline } from './queryArea/fillAreasOnline';
 import styles from './styles';
+var loadingImage = require('../../assets/loading.gif');
 
 export default function Areas({ navigation }) {
-    const [online, setOnline] = useState(false);
+    const [online, setOnline] = useState('seeking...');
+    const [loading, setLoading] = useState(true);
     const [areas, setAreas] = useState([]);
     const [selectedArea, setSelectedArea] = useState(-1);
 
@@ -32,6 +34,7 @@ export default function Areas({ navigation }) {
     }, [online]);
 
     const fillAreas = async () => {
+        if (online === 'seeking...') return;
         if (online) {
             let areas = await fillAreasOnline(token)
             setAreas(areas);
@@ -39,6 +42,7 @@ export default function Areas({ navigation }) {
             let areas = await fillAreasOffline(user.areas)
             setAreas(areas);
         }
+        setLoading(false);
     }
 
     const deleteArea = (id) => {
@@ -81,40 +85,49 @@ export default function Areas({ navigation }) {
                     />
                 </TouchableOpacity>
             </View>
-            <View style={styles.areaContainer}>
-                <ScrollView style={styles.areaList}>
-                    {
-                        areas.map(area => (
-                            <TouchableOpacity
-                                key={area.id}
-                                style={selectedArea === area.id ? styles.areaSelected : styles.area}
-                                onPress={() => { setSelectedArea(selectedArea === area.id ? -1 : area.id) }}
-                            >
-                                <Text style={styles.areaHeader}>Nome: {area.name}</Text>
-                                <Text style={styles.areaDesc} numberOfLines={selectedArea === area.id ? 100 : 1}>
-                                    Descrição: {area.description}
-                                </Text>
-                                <Text style={styles.areaDesc}>Tipo: {area.type_area ? area.type_area.description : area.type_area_name}</Text>
+            {loading ?
+                <View style={styles.loading}>
+                    <Image
+                        source={loadingImage}
+                        style={styles.loadingImage}
+                    />
+                </View>
+                :
+                <View style={styles.areaContainer}>
+                    <ScrollView style={styles.areaList}>
+                        {
+                            areas.map(area => (
+                                <TouchableOpacity
+                                    key={area.id}
+                                    style={selectedArea === area.id ? styles.areaSelected : styles.area}
+                                    onPress={() => { setSelectedArea(selectedArea === area.id ? -1 : area.id) }}
+                                >
+                                    <Text style={styles.areaHeader}>Nome: {area.name}</Text>
+                                    <Text style={styles.areaDesc} numberOfLines={selectedArea === area.id ? 100 : 1}>
+                                        Descrição: {area.description}
+                                    </Text>
+                                    <Text style={styles.areaDesc}>Tipo: {area.type_area ? area.type_area.description : area.type_area_name}</Text>
 
-                                {selectedArea === area.id &&
-                                    <View style={styles.areaIcons}>
-                                        <TouchableOpacity
-                                            style={styles.editIcon}
-                                            onPress={() => navigation.navigate('AreaRegister', { area })}
-                                        >
-                                            <AntDesign name="edit" size={24} color="black" />
-                                        </TouchableOpacity>
-                                        <TouchableOpacity onPress={() => deleteArea(area.id)}>
-                                            <AntDesign name="delete" size={24} color="black" />
-                                        </TouchableOpacity>
-                                    </View>
-                                }
-                            </TouchableOpacity>
+                                    {selectedArea === area.id &&
+                                        <View style={styles.areaIcons}>
+                                            <TouchableOpacity
+                                                style={styles.editIcon}
+                                                onPress={() => navigation.navigate('AreaRegister', { area })}
+                                            >
+                                                <AntDesign name="edit" size={24} color="black" />
+                                            </TouchableOpacity>
+                                            <TouchableOpacity onPress={() => deleteArea(area.id)}>
+                                                <AntDesign name="delete" size={24} color="black" />
+                                            </TouchableOpacity>
+                                        </View>
+                                    }
+                                </TouchableOpacity>
 
-                        ))
-                    }
-                </ScrollView>
-            </View>
+                            ))
+                        }
+                    </ScrollView>
+                </View>
+            }
         </View>
     )
 }
