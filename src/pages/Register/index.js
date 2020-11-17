@@ -1,52 +1,63 @@
-import React, {useState, useEffect, useContext} from 'react';
-import { View, KeyboardAvoidingView, Image, 
-         Text, TouchableOpacity, TextInput,
-         Animated, StyleSheet, Keyboard, Alert
+import React, { useState, useEffect, useContext } from 'react';
+import {
+    View, KeyboardAvoidingView, Image,
+    Text, TouchableOpacity, TextInput,
+    Animated, StyleSheet, Keyboard, Alert
 } from 'react-native';
 
 import api from '../../services/api';
 import { validate } from 'validate.js';
 import { constraintsEmail, validatePassword } from '../../utils/constraints';
 import { Context } from '../../context/contextAuth';
+import { idUser } from '../../context/authenticationFunctions';
+import { isOnline } from '../../services/Network';
+import { get_type_areas } from '../../db/update_offline_db_types';
+import * as registerArea from '../AreaRegister/queryAreaRegister/registerOnline';
 const logo = require('../../assets/logo.png')
 import styles from './styles';
 
 
-export default function Login({navigation}) {
+export default function Login({ navigation }) {
+    const [online, setOnline] = useState(false);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [password2, setPassword2] = useState('');
-    const [offset] = useState(new Animated.ValueXY({x:0, y:95}))
+    const [offset] = useState(new Animated.ValueXY({ x: 0, y: 95 }))
     const [opacity] = useState(new Animated.Value(0))
     const [marginTop] = useState(new Animated.Value(40))
-    const [dimensao] = useState(new Animated.ValueXY({x: 250, y: 255}))
+    const [dimensao] = useState(new Animated.ValueXY({ x: 250, y: 255 }))
 
     const { onSignIn } = useContext(Context);
 
     useEffect(() => {
-        //quando abre o teclado chama a funcao passada
-        keboardDidShowListener = Keyboard.addListener('keyboardDidShow', keyboardDidShow)
-        //quando fecha o teclado chama a funcao passada
-        keboardDidHideListener = Keyboard.addListener('keyboardDidHide', keyboardDidHide)
+        const loadInfo = async () => {
+            const situation = await isOnline();
+            setOnline(situation);
+            //quando abre o teclado chama a funcao passada
+            keboardDidShowListener = Keyboard.addListener('keyboardDidShow', keyboardDidShow)
+            //quando fecha o teclado chama a funcao passada
+            keboardDidHideListener = Keyboard.addListener('keyboardDidHide', keyboardDidHide)
 
-        //executar mais de uma animacao em paralelo
-        Animated.parallel([
-            //controla os "pulos" no form de registrar
-            Animated.spring(offset.y, {
-                toValue: 0,
-                speed: 4,
-                bounciness: 20
-            }),
-            //controla a opacidade
-            Animated.timing(opacity, {
-                toValue: 1,
-                duration: 200,
-            })
-        ]).start();
+            //executar mais de uma animacao em paralelo
+            Animated.parallel([
+                //controla os "pulos" no form de registrar
+                Animated.spring(offset.y, {
+                    toValue: 0,
+                    speed: 4,
+                    bounciness: 20
+                }),
+                //controla a opacidade
+                Animated.timing(opacity, {
+                    toValue: 1,
+                    duration: 200,
+                })
+            ]).start();
+        }
+        loadInfo();
     }, []);
 
-    function keyboardDidShow(){
+    function keyboardDidShow() {
         //executar mais de uma animacao em paralelo
         Animated.parallel([
             //controla o tamanho no eixo x
@@ -67,7 +78,7 @@ export default function Login({navigation}) {
         ]).start();
     }
 
-    function keyboardDidHide(){
+    function keyboardDidHide() {
         //executar mais de uma animacao em paralelo
         Animated.parallel([
             //controla o tamanho no eixo x
@@ -88,14 +99,46 @@ export default function Login({navigation}) {
         ]).start();
     }
 
+    const createAreaDefault = async (token) => {
+        try {
+
+            const type_areas = await get_type_areas();
+
+            const type_area_id = await type_areas.filter(type => type.name === 'outro')[0].id;
+            const user_id = await idUser(token);
+            const newArea = {
+                name: 'Geral',
+                description: 'Geral',
+                type_area_id,
+                user_id
+            };
+
+            await registerArea.registerOnline(newArea, token, false);
+        } catch {
+
+        }
+    }
+
     const register = async () => {
+        if (!online) {
+            Alert.alert(
+                "Aviso",
+                'Sem conexão com a internet, não é possível continuar!',
+                [
+                    { text: "OK" }
+                ],
+                { cancelable: false }
+            );
+            return '';
+        }
+
         //verificar se nome esta vazio
-        if(name === ''){
+        if (name === '') {
             Alert.alert(
                 "Aviso",
                 'Nescessário preencher o campo de Nome',
                 [
-                    { text: "OK"}
+                    { text: "OK" }
                 ],
                 { cancelable: false }
             );
@@ -103,64 +146,65 @@ export default function Login({navigation}) {
         }
 
         //validar email
-        const validationResult = await validate({email}, constraintsEmail);
-        if (validationResult){
+        const validationResult = await validate({ email }, constraintsEmail);
+        if (validationResult) {
             Alert.alert(
                 "Aviso",
                 validationResult.email[0],
                 [
-                  { text: "OK"}
+                    { text: "OK" }
                 ],
                 { cancelable: false }
             );
             return '';
         }
-        
+
         //validando senha
-        if (!validatePassword(password, password2)){
+        if (!validatePassword(password, password2)) {
             return '';
         }
 
-        try{
+        try {
             // envia email e senha para fazer cadastro
-            const response = await api.post('users', {name, email, password});
+            const response = await api.post('users', { name, email, password });
+            await createAreaDefault(response.data.token);
             await onSignIn(response.data.token);//faz o login e ja registra no context
-            navigation.navigate('Drawer', { screen: 'Inicio'}); //navegar para a parte da aplicacao de usuario logado
-        }catch(err){
+            navigation.navigate('Drawer', { screen: 'Inicio' }); //navegar para a parte da aplicacao de usuario logado
+        } catch (err) {
             // console.log(err)
             Alert.alert(
                 "Aviso",
                 'Erro ao fazer o cadastro, tente novamente em alguns instantes!',
                 [
-                  { text: "OK"}
+                    { text: "OK" }
                 ],
                 { cancelable: false }
-              );
+            );
         }
 
-    
+
     }
 
     return (
         <KeyboardAvoidingView style={styles.container}>
-            <Animated.View style={[styles.containerLogo], {marginTop: marginTop,}}>
-                <Animated.Image 
+            <Animated.View style={[styles.containerLogo], { marginTop: marginTop, }}>
+                <Animated.Image
                     style={{
                         width: dimensao.x,
                         height: dimensao.y,
-                        marginLeft: 20, 
-                    }} 
-                    source={logo} 
+                        marginLeft: 20,
+                    }}
+                    source={logo}
                 />
             </Animated.View>
-            <Animated.View 
+            <Animated.View
                 style={[styles.containerForm,
-                    {
-                        opacity: opacity,
-                        transform: [
-                            { translateY: offset.y}
-                        ]
-                    }
+                {
+                    opacity: opacity,
+                    transform: [
+                        { translateY: offset.y }
+                    ]
+                }
                 ]}
             >
                 <TextInput
@@ -169,7 +213,7 @@ export default function Login({navigation}) {
                     value={name}
                     autoCorrect={false}
                     onChangeText={name => setName(name)}
-                    onEndEditing= {e => setName(e.nativeEvent.text.trim())}
+                    onEndEditing={e => setName(e.nativeEvent.text.trim())}
                 />
 
                 <TextInput
@@ -180,7 +224,7 @@ export default function Login({navigation}) {
                     value={email}
                     autoCorrect={false}
                     onChangeText={email => setEmail(email)}
-                    onEndEditing= {e => setEmail(e.nativeEvent.text.trim())}
+                    onEndEditing={e => setEmail(e.nativeEvent.text.trim())}
                 />
 
                 <TextInput

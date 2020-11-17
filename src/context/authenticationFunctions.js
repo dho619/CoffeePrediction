@@ -11,7 +11,7 @@ export const addUserToken = (token) => AsyncStorage.setItem(USER_TOKEN_KEY, toke
 
 export const isSignedIn = async () => {
   const token = await AsyncStorage.getItem(USER_TOKEN_KEY);
-  
+
   return (token !== null) ? token : '';
 };
 
@@ -24,14 +24,21 @@ export const loggedUser = async () => {
 
   try {
     const response = await api.get(`/users/${result.sub}`, {
-      headers: { 
+      headers: {
         Authorization: `Bearer ${token}`
       }
     });
     return response.data.data;
-  } catch (e){
+  } catch (e) {
     clearUserToken();
     return undefined;
   }
-
 };
+
+export const idUser = async (token) => {
+  if (!token) return undefined;
+
+  const result = JWT.decode(token, SECRET_KEY);
+
+  return result ? result.sub : undefined;
+}

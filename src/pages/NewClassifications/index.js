@@ -16,7 +16,7 @@ import Header from '../../components/Header';
 import { styles, pickerStyle } from './styles';
 
 export default function NewPhotos({ route, navigation }) {
-    const [online, setOnline] = useState(false);
+    const [online, setOnline] = useState('seeking...');
     const [uri, setUri] = useState('../../assets/loading.png');
     const [photo, setPhoto] = useState('');
     const [location, setLocation] = useState('');
@@ -42,9 +42,12 @@ export default function NewPhotos({ route, navigation }) {
         return () => mounted = false;
     }, []);
 
+    useEffect(() => {
+        fillAreas();
+    }, [online]);
 
     const fillAreas = async () => {
-
+        if (online === 'seeking...') return;
         if (online) {
             const response = await fillAreasOnline(token)
             let loadedAreas = [];
@@ -60,8 +63,6 @@ export default function NewPhotos({ route, navigation }) {
             });
             setAreas(loadedAreas);
         }
-
-
     }
 
     const submitClassification = async () => {
@@ -120,7 +121,6 @@ export default function NewPhotos({ route, navigation }) {
         } else {
             sucess = await registerOffline(classification, uri);
         }
-
         if (sucess) {
             setName('');
             setDescription('');

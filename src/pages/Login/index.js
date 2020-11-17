@@ -129,9 +129,20 @@ export default function Login({ navigation }) {
                         { cancelable: false }
                     );
                 } else {
-                    await onSignIn(response.data.token);
-                    await rememberUser();
-                    navigation.navigate('Drawer', { screen: 'Inicio' });
+                    const sucess = await onSignIn(response.data.token);
+                    if (sucess) {
+                        await rememberUser();
+                        navigation.navigate('Drawer', { screen: 'Inicio' });
+                    } else {
+                        Alert.alert(
+                            "Erro",
+                            'Erro ao processar o login, tente novamente em instantes!',
+                            [
+                                { text: "OK" }
+                            ],
+                            { cancelable: false }
+                        );
+                    }
                 }
             } catch (err) {
                 Alert.alert(

@@ -29,8 +29,6 @@ export default function Classification({ route, navigation }) {
     const { user, token } = useContext(Context);
 
     const { classification, sentToAPI } = route.params;
-    console.log(classification.image)
-    const offlineImage = ``;
 
     useEffect(() => {
         const loadInfo = async () => {
@@ -42,6 +40,7 @@ export default function Classification({ route, navigation }) {
         }
         let mounted = true;
         loadInfo();
+
         return () => mounted = false;
     }, []);
 
@@ -172,6 +171,7 @@ export default function Classification({ route, navigation }) {
                     }
                     style={[styles.photo, { width: widthImage, height: heightImage }]}
                 />
+
                 <View style={[styles.agroupInformation, { height: heightImage }]}>
                     <View>
                         <Text style={[styles.classificationInformation, { marginBottom: 5 }]}>Local: {classification.area ? classification.area.name : classification.area_name}</Text>

@@ -22,6 +22,10 @@ export const replicate_classifications = async () => {
         }
         if (response) {
             try {
+                if (classification.image) {
+                    FileSystem.deleteAsync(classification.image, { idempotente: true })
+
+                }
                 await execute_db_offline("DELETE FROM classifications WHERE id = ?;", [classification.id]);
             } catch (err) {
                 console.log(err);

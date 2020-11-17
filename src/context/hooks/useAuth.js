@@ -39,11 +39,18 @@ export default function useAuth() {
         await create_tables_if_not_exists();
         const online = await isOnline();
         if (online) {
-            replicate_to_the_backend();
-            setUser(await loggedUser());
-            await update_type_areas()
+            let user = await loggedUser()
+            if (user) {
+                replicate_to_the_backend();
+                setUser(user);
+                await update_type_areas()
+                return true;
+            } else {
+                return false;
+            }
         }
         setAuthenticated(true);
+        return true;
     };
 
     async function onSignOut() {

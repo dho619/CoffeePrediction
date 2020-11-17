@@ -1,7 +1,7 @@
 import { Alert } from 'react-native';
 import api from '../../../services/api';
 
-export const registerOnline = async (newArea, token) => {
+export const registerOnline = async (newArea, token, showMessage = true) => {
     try {
         const response = await api.post('areas', newArea, {
             headers: {
@@ -9,14 +9,16 @@ export const registerOnline = async (newArea, token) => {
             }
         });
 
-        Alert.alert(
-            "Sucesso",
-            'Área cadastrada com sucesso!',
-            [
-                { text: "OK" }
-            ],
-            { cancelable: false }
-        );
+        if (showMessage) {
+            Alert.alert(
+                "Sucesso",
+                'Área cadastrada com sucesso!',
+                [
+                    { text: "OK" }
+                ],
+                { cancelable: false }
+            );
+        }
         return true;
     } catch (err) {
         Alert.alert(

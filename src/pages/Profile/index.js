@@ -16,8 +16,6 @@ import styles from './styles';
 import { updateOnline } from './queryUser/updateOnline';
 import { updateOffline } from './queryUser/updateOffline';
 
-var avatar = require('../../assets/perfil.jpeg');
-
 export default function Profile({ navigation }) {
     const [online, setOnline] = useState(false);
     const [editing, setEditing] = useState(false);
@@ -160,10 +158,9 @@ export default function Profile({ navigation }) {
         <KeyboardAvoidingView style={styles.container}>
             <Header navigation={navigation} />
             <View style={styles.header}>
-                <Image
-                    source={avatar}
-                    style={[styles.avatar, { width: widthImage, height: heightImage }]}
-                />
+                <View style={[styles.avatar, { width: widthImage, height: heightImage }]}>
+                    <Text style={styles.avatarText}>{`${user.name}`.substring(0, 1)}</Text>
+                </View>
                 <View style={styles.infHeader}>
                     <Text style={styles.datasUsuario}>Ativo desde: {formatDatePython(user.created_at)}</Text>
                     <Text style={styles.datasUsuario}>Última Atualização: {formatDatePython(user.updated_at)}</Text>

@@ -6,7 +6,6 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { execute_db_offline } from '../../db/db_offline';
 
-var avatar = require('../../assets/perfil.jpeg');
 import styles from './styles';
 
 //itens da gaveta que ficarao escondidos
@@ -62,10 +61,6 @@ export default function CustomDrawer({ ...props }) {
                 </TouchableOpacity>
                 <View style={styles.userArea}>
                     <TouchableOpacity onPress={accessProfile} >
-                        {/* <Image
-                            source={avatar}
-                            style={styles.avatar}
-                        /> */}
                         <View style={styles.avatar}>
                             <Text style={styles.avatarText}>{`${user.name}`.substring(0, 1)}</Text>
                         </View>
