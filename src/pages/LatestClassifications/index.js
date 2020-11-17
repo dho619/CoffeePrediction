@@ -24,7 +24,7 @@ export default function LatestClassifications({ navigation }) {
     useEffect(() => {
         const loadInfo = async () => {
             const situation = await isOnline();
-            setOnline(situation)
+            setOnline(false)
         }
         loadInfo();
     }, []);
@@ -34,6 +34,7 @@ export default function LatestClassifications({ navigation }) {
     }, [online]);
 
     const handleReflesh = async () => {
+        if (!online) return;
         setPage(1);
         setRefreshing(true);
         await fillClassification(1);
@@ -41,6 +42,7 @@ export default function LatestClassifications({ navigation }) {
     }
 
     const handleLoadMore = async () => {
+        if (!online) return;
         setPage(page + 1);
         setRefreshing(true);
         await fillClassification(page + 1);

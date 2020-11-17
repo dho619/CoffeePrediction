@@ -61,6 +61,7 @@ const update_classifications = async (classification, token) => {
     const newClassification = {
         name: classification.name,
         description: classification.description,
+        area_id: classification.area_id,
     };
     try {
         await api.put(`classifications/${classification.id}`, newClassification, {

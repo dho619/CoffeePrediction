@@ -3,21 +3,26 @@ import {
     Text, TextInput, View, Image, TouchableOpacity,
     KeyboardAvoidingView, Keyboard, Alert
 } from 'react-native';
+import RNPickerSelect from 'react-native-picker-select';
 import { AntDesign } from '@expo/vector-icons';
 
 import { Context } from '../../context/contextAuth';
 import { isOnline } from '../../services/Network';
 import { formatDatePython, dateNow } from '../../utils/date';
 import Header from '../../components/Header';
-import styles from './styles';
+
 import { handleClassification } from './queryClassification/handleClassification';
 import { updateOnline } from './queryClassification/updateOnline';
 import { updateOffline } from './queryClassification/updateOffline';
 import { handleDeleteOffline } from './queryClassification/deleteClassificationOffline';
 import { handleDeleteOnline } from './queryClassification/deleteClassificationOnline';
+import { fillAreasOffline } from '../Areas/queryArea/fillAreasOffline';
+import { fillAreasOnline } from '../Areas/queryArea/fillAreasOnline';
+
+import { styles, pickerStyle } from './styles';
 
 export default function Classification({ route, navigation }) {
-    const [online, setOnline] = useState(false);
+    const [online, setOnline] = useState('seeking...');
     const [editing, setEditing] = useState(false);
     const [treatedClassification, setTreatedClassification] = useState({});
     const [id, setId] = useState('');
@@ -25,6 +30,8 @@ export default function Classification({ route, navigation }) {
     const [description, setDescription] = useState('');
     const [widthImage, setWidthImage] = useState(120);
     const [heightImage, setHeightImage] = useState(200);
+    const [areas, setAreas] = useState([]);
+    const [area, setArea] = useState(-1);
 
     const { user, token } = useContext(Context);
 
@@ -33,7 +40,7 @@ export default function Classification({ route, navigation }) {
     useEffect(() => {
         const loadInfo = async () => {
             const situation = await isOnline();
-            setOnline(situation);
+            setOnline(false);
             await fillClassification();
             keboardDidShowListener = Keyboard.addListener('keyboardDidShow', keyboardDidShow)
             keboardDidHideListener = Keyboard.addListener('keyboardDidHide', keyboardDidHide)
@@ -48,7 +55,31 @@ export default function Classification({ route, navigation }) {
         let mounted = true;
         fillClassification();
         return () => mounted = false;
-    }, [treatedClassification])
+    }, [treatedClassification]);
+
+    useEffect(() => {
+        fillAreas();
+    }, [online]);
+
+    const fillAreas = async () => {
+        if (online === 'seeking...') return;
+        if (online) {
+            const response = await fillAreasOnline(token)
+            let loadedAreas = [];
+            await response.map(area => {
+                loadedAreas.push({ label: area.name, value: area.id });
+            });
+            setAreas(loadedAreas);
+        } else {
+            const response = await fillAreasOffline(user.areas)
+            let loadedAreas = [];
+            await response.map(area => {
+                loadedAreas.push({ label: area.name, value: area.id });
+            });
+            setAreas(loadedAreas);
+        }
+        setArea(classification.area ? classification.area.id : classification.area_id);
+    }
 
     const fillClassification = async () => {
         setTreatedClassification(await handleClassification(classification));
@@ -58,8 +89,8 @@ export default function Classification({ route, navigation }) {
     }
 
     function keyboardDidShow() {
-        setHeightImage(135);
-        setWidthImage(80);
+        setHeightImage(90);
+        setWidthImage(45);
     }
 
     function keyboardDidHide() {
@@ -114,7 +145,14 @@ export default function Classification({ route, navigation }) {
             return '';
         }
 
-        const updateClassification = { name, description };
+        const area_name = await areas.filter(areaComboBox => areaComboBox.value == area)[0].label;
+
+        const updateClassification = {
+            name,
+            description,
+            area_id: area,
+            area_name
+        };
 
         let success = false;
         if (online) {
@@ -174,7 +212,6 @@ export default function Classification({ route, navigation }) {
 
                 <View style={[styles.agroupInformation, { height: heightImage }]}>
                     <View>
-                        <Text style={[styles.classificationInformation, { marginBottom: 5 }]}>Local: {classification.area ? classification.area.name : classification.area_name}</Text>
                         {sentToAPI ?
                             <>
                                 <Text style={styles.informations}>Enviado: {formatDatePython(classification.created_at)}</Text>
@@ -231,6 +268,22 @@ export default function Classification({ route, navigation }) {
                     multiline={true}
                     onPress={() => Keyboard.dismiss()}
                     onChangeText={descriptionInput => editing ? setDescription(descriptionInput) : descriptionInput = description}
+                />
+
+                <RNPickerSelect
+                    placeholder={{
+                        label: 'Selecione a área dessa folha',
+                        value: -1,
+                    }}
+                    items={areas}
+                    disabled={!editing}
+                    onValueChange={value => setArea(value)}
+                    value={area}
+                    style={pickerStyle}
+                    useNativeAndroidPickerStyle={false} //android only
+                    Icon={() => {
+                        return <AntDesign name="downcircleo" size={24} color="black" />;
+                    }}
                 />
 
                 {editing ?

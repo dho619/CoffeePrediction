@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-export default StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#cf965e',
@@ -24,7 +24,7 @@ export default StyleSheet.create({
         borderRadius: 10,
     },
     agroupInformation: {
-        paddingTop: 20,
+        paddingTop: 5,
         justifyContent: 'space-between',
     },
     informations: {
@@ -105,3 +105,31 @@ export default StyleSheet.create({
         marginLeft: 10
     }
 });
+
+const pickerStyle = StyleSheet.create({
+    inputIOS: {
+        fontSize: 17,
+        padding: 10,
+        width: 352,
+        backgroundColor: '#FFF',
+        marginBottom: 15,
+        color: '#222',
+        borderRadius: 7,
+    },
+    inputAndroid: {
+        fontSize: 17,
+        padding: 10,
+        paddingRight: 40,
+        width: 352,
+        backgroundColor: '#FFF',
+        marginBottom: 15,
+        color: '#222',
+        borderRadius: 7,
+    },
+    iconContainer: {
+        top: 15,
+        right: 7,
+    },
+});
+
+export { styles, pickerStyle };

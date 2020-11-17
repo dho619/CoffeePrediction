@@ -1,17 +1,17 @@
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
-    container: { 
-        flex: 1, 
-        justifyContent: 'center', 
+    container: {
+        flex: 1,
+        justifyContent: 'center',
         backgroundColor: '#cf965e',
     },
-    formClassification:{
+    formClassification: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'flex-end'
     },
-    imgFolha:{
+    imgFolha: {
         width: 160,
         height: 200,
         marginBottom: 30,
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     inputMultiline: {
         backgroundColor: '#FFF',
         width: '90%',
-        maxHeight:82,
+        maxHeight: 82,
         marginBottom: 15,
         color: '#222',
         fontSize: 17,
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
         color: '#FFF',
         fontSize: 18,
     },
-    imageBackground:{
+    imageBackground: {
         flex: 1,
         width: '100%',
         height: '100%',

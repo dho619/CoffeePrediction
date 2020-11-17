@@ -7,12 +7,12 @@ export const updateOffline = async (id, updateClassification) => {
         let classification_offline = await execute_db_offline("SELECT * FROM classifications WHERE ID = ? AND type_action = ?", [id, 'insert']);
 
         if (classification_offline.length > 0) {
-            await execute_db_offline("UPDATE classifications SET name = ?, description = ? WHERE id = ? ",
-                [updateClassification.name, updateClassification.description, id]
+            await execute_db_offline("UPDATE classifications SET name = ?, description = ?, area_id = ?, area_name = ? WHERE id = ? ",
+                [updateClassification.name, updateClassification.description, updateClassification.area_id, updateClassification.area_name, id]
             );
         } else {
-            await execute_db_offline("INSERT INTO classifications (id, name, description, type_action) VALUES (?, ?, ?, ?)",
-                [id, updateClassification.name, updateClassification.description, 'update']
+            await execute_db_offline("INSERT INTO classifications (id, name, description, area_id, area_name, type_action) VALUES (?, ?, ?, ?, ?, ?)",
+                [id, updateClassification.name, updateClassification.description, updateClassification.area_id, updateClassification.area_name, 'update']
             );
         }
         return true;
