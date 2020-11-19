@@ -9,7 +9,6 @@ export const fillClassificationsOffline = async (classifications) => {
 
         //atualizando as classificacoes
         let classifications_update = await execute_db_offline("SELECT * FROM classifications WHERE type_action = ?", ['update']);
-        console.log(classifications_update);
         if (classifications_update.length > 0) {
             filtered_classifications = await filtered_classifications.map(classification => {
                 let classification_update = classifications_update.filter(classification_update => classification_update.id === classification.id);
