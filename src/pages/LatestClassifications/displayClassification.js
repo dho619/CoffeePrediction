@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Image } from 'react-native'
+import { Text, TouchableOpacity } from 'react-native'
 import { AntDesign } from '@expo/vector-icons';
 
-import styles from './styles';
+import { styles } from './styles';
 
 export default function DisplayClassification({ ...props }) {
     const [selectedClassification, setSelectedClassification] = useState(false);

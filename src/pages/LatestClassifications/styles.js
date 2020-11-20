@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-export default StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: "column",
@@ -9,9 +9,10 @@ export default StyleSheet.create({
     headerContainer: {
         marginTop: 10,
         marginLeft: '10%',
-        marginBottom: 25,
+        marginBottom: 35,
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     headerText: {
         fontSize: 25,
@@ -27,13 +28,23 @@ export default StyleSheet.create({
         width: 250,
         height: 250
     },
+    filterContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginLeft: 20,
+        marginBottom: 30
+    },
+    filterField: {
+        fontSize: 20,
+        marginRight: 10
+    },
     classificationContainer: {
         alignItems: "center",
         justifyContent: "center",
     },
     classificationList: {
         width: '90%',
-        height: '75%',
+        height: '60%',
         padding: 15,
     },
     classification: {
@@ -84,3 +95,29 @@ export default StyleSheet.create({
         bottom: 10,
     },
 });
+
+const pickerStyle = StyleSheet.create({
+    inputIOS: {
+        fontSize: 14,
+        padding: 5,
+        width: 270,
+        backgroundColor: '#FFF',
+        color: '#222',
+        borderRadius: 7,
+    },
+    inputAndroid: {
+        fontSize: 14,
+        padding: 5,
+        paddingRight: 40,
+        width: 270,
+        backgroundColor: '#FFF',
+        color: '#222',
+        borderRadius: 7,
+    },
+    iconContainer: {
+        top: 6,
+        right: 10,
+    },
+});
+
+export { styles, pickerStyle };

@@ -1,14 +1,17 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, FlatList, Image, Alert } from 'react-native'
+import { View, Text, FlatList, Image } from 'react-native'
+import RNPickerSelect from 'react-native-picker-select';
 import { AntDesign } from '@expo/vector-icons';
 
 import { Context } from '../../context/contextAuth';
 import { isOnline } from '../../services/Network';
 import { fillClassificationsOffline } from './queryClassifications/fillClassificationsOffline';
 import { fillClassificationOnline } from './queryClassifications/fillClassificationsOnline';
+import { fillAreasOffline } from '../Areas/queryArea/fillAreasOffline';
+import { fillAreasOnline } from '../Areas/queryArea/fillAreasOnline';
 import Header from '../../components/Header';
 import DisplayClassification from './displayClassification';
-import styles from './styles';
+import { styles, pickerStyle } from './styles';
 
 var loadingImage = require('../../assets/loading.gif');
 
@@ -17,21 +20,29 @@ export default function LatestClassifications({ navigation }) {
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
     const [classifications, setClassifications] = useState([]);
+    const [listedClassifications, setListedClassifications] = useState([]);
     const [page, setPage] = useState(1);
+    const [areas, setAreas] = useState([]);
+    const [area, setArea] = useState('');
 
     const { user, token } = useContext(Context);
 
     useEffect(() => {
         const loadInfo = async () => {
             const situation = await isOnline();
-            setOnline(false)
+            setOnline(situation)
         }
         loadInfo();
     }, []);
 
     useEffect(() => {
         fillClassification(1);
+        fillAreas();
     }, [online]);
+
+    useEffect(() => {
+        handleFilter();
+    }, [area]);
 
     const handleReflesh = async () => {
         if (!online) return;
@@ -49,6 +60,19 @@ export default function LatestClassifications({ navigation }) {
         setRefreshing(false);
     }
 
+    const handleFilter = async () => {
+        setRefreshing(true);
+        if (area !== '') {
+            const filteredClassifications = await classifications.filter(
+                classification => (classification.area ? classification.area.id : classification.area_id) === area
+            );
+            setListedClassifications(filteredClassifications);
+        } else {
+            setListedClassifications(classifications);
+        }
+        setRefreshing(false);
+    }
+
     const fillClassification = async (pageAtual) => {
         if (online === 'seeking...') return;
         let loadedClassifications = []
@@ -59,10 +83,31 @@ export default function LatestClassifications({ navigation }) {
         }
         if (pageAtual === 1) {
             setClassifications(loadedClassifications);
+            setListedClassifications(loadedClassifications);
         } else {
             setClassifications([...classifications, ...loadedClassifications]);
+            setListedClassifications([...classifications, ...loadedClassifications]);
         }
+        if (area !== '') handleFilter();
         setLoading(false);
+    }
+    const fillAreas = async () => {
+        if (online === 'seeking...') return;
+        if (online) {
+            const response = await fillAreasOnline(token)
+            let loadedAreas = [];
+            await response.map(area => {
+                loadedAreas.push({ label: area.name, value: area.id });
+            });
+            setAreas(loadedAreas);
+        } else {
+            const response = await fillAreasOffline(user.areas)
+            let loadedAreas = [];
+            await response.map(area => {
+                loadedAreas.push({ label: area.name, value: area.id });
+            });
+            setAreas(loadedAreas);
+        }
     }
 
     return (
@@ -71,6 +116,24 @@ export default function LatestClassifications({ navigation }) {
             <View style={styles.headerContainer}>
                 <Text style={styles.headerText}>Últimas Análises:</Text>
             </View>
+            <View style={styles.filterContainer}>
+                <Text style={styles.filterField}>Area: </Text>
+                <RNPickerSelect
+                    placeholder={{
+                        label: 'Todas',
+                        value: '',
+                    }}
+                    items={areas}
+                    onValueChange={value => setArea(value)}
+                    value={area}
+                    style={pickerStyle}
+                    useNativeAndroidPickerStyle={false} //android only
+                    Icon={() => {
+                        return <AntDesign name="downcircleo" size={24} color="black" />;
+                    }}
+                />
+            </View>
+            <View style={{ flex: 1, maxHeight: 2, backgroundColor: "#B38F72" }} />
             {loading ?
                 <View style={styles.loading}>
                     <Image
@@ -87,7 +150,7 @@ export default function LatestClassifications({ navigation }) {
                         contentContainerStyle={{
                             flexDirection: 'column'
                         }}
-                        data={classifications}
+                        data={listedClassifications}
                         renderItem={({ item }) => (
                             <DisplayClassification
                                 classification={item}
