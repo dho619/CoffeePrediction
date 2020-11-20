@@ -24,6 +24,7 @@ export default StyleSheet.create({
   },
   datasUsuario: {
     fontSize: 15,
+    maxWidth: 200,
   },
   btEditar: {
     marginTop: 10,
@@ -31,6 +32,7 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   txtBtEditar: {
+    fontSize: 12,
     fontWeight: 'bold',
     marginRight: 5,
   },

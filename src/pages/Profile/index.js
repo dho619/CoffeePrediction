@@ -173,7 +173,7 @@ export default function Profile({ navigation }) {
                             <Text style={styles.txtBtEditar}>
                                 Editar informações de perfil
                                 </Text>
-                            <AntDesign name="edit" size={24} color="black" />
+                            <AntDesign name="edit" size={19} color="black" />
                         </TouchableOpacity>
                     }
                 </View>
