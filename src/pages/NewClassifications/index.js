@@ -8,6 +8,7 @@ import { AntDesign } from '@expo/vector-icons';
 
 import { Context } from '../../context/contextAuth';
 import { isOnline } from '../../services/Network';
+import { registerForPushNotificationsAsync } from '../../services/getTokenNotification';
 import { registerOnline } from './queryClassificatioons/insertOnline';
 import { registerOffline } from './queryClassificatioons/insertOffline';
 import { fillAreasOffline } from '../Areas/queryArea/fillAreasOffline';
@@ -106,6 +107,8 @@ export default function NewPhotos({ route, navigation }) {
 
         const area_name = await areas.filter(areaComboBox => areaComboBox.value == area)[0].label;
 
+        const tokenPush = await registerForPushNotificationsAsync();
+
         const classification = {
             name,
             description,
@@ -114,6 +117,7 @@ export default function NewPhotos({ route, navigation }) {
             image: photo,
             user_id: user.id,
             location: location,
+            tokenPush
         };
         let sucess = false;
         if (online) {

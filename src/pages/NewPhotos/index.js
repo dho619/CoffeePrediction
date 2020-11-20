@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Text, View, TouchableOpacity, Modal, ImageBackground } from 'react-native'
+import { Text, View, TouchableOpacity, Modal, ImageBackground, Alert } from 'react-native'
 import { Camera } from 'expo-camera';
 import * as Location from 'expo-location';
 import { launchImageLibraryAsync, requestCameraRollPermissionsAsync } from 'expo-image-picker';
@@ -30,7 +30,7 @@ export default function NewPhotos({ navigation }) {
     }, []);
 
     if (hasPermission === null) { //protecao quando estiver null
-        return <View />;
+        return <View />
     };
     if (hasPermission === false) { //se nao deu permissao, exibe mensagem
         return <Text>No access to camera</Text>;

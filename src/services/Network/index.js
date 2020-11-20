@@ -1,8 +1,8 @@
 import NetInfo from '@react-native-community/netinfo';
 
-import { replicate_areas } from './replication/areas';
-import { replicate_classifications } from './replication/classifications';
-import { replicate_users } from './replication/users';
+import { replicate_areas } from '../replication/areas';
+import { replicate_classifications } from '../replication/classifications';
+import { replicate_users } from '../replication/users';
 
 export const isOnline = async () => {
     var netState = await NetInfo.fetch();

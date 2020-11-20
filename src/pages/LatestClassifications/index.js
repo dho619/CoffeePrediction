@@ -30,7 +30,7 @@ export default function LatestClassifications({ navigation }) {
     useEffect(() => {
         const loadInfo = async () => {
             const situation = await isOnline();
-            setOnline(situation)
+            setOnline(situation);
         }
         loadInfo();
     }, []);

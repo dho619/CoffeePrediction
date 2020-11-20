@@ -22,11 +22,11 @@ export const registerOffline = async (newClassification, uri) => {
     try {
         id = await get_guid();
         const newUri = await copyImage(uri);
-        await execute_db_offline("INSERT INTO classifications (id, name, location, description, image, user_id, area_id, area_name, type_action) "
-            + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        await execute_db_offline("INSERT INTO classifications (id, name, location, description, image, user_id, area_id, area_name, tokenPush, type_action) "
+            + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             [id, newClassification.name, newClassification.location,
                 newClassification.description, newUri, newClassification.user_id,
-                newClassification.area_id, newClassification.area_name, `insert`
+                newClassification.area_id, newClassification.area_name, newClassification.tokenPush, `insert`
             ]
         );
 

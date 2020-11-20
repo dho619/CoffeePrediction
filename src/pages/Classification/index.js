@@ -40,14 +40,13 @@ export default function Classification({ route, navigation }) {
     useEffect(() => {
         const loadInfo = async () => {
             const situation = await isOnline();
-            setOnline(false);
+            setOnline(situation);
             await fillClassification();
             keboardDidShowListener = Keyboard.addListener('keyboardDidShow', keyboardDidShow)
             keboardDidHideListener = Keyboard.addListener('keyboardDidHide', keyboardDidHide)
         }
         let mounted = true;
         loadInfo();
-
         return () => mounted = false;
     }, []);
 
@@ -60,6 +59,14 @@ export default function Classification({ route, navigation }) {
     useEffect(() => {
         fillAreas();
     }, [online]);
+
+    const handleBack = async () => {
+        if (sentToAPI && !classification.is_sended) {
+            await sendEditing(true);
+        }
+        navigation.navigate('Últimas Análises');
+    }
+
 
     const fillAreas = async () => {
         if (online === 'seeking...') return;
@@ -132,7 +139,7 @@ export default function Classification({ route, navigation }) {
         );
     }
 
-    const sendEditing = async () => {
+    const sendEditing = async (updatePreview) => {
         if (name === '') {
             Alert.alert(
                 "Aviso",
@@ -153,6 +160,10 @@ export default function Classification({ route, navigation }) {
             area_id: area,
             area_name
         };
+        if (updatePreview) {
+            updateClassification.is_sended = true;
+            classification.is_sended = true;
+        }
 
         let success = false;
         if (online) {
@@ -161,31 +172,33 @@ export default function Classification({ route, navigation }) {
             success = await updateOffline(id, updateClassification);
         }
 
-        if (success) {
-            user.name = name;
-            user.updated_at = dateNow(false, true);
-            clearFields();
-            Alert.alert(
-                "Sucess",
-                'Classificação atualizada com sucesso!',
-                [
-                    { text: "OK" }
-                ],
-                { cancelable: false }
-            );
-            classification.name = name;
-            classification.description = description;
-            classification.updated_at = dateNow(false, true);
-            fillClassification();
-        } else {
-            Alert.alert(
-                "Aviso",
-                'Erro ao fazer a atualização, tente novamente em alguns instantes!',
-                [
-                    { text: "OK" }
-                ],
-                { cancelable: false }
-            );
+        if (!updatePreview) {
+            if (success) {
+                user.name = name;
+                user.updated_at = dateNow(false, true);
+                clearFields();
+                Alert.alert(
+                    "Sucess",
+                    'Classificação atualizada com sucesso!',
+                    [
+                        { text: "OK" }
+                    ],
+                    { cancelable: false }
+                );
+                classification.name = name;
+                classification.description = description;
+                classification.updated_at = dateNow(false, true);
+                fillClassification();
+            } else {
+                Alert.alert(
+                    "Aviso",
+                    'Erro ao fazer a atualização, tente novamente em alguns instantes!',
+                    [
+                        { text: "OK" }
+                    ],
+                    { cancelable: false }
+                );
+            }
         }
     }
 
@@ -195,7 +208,7 @@ export default function Classification({ route, navigation }) {
                 <Header navigation={navigation} />
                 <TouchableOpacity
                     style={styles.iconBack}
-                    onPress={() => navigation.navigate('Últimas Análises')}
+                    onPress={handleBack}
                 >
                     <AntDesign name="arrowleft" size={50} color="black" />
                 </TouchableOpacity>
@@ -292,7 +305,7 @@ export default function Classification({ route, navigation }) {
                             <AntDesign name="closecircle" size={30} color="black" />
                             <Text style={styles.textButtons}>Cancelar</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.buttons} onPress={sendEditing}>
+                        <TouchableOpacity style={styles.buttons} onPress={() => sendEditing(false)}>
                             <AntDesign name="check" size={30} color="black" />
                             <Text style={styles.textButtons}>Salvar</Text>
                         </TouchableOpacity>
@@ -309,6 +322,6 @@ export default function Classification({ route, navigation }) {
                     </TouchableOpacity>
                 }
             </View>
-        </KeyboardAvoidingView>
+        </KeyboardAvoidingView >
     );
 }

@@ -16,6 +16,7 @@ export default function DisplayClassification({ ...props }) {
                 setSelectedClassification(!selectedClassification)
             }}
         >
+            {!classification.is_sended && <AntDesign name="notification" size={24} color="black" />}
             <Text style={styles.classificationHeader}>Nome: {classification.name}</Text>
             <Text style={styles.analyzeDesc} numberOfLines={selectedClassification ? 100 : 1}>
                 Descrição: {classification.description}

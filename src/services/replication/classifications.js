@@ -6,9 +6,9 @@ import { isSignedIn } from '../../context/authenticationFunctions';
 
 export const replicate_classifications = async () => {
     const token = await isSignedIn()
-
     const classifications = await execute_db_offline("SELECT * FROM classifications order by replication_sequence;");
     await classifications.map(async classification => {
+        console.log(classification.is_sended);
         var response = false;
         switch (classification.type_action) {
             case 'insert':
@@ -42,6 +42,7 @@ const insert_classifications = async (classification, token) => {
         description: classification.description,
         location: classification.location,
         image: asset,
+        tokenPush: classification.tokenPush,
         area_id: classification.area_id,
         user_id: classification.user_id,
     };
@@ -62,6 +63,7 @@ const update_classifications = async (classification, token) => {
         name: classification.name,
         description: classification.description,
         area_id: classification.area_id,
+        is_sended: classification.is_sended
     };
     try {
         await api.put(`classifications/${classification.id}`, newClassification, {

@@ -4,6 +4,7 @@ import { execute_db_offline } from '../../../db/db_offline';
 export const fillClassificationsOffline = async (classifications) => {
     try {
         let classifications_offline = await execute_db_offline("SELECT * FROM classifications WHERE type_action <> ?", ['update']);
+
         //tirar todos os casos onde tem classification deletada offline
         let filtered_classifications = await classifications.filter(classification => classifications_offline.filter(classification_offline => classification_offline.id === classification.id).length === 0)
 
@@ -17,6 +18,7 @@ export const fillClassificationsOffline = async (classifications) => {
                     classification.description = classification_update[0].description;
                     classification.area.id = classification_update[0].area_id;
                     classification.area.name = classification_update[0].area_name;
+                    classification.is_sended = classification_update[0].is_sended;
                     return classification;
                 } else {
                     return classification;
@@ -26,9 +28,6 @@ export const fillClassificationsOffline = async (classifications) => {
 
         //tirar os tipos de ação delete
         let filtered_classifications_offline = await classifications_offline.filter(classification_offline => classification_offline.type_action !== 'delete')
-
-
-
 
         return [...filtered_classifications_offline, ...filtered_classifications];
     } catch (err) {
