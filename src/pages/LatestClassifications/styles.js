@@ -38,6 +38,11 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginRight: 10
     },
+    iconNotification: {
+        position: 'absolute',
+        right: 10,
+        top: 5,
+    },
     classificationContainer: {
         alignItems: "center",
         justifyContent: "center",

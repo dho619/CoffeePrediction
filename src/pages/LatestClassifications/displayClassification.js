@@ -1,13 +1,36 @@
-import React, { useState } from 'react';
-import { Text, TouchableOpacity } from 'react-native'
-import { AntDesign } from '@expo/vector-icons';
+import React, { useState, useEffect } from 'react';
+import { Text, TouchableOpacity, Animated, Easing } from 'react-native'
+import { AntDesign, Ionicons } from '@expo/vector-icons';
 
 import { styles } from './styles';
 
+const rotateOptions = ['0deg', '10deg', '20deg', '30deg', '40deg', '30deg', '20deg', '10deg', '0deg', '-10deg', '-20deg', '-30deg', '-40deg', '-30deg', '-20deg', '-10deg']
+const elementNumbers = 48;
+
 export default function DisplayClassification({ ...props }) {
     const [selectedClassification, setSelectedClassification] = useState(false);
+    const [spinValue, setSpinValue] = useState(new Animated.Value(0));
+
+    useEffect(() => {
+        StartIconRotate();
+    }, []);
+    function StartIconRotate() {
+        spinValue.setValue(0);
+
+        Animated.timing(spinValue, {
+            toValue: elementNumbers,
+            duration: 4000,
+            easing: Easing.linear,
+        }).start();
+    }
+
+    const spin = (spinValue.interpolate({
+        inputRange: [...Array(elementNumbers).keys()],
+        outputRange: [...rotateOptions, ...rotateOptions, ...rotateOptions]
+    }));
 
     const { classification, navigation } = props
+
     return (
         <TouchableOpacity
             key={classification.id}
@@ -16,7 +39,11 @@ export default function DisplayClassification({ ...props }) {
                 setSelectedClassification(!selectedClassification)
             }}
         >
-            {!classification.is_sended && <AntDesign name="notification" size={24} color="black" />}
+            {!classification.is_sended &&
+                <Animated.View style={[styles.iconNotification, { transform: [{ rotate: spin }] }]}>
+                    <Ionicons name="ios-notifications" size={30} color="red" />
+                </Animated.View>
+            }
             <Text style={styles.classificationHeader}>Nome: {classification.name}</Text>
             <Text style={styles.analyzeDesc} numberOfLines={selectedClassification ? 100 : 1}>
                 Descrição: {classification.description}
