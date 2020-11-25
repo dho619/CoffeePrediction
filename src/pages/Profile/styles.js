@@ -18,7 +18,7 @@ export default StyleSheet.create({
     backgroundColor: '#00622D'
   },
   avatarText: {
-    fontSize: 60,
+    fontSize: 50,
     fontWeight: 'bold',
     color: '#fff'
   },
